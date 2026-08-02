@@ -1,0 +1,8 @@
+{
+  "_resourceType": "project",
+  "name": "DynamicProjectileExample",
+  "author": "fredrikofstad (ported by Mico27)",
+  "notes": "Example project for gbs-DynamicProjectilePlugin: one scene per projectile behaviour plus the global pause / hide / lifetime controls.",
+  "_version": "4.2.0",
+  "_release": "10"
+}

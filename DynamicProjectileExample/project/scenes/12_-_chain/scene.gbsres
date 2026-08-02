@@ -1,0 +1,340 @@
+{
+  "_resourceType": "scene",
+  "id": "5c000000-0000-4000-8000-000000000012",
+  "_index": 12,
+  "name": "12 - Chain",
+  "symbol": "scene_chain",
+  "backgroundId": "b0000000-0000-4000-8000-000000000001",
+  "tilesetId": "",
+  "width": 20,
+  "height": 18,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "playerSpriteSheetId": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
+  "collisions": "0f15+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f15+",
+  "autoFadeSpeed": 1,
+  "x": 1340,
+  "y": 300,
+  "script": [
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "Chain: one projectile that draws a run of sprites between two",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000251"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "actors. Straight spreads the links evenly along the line; Loose",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000252"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "lets each link lag behind its neighbour and catch up, so the",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000253"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "chain hangs and drags instead of staying taut.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000254"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "Both are strung from the player to the Target actor, so walking",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000255"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "around is what shows the difference.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000256"
+    },
+    {
+      "command": "EVENT_TEXT",
+      "args": {
+        "text": [
+          "CHAIN\n\nB: straight chain\nA: loose chain",
+          "Walk around while\none is out to see\nit follow.",
+          "Each lasts 4s. Only\n2 can be out at\nonce. START: menu"
+        ]
+      },
+      "id": "e0000000-0000-4000-8000-000000000257"
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "b"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000260",
+      "children": {
+        "true": [
+          {
+            "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "behavior",
+              "slot": 0,
+              "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
+              "spriteStateId": "",
+              "speed": 2,
+              "animSpeed": 15,
+              "lifeTime": 4,
+              "initialOffset": 0,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [],
+              "preset": "custom",
+              "type": "8",
+              "collision": "0",
+              "gravity": {
+                "type": "number",
+                "value": 0
+              },
+              "bounce": {
+                "type": "number",
+                "value": 2
+              },
+              "amplitude": {
+                "type": "number",
+                "value": 7
+              },
+              "frequency": {
+                "type": "number",
+                "value": 6
+              },
+              "hookshotTileHit": 0,
+              "hookshotActorHit": 0,
+              "compInfiniteLifetime": false,
+              "compIgnorePlayer": false,
+              "compRemoveScript": true,
+              "compTileHitScript": true,
+              "compActorHitScript": true
+            },
+            "id": "e0000000-0000-4000-8000-000000000258"
+          },
+          {
+            "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "source",
+              "slot": 0,
+              "sourceType": "actor",
+              "posX": {
+                "type": "number",
+                "value": 0
+              },
+              "posY": {
+                "type": "number",
+                "value": 0
+              },
+              "posUnits": "tiles",
+              "actorId": "player",
+              "x": 0,
+              "y": 0,
+              "directionType": "actor",
+              "otherActorId": "player",
+              "direction": "right",
+              "angle": 0,
+              "angleVariable": "0",
+              "targetActorId": "player",
+              "targetX": {
+                "type": "number",
+                "value": 0
+              },
+              "targetY": {
+                "type": "number",
+                "value": 0
+              },
+              "targetUnits": "tiles",
+              "paramBehaviour": "any",
+              "paramX": {
+                "type": "number",
+                "value": 0
+              },
+              "paramY": {
+                "type": "number",
+                "value": 1
+              },
+              "paramPhase": {
+                "type": "number",
+                "value": 64
+              },
+              "paramActorIndex": {
+                "type": "number",
+                "value": 0
+              }
+            },
+            "id": "e0000000-0000-4000-8000-000000000259"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "a"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000263",
+      "children": {
+        "true": [
+          {
+            "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "behavior",
+              "slot": 1,
+              "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
+              "spriteStateId": "",
+              "speed": 2,
+              "animSpeed": 15,
+              "lifeTime": 4,
+              "initialOffset": 0,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [],
+              "preset": "custom",
+              "type": "8",
+              "collision": "1",
+              "gravity": {
+                "type": "number",
+                "value": 0
+              },
+              "bounce": {
+                "type": "number",
+                "value": 2
+              },
+              "amplitude": {
+                "type": "number",
+                "value": 7
+              },
+              "frequency": {
+                "type": "number",
+                "value": 6
+              },
+              "hookshotTileHit": 0,
+              "hookshotActorHit": 0,
+              "compInfiniteLifetime": false,
+              "compIgnorePlayer": false,
+              "compRemoveScript": true,
+              "compTileHitScript": true,
+              "compActorHitScript": true
+            },
+            "id": "e0000000-0000-4000-8000-000000000261"
+          },
+          {
+            "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "source",
+              "slot": 1,
+              "sourceType": "actor",
+              "posX": {
+                "type": "number",
+                "value": 0
+              },
+              "posY": {
+                "type": "number",
+                "value": 0
+              },
+              "posUnits": "tiles",
+              "actorId": "player",
+              "x": 0,
+              "y": 0,
+              "directionType": "actor",
+              "otherActorId": "player",
+              "direction": "right",
+              "angle": 0,
+              "angleVariable": "0",
+              "targetActorId": "player",
+              "targetX": {
+                "type": "number",
+                "value": 0
+              },
+              "targetY": {
+                "type": "number",
+                "value": 0
+              },
+              "targetUnits": "tiles",
+              "paramBehaviour": "any",
+              "paramX": {
+                "type": "number",
+                "value": 0
+              },
+              "paramY": {
+                "type": "number",
+                "value": 1
+              },
+              "paramPhase": {
+                "type": "number",
+                "value": 64
+              },
+              "paramActorIndex": {
+                "type": "number",
+                "value": 0
+              }
+            },
+            "id": "e0000000-0000-4000-8000-000000000262"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "start"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000265",
+      "children": {
+        "true": [
+          {
+            "command": "EVENT_SWITCH_SCENE",
+            "args": {
+              "sceneId": "5c000000-0000-4000-8000-000000000000",
+              "x": {
+                "type": "number",
+                "value": 9
+              },
+              "y": {
+                "type": "number",
+                "value": 9
+              },
+              "direction": "down",
+              "fadeSpeed": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000264"
+          }
+        ]
+      }
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

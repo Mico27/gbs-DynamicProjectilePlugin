@@ -1,0 +1,51 @@
+{
+  "_resourceType": "variables",
+  "variables": [
+    {
+      "id": "0",
+      "name": "MenuChoice",
+      "symbol": "var_menu_choice"
+    },
+    {
+      "id": "1",
+      "name": "OptionChoice",
+      "symbol": "var_option_choice"
+    },
+    {
+      "id": "2",
+      "name": "HitX",
+      "symbol": "var_hit_x"
+    },
+    {
+      "id": "3",
+      "name": "HitY",
+      "symbol": "var_hit_y"
+    },
+    {
+      "id": "4",
+      "name": "DeltaX",
+      "symbol": "var_delta_x"
+    },
+    {
+      "id": "5",
+      "name": "DeltaY",
+      "symbol": "var_delta_y"
+    },
+    {
+      "id": "6",
+      "name": "HookMode",
+      "symbol": "var_hook_mode"
+    },
+    {
+      "id": "7",
+      "name": "HitActor",
+      "symbol": "var_hit_actor"
+    },
+    {
+      "id": "8",
+      "name": "HitType",
+      "symbol": "var_hit_type"
+    }
+  ],
+  "constants": []
+}

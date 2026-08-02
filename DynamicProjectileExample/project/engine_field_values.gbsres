@@ -1,0 +1,57 @@
+{
+  "_resourceType": "engineFieldValues",
+  "engineFieldValues": [
+    {
+      "id": "fade_style",
+      "value": 0
+    },
+    {
+      "id": "FEAT_PLATFORM_COYOTE_TIME",
+      "value": 0
+    },
+    {
+      "id": "FEAT_PLATFORM_DROP_THROUGH",
+      "value": 0
+    },
+    {
+      "id": "SHOOTER_MOVEMENT_TYPE",
+      "value": "MOVEMENT_TYPE_LOCK_PERPENDICULAR"
+    },
+    {
+      "id": "SHOOTER_TRIGGER_ACTIVATION",
+      "value": "ON_PLAYER_COLLISION"
+    },
+    {
+      "id": "SHOOTER_WALL_COLLISION_GROUP",
+      "value": "COLLISION_GROUP_NONE"
+    },
+    {
+      "id": "DYNPROJ_MAX_PROJECTILE_DEFS",
+      "value": 8
+    },
+    {
+      "id": "DYNPROJ_CLIP_EXT",
+      "value": 6
+    },
+    {
+      "id": "DYNPROJ_MAX_PROJECTILES",
+      "value": 10
+    },
+    {
+      "id": "DYNPROJ_TILE_COLLISION",
+      "value": 0
+    },
+    {
+      "id": "DYNPROJ_ENABLE_TRAIL",
+      "value": 1
+    },
+    {
+      "id": "DYNPROJ_ENABLE_CHAIN",
+      "value": 1
+    },
+    {
+      "id": "DYNPROJ_ENABLE_HOOKSHOT",
+      "value": 1
+    }
+  ]
+}
