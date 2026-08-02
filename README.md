@@ -14,13 +14,14 @@ The plugin ships with `DynamicProjectileExample/`, a complete project with one d
 
 1. [Concepts](#concepts)
 2. [Project Setup](#project-setup)
-3. [Behaviours Reference](#behaviours-reference)
-4. [Engine Settings](#engine-settings)
-5. [Events Reference](#events-reference)
-6. [Engine Fields Reference](#engine-fields-reference)
-7. [Media](#media)
-8. [Memory Footprint](#memory-footprint)
-9. [Credits](#credits)
+3. [Size Limits and Restrictions](#size-limits-and-restrictions)
+4. [Behaviours Reference](#behaviours-reference)
+5. [Engine Settings](#engine-settings)
+6. [Events Reference](#events-reference)
+7. [Engine Fields Reference](#engine-fields-reference)
+8. [Media](#media)
+9. [Memory Footprint](#memory-footprint)
+10. [Credits](#credits)
 
 ---
 
@@ -57,15 +58,14 @@ A chain or trail launched when every strand is busy is silently not launched, ex
 
 ---
 
+## Project Setup
+
 ### Installation
 
 Copy `src/DynamicProjectilePlugin` into your project's `plugins/` folder, keeping the whole folder intact.
 
 This plugin replaces the stock projectile engine files. Three other plugins in the same collection — **SceneStackExPlugin**, **DynamicActorPlugin** and **SpritesheetChangeBufferPlugin** — touch some of the same files, so pre-merged compatibility variants are included for every combination of them and are selected automatically. Because this plugin is applied last of the four, its merged build also resolves the clash between DynamicActorPlugin and SpritesheetChangeBufferPlugin.
 
----
-
-## Project Setup
 
 ### 1. Define a Slot
 
@@ -109,6 +109,30 @@ Each slot has a matching checkbox (*Run On Remove script* and friends) so an ind
 Every behaviour except Default has an on/off switch under **Settings → Engine → Custom Projectiles**. These are compile-time switches — turning one off removes its code from the ROM rather than merely skipping it at runtime. The behaviours are by far the biggest lever on the plugin's ROM cost.
 
 The events refuse to compile against a behaviour that has been switched off, naming the offending scene, rather than silently producing a projectile that does nothing.
+
+---
+
+## Size Limits and Restrictions
+
+### The projectile pool can run out
+
+All live projectiles come from a fixed pool, sized by **Max concurrent projectiles**. A launch that finds the pool full is **silently dropped**. Remember how many entries a shot really consumes: most behaviours take one, but a **hookshot takes four** — the head plus three chain links.
+
+### The strand pool can run out
+
+**Chain** and **Trail** each need a strand buffer from a second pool, sized by **Max chains + trails** and **Points per chain / trail**. A chain or trail launched when every strand is busy is silently not launched, exactly like a full projectile pool.
+
+### Redefining a slot changes projectiles already in flight
+
+A live projectile stores only an index into the slot table, so redefining a slot changes the behaviour of anything already flying from it. Only the lifetime and the per-launch parameters are truly per-projectile.
+
+### Order matters if you mix with the stock events
+
+*Define Projectile Slot* writes the whole definition, so running the stock *Load Projectile Slot* afterwards on the same slot wipes the behaviour back to Default.
+
+### Stock engine files are replaced
+
+This plugin replaces the stock projectile engine files. Compatibility variants are included for **SceneStackExPlugin**, **DynamicActorPlugin** and **SpritesheetChangeBufferPlugin** and are selected automatically; any other plugin touching the same files needs a manual merge.
 
 ---
 
