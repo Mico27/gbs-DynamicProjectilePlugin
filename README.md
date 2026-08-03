@@ -216,9 +216,6 @@ Launch the head and its links as separate shots from the same slot, varying only
 
 https://github.com/user-attachments/assets/bc1ca11b-af4d-4bd5-be93-95f38bc4698b
 
-https://github.com/user-attachments/assets/26830974-b766-4428-8994-94b4b89fe0cf
-
-
 Rigidly pinned to an actor at a fixed offset, whichever way that actor turns. Useful for held weapons and carried objects.
 
 **Slot fields:** Tile Collision Behaviour
@@ -230,9 +227,7 @@ Unlike Orbit, each anchored projectile carries its own target, so several can ha
 
 ### Custom
 
-
 https://github.com/user-attachments/assets/29c73909-2e20-42ce-9271-9ec0c8c0c56a
-
 
 Moves by whatever two script variables contain, re-read every frame. Everything else — collision, lifetime, impact scripts — behaves normally.
 
@@ -243,9 +238,7 @@ Moves by whatever two script variables contain, re-read every frame. Everything 
 
 ### Chain
 
-
 https://github.com/user-attachments/assets/5d4f7d9b-3c17-4fca-abe8-4f483373bdf8
-
 
 A run of sprites strung between two actors. A chain has no velocity, no aim and no tile collision; the launch position and angle only decide which of the sprite's four direction animations the links are drawn with.
 
@@ -267,9 +260,7 @@ A chain is **not** removed when it scrolls off screen, unlike every other behavi
 
 ### Trail
 
-
 https://github.com/user-attachments/assets/63cda598-eb4a-4046-9ae4-25615ea18b8c
-
 
 Travels like a plain shot — speed, gravity, bounce and tile collision all behave normally — and additionally records where it has been, hanging a sprite off its own history every few updates.
 
