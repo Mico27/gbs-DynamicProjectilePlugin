@@ -46,7 +46,7 @@
       "command": "EVENT_TEXT",
       "args": {
         "text": [
-          "ARC\n\nB: lob a shot.\nSTART: menu"
+          "ARC\nA:stock projectile\nB:lob a shot.\nSTART: menu"
         ]
       },
       "id": "e0000000-0000-4000-8000-000000000026"
@@ -121,6 +121,49 @@
       "command": "EVENT_SET_INPUT_SCRIPT",
       "args": {
         "input": [
+          "a"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "19be3159-1daf-485a-a9fc-80e861e171ac",
+      "children": {
+        "true": [
+          {
+            "command": "EVENT_LAUNCH_PROJECTILE",
+            "args": {
+              "__section": "projectile",
+              "spriteSheetId": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
+              "spriteStateId": "",
+              "actorId": "$self$",
+              "x": 0,
+              "y": 0,
+              "directionType": "direction",
+              "otherActorId": "$self$",
+              "direction": "right",
+              "angle": 0,
+              "angleVariable": "L0",
+              "targetActorId": "$self$",
+              "speed": 2,
+              "animSpeed": 15,
+              "lifeTime": 1,
+              "initialOffset": 0,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [
+                "1"
+              ]
+            },
+            "id": "87126840-9db9-4c65-ae2e-2d3867d2ee25"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
           "b"
         ],
         "override": true,
@@ -133,7 +176,7 @@
             "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
             "args": {
               "tabs": "behavior",
-              "slot": 0,
+              "slot": 1,
               "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
               "spriteStateId": "",
               "speed": 3,
@@ -171,7 +214,8 @@
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
-              "compActorHitScript": true
+              "compActorHitScript": true,
+              "__collapse": true
             },
             "id": "e0000000-0000-4000-8000-000000000034"
           },
@@ -179,7 +223,7 @@
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
             "args": {
               "tabs": "source",
-              "slot": 0,
+              "slot": 1,
               "sourceType": "actor",
               "posX": {
                 "type": "number",
@@ -224,7 +268,8 @@
               "paramActorIndex": {
                 "type": "number",
                 "value": 0
-              }
+              },
+              "__collapse": true
             },
             "id": "e0000000-0000-4000-8000-000000000035"
           }
@@ -256,7 +301,8 @@
                 "value": 9
               },
               "direction": "down",
-              "fadeSpeed": "2"
+              "fadeSpeed": "2",
+              "__collapse": true
             },
             "id": "e0000000-0000-4000-8000-000000000037"
           }
