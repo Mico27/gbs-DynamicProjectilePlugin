@@ -153,9 +153,7 @@ A straight-line projectile — the stock behaviour, plus this plugin's tile coll
 
 ### Arc
 
-
 https://github.com/user-attachments/assets/0d3824fa-a344-497f-a642-c7efe43db31b
-
 
 Thrown upward, then pulled back down by gravity. Gravity is applied every other frame.
 
@@ -166,9 +164,7 @@ Thrown upward, then pulled back down by gravity. Gravity is applied every other 
 
 ### Boomerang
 
-
-https://github.com/user-attachments/assets/3cc347f8-233b-4747-be3e-744d2872d0c4
-
+https://github.com/user-attachments/assets/e3679382-6c15-4327-ba99-926d23725815
 
 Sheds speed as it travels, reverses, and comes back.
 
@@ -179,9 +175,7 @@ Sheds speed as it travels, reverses, and comes back.
 
 ### Sine Wave
 
-
-https://github.com/user-attachments/assets/ce1145a0-3f12-457a-a6d1-f4701c3c7cbe
-
+https://github.com/user-attachments/assets/842b81e3-ade3-430f-b2c8-fd8149c46fea
 
 Weaves from side to side, perpendicular to its direction of travel.
 
@@ -192,8 +186,8 @@ Weaves from side to side, perpendicular to its direction of travel.
 
 ### Orbit
 
+https://github.com/user-attachments/assets/ce1145a0-3f12-457a-a6d1-f4701c3c7cbe
 
-https://github.com/user-attachments/assets/e085e38c-01ad-4d5b-97ca-22b3f740b2dc
 
 
 Circles an actor at a fixed radius, following it as it moves.
@@ -207,9 +201,7 @@ Orbiters share one target actor — the one resolved by the most recent launch. 
 
 ### Hookshot
 
-
-https://github.com/user-attachments/assets/bc1ca11b-af4d-4bd5-be93-95f38bc4698b
-
+https://github.com/user-attachments/assets/e085e38c-01ad-4d5b-97ca-22b3f740b2dc
 
 A grappling hook: a head that flies out, up to three chain links that span the gap behind it, and a set of reactions for what happens when the head lands. See [Hookshot Detail](#hookshot-detail) below.
 
@@ -222,6 +214,7 @@ Launch the head and its links as separate shots from the same slot, varying only
 
 ### Anchor
 
+https://github.com/user-attachments/assets/bc1ca11b-af4d-4bd5-be93-95f38bc4698b
 
 https://github.com/user-attachments/assets/26830974-b766-4428-8994-94b4b89fe0cf
 
