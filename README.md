@@ -153,6 +153,10 @@ A straight-line projectile — the stock behaviour, plus this plugin's tile coll
 
 ### Arc
 
+
+https://github.com/user-attachments/assets/0d3824fa-a344-497f-a642-c7efe43db31b
+
+
 Thrown upward, then pulled back down by gravity. Gravity is applied every other frame.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Bounce
@@ -161,6 +165,10 @@ Thrown upward, then pulled back down by gravity. Gravity is applied every other 
 ---
 
 ### Boomerang
+
+
+https://github.com/user-attachments/assets/3cc347f8-233b-4747-be3e-744d2872d0c4
+
 
 Sheds speed as it travels, reverses, and comes back.
 
@@ -171,6 +179,10 @@ Sheds speed as it travels, reverses, and comes back.
 
 ### Sine Wave
 
+
+https://github.com/user-attachments/assets/ce1145a0-3f12-457a-a6d1-f4701c3c7cbe
+
+
 Weaves from side to side, perpendicular to its direction of travel.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Bounce · *Wave Amplitude* (how far it weaves) · *Wave Frequency* (how tight the zigzag)
@@ -179,6 +191,10 @@ Weaves from side to side, perpendicular to its direction of travel.
 ---
 
 ### Orbit
+
+
+https://github.com/user-attachments/assets/e085e38c-01ad-4d5b-97ca-22b3f740b2dc
+
 
 Circles an actor at a fixed radius, following it as it moves.
 
@@ -191,6 +207,10 @@ Orbiters share one target actor — the one resolved by the most recent launch. 
 
 ### Hookshot
 
+
+https://github.com/user-attachments/assets/bc1ca11b-af4d-4bd5-be93-95f38bc4698b
+
+
 A grappling hook: a head that flies out, up to three chain links that span the gap behind it, and a set of reactions for what happens when the head lands. See [Hookshot Detail](#hookshot-detail) below.
 
 **Slot fields:** Tile Collision Behaviour (*Pass through* / *React to tiles*) · Gravity · *Hookshot: On Tile Hit* · *Hookshot: On Actor Hit*
@@ -201,6 +221,10 @@ Launch the head and its links as separate shots from the same slot, varying only
 ---
 
 ### Anchor
+
+
+https://github.com/user-attachments/assets/26830974-b766-4428-8994-94b4b89fe0cf
+
 
 Rigidly pinned to an actor at a fixed offset, whichever way that actor turns. Useful for held weapons and carried objects.
 
@@ -213,6 +237,10 @@ Unlike Orbit, each anchored projectile carries its own target, so several can ha
 
 ### Custom
 
+
+https://github.com/user-attachments/assets/29c73909-2e20-42ce-9271-9ec0c8c0c56a
+
+
 Moves by whatever two script variables contain, re-read every frame. Everything else — collision, lifetime, impact scripts — behaves normally.
 
 **Slot fields:** Tile Collision Behaviour · *Delta X Variable* · *Delta Y Variable*
@@ -221,6 +249,10 @@ Moves by whatever two script variables contain, re-read every frame. Everything 
 ---
 
 ### Chain
+
+
+https://github.com/user-attachments/assets/5d4f7d9b-3c17-4fca-abe8-4f483373bdf8
+
 
 A run of sprites strung between two actors. A chain has no velocity, no aim and no tile collision; the launch position and angle only decide which of the sprite's four direction animations the links are drawn with.
 
@@ -241,6 +273,10 @@ A chain is **not** removed when it scrolls off screen, unlike every other behavi
 ---
 
 ### Trail
+
+
+https://github.com/user-attachments/assets/63cda598-eb4a-4046-9ae4-25615ea18b8c
+
 
 Travels like a plain shot — speed, gravity, bounce and tile collision all behave normally — and additionally records where it has been, hanging a sprite off its own history every few updates.
 
