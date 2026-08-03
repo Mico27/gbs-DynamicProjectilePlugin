@@ -3,7 +3,7 @@
 #include "projectiles.h"
 
 #include <gbdk/metasprites.h>
-
+#include <stdlib.h>
 // DYNPROJ_ENABLE_* come from here: each behaviour is an engine setting under
 // Settings -> Engine -> Custom Projectiles, and turning one off keeps its code
 // out of the ROM entirely.
@@ -1712,9 +1712,9 @@ void vm_define_projectile_behavior(SCRIPT_CTX * THIS) OLDCALL BANKED {
     // variable (or an older project saved when the range was wider) would
     // otherwise wrap round into the opposite sign.
     BYTE gravity = *(BYTE *)VM_REF_TO_PTR(FN_ARG4);
-    if (gravity > DEF_GRAVITY_MAX) gravity = DEF_GRAVITY_MAX;
-    else if (gravity < DEF_GRAVITY_MIN) gravity = DEF_GRAVITY_MIN;
-    def->gravity   = (UBYTE)(gravity + DEF_GRAVITY_BIAS);
+    gravity = CLAMP(gravity, -DEF_GRAVITY_MAX, DEF_GRAVITY_MAX);
+    def->gravity   = abs(gravity);
+    def->invert_gravity = gravity < 0 ? 1 : 0;
     def->bounce    = *(UBYTE *)VM_REF_TO_PTR(FN_ARG5);
     def->amplitude = *(BYTE  *)VM_REF_TO_PTR(FN_ARG6);
     def->frequency = *(UBYTE *)VM_REF_TO_PTR(FN_ARG7);
