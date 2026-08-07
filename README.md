@@ -550,6 +550,69 @@ Notes on the demos:
 
 ---
 
+<!-- SETTINGCOST:BEGIN -->
+### What each engine setting costs
+
+Every setting here changes what gets compiled. Figures are what you **get back by
+turning the setting off**; rows marked *off by default* show what turning it **on**
+costs instead, and sliders show the cost per step. A dash means that budget does not
+move.
+
+| Setting | Bank 0 | WRAM | Banked ROM |
+|---|---|---|---|
+| Max concurrent projectiles *(slider 1–20, default 6)* | — | 16 B/step | — |
+| Max projectile slots *(slider 5–20, default 5)* | — | 32 B/step | — |
+| Off-screen margin (tiles) *(slider 0–10, default 2)* | — | — | 1.2 B/step |
+| Tile collision detection → *Bounding box* | — | — | −89 B |
+| Enable behaviour: Arc | — | — | **23 B** |
+| Enable behaviour: Boomerang | — | — | **222 B** |
+| Enable behaviour: Sine Wave | — | — | **138 B** |
+| Enable behaviour: Orbit | — | — | **187 B** |
+| Enable behaviour: Hookshot | — | **6 B** | **2,947 B** |
+| Hookshot pull realigns to grid → *Off (leave where it stopped)* | — | — | −304 B |
+| Hookshot pull realigns to grid → *16px grid* | — | — | +9 B |
+| Hookshot pulls stop at obstacles | — | — | **954 B** |
+| Enable behaviour: Anchor | — | — | **183 B** |
+| Enable behaviour: Custom | — | — | **104 B** |
+| Enable behaviour: Chain | **128 B** | **4 B** | **1,428 B** |
+| Enable behaviour: Trail | **201 B** | — | **777 B** |
+| Max chains + trails *(slider 1–8, default 2)* | — | 66 B/step | — |
+| Points per chain / trail *(slider 2–32, default 16)* | — | 8 B/step | — |
+
+Turning off every on-by-default switch above frees **329 B** of bank 0, **10 B** of WRAM, **6,963 B** of banked ROM — the full
+span between this plugin at its fullest and stripped to nothing. Treat it as a
+ceiling rather than a recipe: you keep whatever your game actually uses.
+
+- **Max concurrent projectiles**: going from 1 to 20 moves WRAM by +304 B.
+- **Max projectile slots**: going from 5 to 20 moves WRAM by +480 B.
+- **Off-screen margin (tiles)**: going from 0 to 10 moves banked ROM by +12 B.
+- **Max chains + trails**: going from 1 to 8 moves WRAM by +462 B.
+- **Points per chain / trail**: going from 2 to 32 moves WRAM by +240 B.
+
+- **Hookshot pull realigns to grid** only applies when *Enable behaviour: Hookshot* is enabled.
+- **Hookshot pulls stop at obstacles** only applies when *Enable behaviour: Hookshot* is enabled.
+- **Max chains + trails** only applies when *Enable behaviour: Chain* is enabled.
+- **Points per chain / trail** only applies when *Enable behaviour: Chain* is enabled.
+
+<details><summary>How these were measured</summary>
+
+GB Studio 4.3.0-e1. Each of this plugin's `engine/src/**/*.c` files was compiled with
+the toolchain and flags GB Studio itself uses (`lcc -msm83:gb
+-Wf--max-allocs-per-node 3000 -DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged
+include tree, once with every setting at its default and once per setting toggled. The
+SDCC object files' area records were then diffed: `_HOME` is bank 0,
+`_DATA`/`_INITIALIZED`/`_BSS` are WRAM, and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are
+banked ROM.
+
+Two caveats. Only this plugin's own engine sources are measured, so a setting that also
+changes a struct shared with stock engine files can move a few more bytes in files the
+plugin does not ship. And each setting is toggled on its own: a handful measure slightly
+*negative* because enabling their code lets the compiler drop a fallback path elsewhere,
+and settings that gate other settings only show their own contribution.
+
+</details>
+<!-- SETTINGCOST:END -->
+
 ## Memory Footprint
 
 Measured against the stock GB Studio **4.3.0-e1** engine at default engine settings, by diffing the link maps of the `gbs2` template built with and without the plugin installed. Values are the plugin's *delta* versus the stock engine. **DMG and CGB deltas are identical** — the plugin has no colour-specific paths. Using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks.
