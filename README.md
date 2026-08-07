@@ -100,15 +100,19 @@ Set **Slot Behaviour** on that tab to whatever the slot holds. It has no effect 
 
 ### 3. Add Impact Scripts (optional)
 
-**Set Projectile Removal Script**, **Set Projectile Tile Hit Script** and **Set Projectile Actor Hit Script** register a script that runs when *any* projectile is removed, hits a wall, or touches an actor. Set them once per scene; they persist until cleared or the scene changes.
+**Set Projectile Removal Script**, **Set Projectile Tile Hit Script**, **Set Projectile Actor Hit Script** and **Set Projectile Tile Enter Script** register a script that runs when *any* projectile is removed, hits a wall, touches an actor, or crosses into a new tile. Set them once per scene; they persist until cleared or the scene changes.
 
 Each slot has a matching checkbox (*Run On Remove script* and friends) so an individual slot can opt out.
+
+*Set Projectile Tile Hit Script* holds **one script per face of the tile** — run it once per face, or leave it on *Any* to fill all four at once.
 
 ### 4. Trim the Behaviours You Do Not Use (optional)
 
 Every behaviour except Default has an on/off switch under **Settings → Engine → Dynamic Projectiles**. These are compile-time switches — turning one off removes its code from the ROM rather than merely skipping it at runtime. The behaviours are by far the biggest lever on the plugin's ROM cost.
 
-The events refuse to compile against a behaviour that has been switched off, naming the offending scene, rather than silently producing a projectile that does nothing.
+The three shared impact scripts have their own switches too — **Enable script: Tile Hit / Actor Hit / Tile Enter** — which remove the trigger, its global and its native from the ROM. **Tile hit script per face** sits under the first of those and decides whether the tile hit trigger keeps four scripts or one.
+
+The events refuse to compile against a behaviour or script that has been switched off, naming the offending scene, rather than silently producing a projectile that does nothing. The one exception is the per-slot checkboxes: a slot ticking *Run Tile Hit script* while that switch is off simply has the flag cleared, since a field cannot be hidden based on an engine setting and the flag would be dead weight either way. Turning the switch back on restores it without touching the slot.
 
 ---
 
@@ -129,6 +133,14 @@ A live projectile stores only an index into the slot table, so redefining a slot
 ### Order matters if you mix with the stock events
 
 *Load Dynamic Projectile Into Slot* writes the whole definition, so running the stock *Load Projectile Into Slot* afterwards on the same slot wipes the behaviour back to Default.
+
+### The tile enter script is not a per-tile trace
+
+The crossing is detected by comparing the cell the origin point started an update pass in with the one it ended in, so a projectile moving more than a cell per pass reports where it landed, not every cell on the line between. Slow it down, or widen the **Tile enter grid**, if you need every one.
+
+### "Infinite lifetime" moved from a flag to Life Time 0
+
+Older versions had an *Infinite lifetime* checkbox on the definition. That flag bit is now *Run Tile Enter script*, and a projectile never expires by being given a **Life Time of 0** instead. Slots saved with the old checkbox keep their stored *Life Time*, so re-check any that relied on it.
 
 ### Stock engine files are replaced
 
@@ -317,6 +329,11 @@ Found under **Settings → Engine → Dynamic Projectiles**. Indented entries be
 | **Max projectile slots** | 5–20 | 5 | Size of the definition table. Five is a floor, not a choice — GB Studio's scene loader always fills slots 0–4 itself. Each slot costs 32 bytes of WRAM. |
 | **Off-screen margin (tiles)** | 0–10 | 2 | How far past the screen edge a projectile may travel before it is retired. 0 retires it the moment its origin leaves the screen. |
 | **Tile collision detection** | Origin point / Bounding box | Origin point | Whether tile tests use a single lookup at the projectile's position, or every tile its bounds rect covers. Bounding box makes large projectiles stop as soon as any part of them touches a wall, at the cost of several tile reads per projectile per frame. |
+| **Enable script: Tile Hit** | on / off | on | Compile-time switch for the shared tile hit trigger. Off removes its global, its native and its trigger from the ROM. |
+| ↳ **Tile hit script per face** | on / off | on | Whether the tile hit trigger keeps one script per face of the tile, or a single shared one. Off collapses the four slots to one and folds away the work of deciding which face was struck; the event's *Tile Face* must then stay on *Any*. |
+| **Enable script: Actor Hit** | on / off | on | Same for the actor hit trigger. |
+| **Enable script: Tile Enter** | on / off | on | Same for the tile enter trigger, including the per-pass cell comparison in the update loop. |
+| ↳ **Tile enter grid** | 8x8 / 16x16 tiles | 8x8 | Cell size the *Set Projectile Tile Enter Script* counts crossings against. 16x16 fires a quarter as often, which suits metatile-based scenes. |
 | **Enable behaviour: …** | on / off | on | One compile-time switch per behaviour except Default. |
 | ↳ **Hookshot pull realigns to grid** | Off / 8px / 16px | 8px | Grid a pull puts the source actor back on. Set it to match your top-down scene, or *Off* for scene types where snapping the player is wrong. |
 | ↳ **Hookshot pulls stop at obstacles** | on / off | on | Whether a pull stops short of solid tiles and actors. |
@@ -348,7 +365,7 @@ Writes a complete projectile definition into a slot: everything the stock *Load 
 | Projectile Slot | Slot to write (0 to *Max projectile slots* − 1). A plain number, not one of five buttons. |
 | Sprite Sheet / Animation State | The projectile's appearance. |
 | Speed / Animation Speed | Travel speed and animation rate. |
-| Life Time | Seconds before it expires on its own. |
+| Life Time | Seconds before it expires on its own. **0 means it never does** — it then only goes away by hitting something, leaving the screen, or a script removing it. |
 | Initial Offset | Distance in front of the source to spawn at, in pixels. |
 | Loop Animation | Whether the animation repeats or holds on its last frame. |
 | Destroy On Hit | Unchecked makes it a *strong* projectile that survives contact. |
@@ -364,7 +381,7 @@ Writes a complete projectile definition into a slot: everything the stock *Load 
 | Gravity | Downward pull, applied every other frame. Clamped to −8…7. |
 | Bounce | How hard it rebounds, shown when the collision mode bounces. |
 | *(behaviour shape fields)* | Wave amplitude/frequency, orbit radius/speed, chain type/links/slack/catch-up, trail segments/spacing, hookshot reactions, custom delta variables — see [Behaviours Reference](#behaviours-reference). |
-| Infinite lifetime | Ignore *Life Time* so these never expire on their own. |
+| Run Tile Enter script | Whether this slot triggers the shared tile enter script. Off by default — it fires far more often than the impact scripts. |
 | Ignore player collision | Pass through the player. |
 | Run On Remove / Tile Hit / Actor Hit script | Whether this slot triggers each shared impact script. All on by default. |
 
@@ -447,10 +464,17 @@ Registers a script that runs whenever any projectile is removed — expired, off
 
 Registers a script that runs whenever a projectile's *Tile Collision Behaviour* reacts to a solid tile. A projectile in a bounce mode runs it on **every** bounce, so keep it short.
 
+There is **one script per face of the tile**, so a shot landing on a floor can do something different from one hitting a wall. Run the event once per face you care about; each slot is independent and holds until cleared or the scene changes.
+
 | Field | Description |
 |-------|-------------|
 | Action | Set script · Clear script. |
+| Tile Face | Any · Top · Right · Bottom · Left. *Any* writes all four slots at once, which is the default. Naming a single face needs the **Tile hit script per face** engine setting; with that off there is one shared script and the event refuses anything but *Any*. |
 | On Tile Hit | The script to run. |
+
+**Face means the side of the tile that was struck**, not the way the projectile was travelling — a shot falling onto a floor hits its *Top*, one flying right into a wall hits that wall's *Left*. The bounce modes already test each face separately, so they report it exactly. *Remove projectile* mode does a single lookup for any solid side, so there the face is read back off the direction of travel.
+
+The per-slot *Run Tile Hit script* checkbox is still one opt-in covering all four faces — the definition's flags field is full, so there is no room for four.
 
 ---
 
@@ -467,11 +491,26 @@ Registers a script that runs whenever a projectile touches an actor in its colli
 
 ---
 
+### Set Projectile Tile Enter Script
+
+**`DYNPROJ_EVENT_SET_TILE_ENTER_SCRIPT`**
+
+Registers a script that runs whenever a projectile's origin point crosses into a new cell of the **Tile enter grid**. Only slots with *Run Tile Enter script* ticked trigger it, since it fires far more often than the impact scripts — a shot crossing the screen runs it once per tile.
+
+The crossing is detected by comparing the cell the origin point started the pass in with the one it ended in, so a projectile fast enough to jump a whole tile reports where it landed rather than every tile on the line between. A shot that leaves the screen still reports the tile it left through, before it is retired.
+
+| Field | Description |
+|-------|-------------|
+| Action | Set script · Clear script. |
+| On Tile Enter | The script to run. |
+
+---
+
 ### Set Projectile Lifetime
 
 **`DYNPROJ_EVENT_PROJECTILE_LIFETIME`**
 
-Globally suspends lifetime countdown, so nothing expires on its own until it is switched back. Slots with *Infinite lifetime* are unaffected either way.
+Globally suspends lifetime countdown, so nothing expires on its own until it is switched back. Slots given a *Life Time* of 0 are unaffected either way — they already never expire.
 
 | Field | Description |
 |-------|-------------|
@@ -528,18 +567,19 @@ It boots into a menu; each entry is a self-contained demo scene. In every demo *
 | Scene | Shows | Controls |
 |-------|-------|----------|
 | 1 - Arc | Launch height and gravity, *Remove projectile* tile collision, and the hit scripts on a non-hookshot projectile | B: lob a shot |
-| 2 - Boomerang | Range, infinite lifetime | B: light throw, A: heavy throw |
+| 2 - Boomerang | Range, and a Life Time of 0 so the throw only ends by returning | B: light throw, A: heavy throw |
 | 3 - Sine Wave | Amplitude / frequency / phase, with A's amplitude read from a variable | B: gentle wave, A: wider each press |
 | 4 - Orbit | Three orbiters evenly spaced by starting phase; the third is fired with the By Index launch event | B: add 3 orbiters |
 | 5 - Hookshot | Head + three chain links, all four impact reactions, and the chain tracking the player as they walk | B: fire hook, A: pick mode, SELECT: recall |
 | 6 - Anchor | Two anchored projectiles on different actors at once | B: attach to player, A: attach to the target |
 | 7 - Custom | Per-frame delta driven by two variables, plus an on-removal script | B: fire |
-| 8 - Gravity & Bounce | *Bounce*, *Bounce (only floor)* and *Remove projectile*, with a tile hit script on each bounce | B / A / SELECT: one behaviour each |
+| 8 - Gravity & Bounce | *Bounce*, *Bounce (only floor)* and *Remove projectile*, with a separate tile hit script per tile face so the print names the side struck | B / A / SELECT: one behaviour each |
 | 9 - On Removal | A removal script reading position and behaviour back out of the `Last Hit` fields | B: fire |
 | 10 - Global Controls | Pause / hide / lifetime switches, plus per-slot *Ignore player collision* | B: fire, A: options menu |
 | 11 - Extra Slots | Slots 5–7, past what stock GB Studio can address, plus all four launch sources | B / A / SELECT, and the d-pad |
 | 12 - Chain | Both placement modes strung from the player to the target — walk around to see the difference | B: straight chain, A: loose chain |
 | 13 - Trail | A trail that hops under gravity, one that flies straight at the target with a longer tail, and a tail hung off the player | B / A / SELECT |
+| 14 - Tile Enter | A tile enter script counting cells as a slow shot crosses the room, and an identical slot with the opt-in unticked | B: reporting shot, A: silent shot |
 
 Notes on the demos:
 
@@ -565,22 +605,27 @@ move.
 | Max projectile slots *(slider 5–20, default 5)* | — | 32 B/step | — |
 | Off-screen margin (tiles) *(slider 0–10, default 2)* | — | — | 1.2 B/step |
 | Tile collision detection → *Bounding box* | — | — | −89 B |
+| Enable script: Tile Hit | — | **12 B** | **338 B** |
+| Tile hit script per face | — | **9 B** | **204 B** |
+| Enable script: Actor Hit | — | **3 B** | **125 B** |
+| Enable script: Tile Enter | — | **3 B** | **213 B** |
+| Tile enter grid → *16x16 tiles* | — | — | +8 B |
 | Enable behaviour: Arc | — | — | **23 B** |
 | Enable behaviour: Boomerang | — | — | **222 B** |
 | Enable behaviour: Sine Wave | — | — | **138 B** |
 | Enable behaviour: Orbit | — | — | **187 B** |
-| Enable behaviour: Hookshot | — | **6 B** | **2,947 B** |
+| Enable behaviour: Hookshot | — | **6 B** | **2,920 B** |
 | Hookshot pull realigns to grid → *Off (leave where it stopped)* | — | — | −304 B |
 | Hookshot pull realigns to grid → *16px grid* | — | — | +9 B |
 | Hookshot pulls stop at obstacles | — | — | **954 B** |
 | Enable behaviour: Anchor | — | — | **183 B** |
 | Enable behaviour: Custom | — | — | **104 B** |
-| Enable behaviour: Chain | **128 B** | **4 B** | **1,428 B** |
-| Enable behaviour: Trail | **201 B** | — | **777 B** |
+| Enable behaviour: Chain | **128 B** | **4 B** | **1,395 B** |
+| Enable behaviour: Trail | **201 B** | — | **784 B** |
 | Max chains + trails *(slider 1–8, default 2)* | — | 66 B/step | — |
 | Points per chain / trail *(slider 2–32, default 16)* | — | 8 B/step | — |
 
-Turning off every on-by-default switch above frees **329 B** of bank 0, **10 B** of WRAM, **6,963 B** of banked ROM — the full
+Turning off every on-by-default switch above frees **329 B** of bank 0, **37 B** of WRAM, **7,790 B** of banked ROM — the full
 span between this plugin at its fullest and stripped to nothing. Treat it as a
 ceiling rather than a recipe: you keep whatever your game actually uses.
 
@@ -590,6 +635,8 @@ ceiling rather than a recipe: you keep whatever your game actually uses.
 - **Max chains + trails**: going from 1 to 8 moves WRAM by +462 B.
 - **Points per chain / trail**: going from 2 to 32 moves WRAM by +240 B.
 
+- **Tile hit script per face** only applies when *Enable script: Tile Hit* is enabled.
+- **Tile enter grid** only applies when *Enable script: Tile Enter* is enabled.
 - **Hookshot pull realigns to grid** only applies when *Enable behaviour: Hookshot* is enabled.
 - **Hookshot pulls stop at obstacles** only applies when *Enable behaviour: Hookshot* is enabled.
 - **Max chains + trails** only applies when *Enable behaviour: Chain* is enabled.

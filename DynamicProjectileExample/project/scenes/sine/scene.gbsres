@@ -24,7 +24,7 @@
         "text": "Sine: oscillates perpendicular to the direction of travel.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000051"
+      "id": "e0000000-0000-4000-8000-000000000052"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "A's shot takes its amplitude from a variable instead of a fixed",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000052"
+      "id": "e0000000-0000-4000-8000-000000000053"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "number - every numeric parameter accepts a value like this.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000053"
+      "id": "e0000000-0000-4000-8000-000000000054"
     },
     {
       "command": "EVENT_SET_VALUE",
@@ -51,7 +51,7 @@
           "value": 20
         }
       },
-      "id": "e0000000-0000-4000-8000-000000000054"
+      "id": "e0000000-0000-4000-8000-000000000055"
     },
     {
       "command": "EVENT_TEXT",
@@ -61,7 +61,7 @@
           "A's amplitude is\nread from a\nvariable."
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000055"
+      "id": "e0000000-0000-4000-8000-000000000056"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -72,7 +72,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000058",
+      "id": "e0000000-0000-4000-8000-000000000059",
       "children": {
         "true": [
           {
@@ -113,13 +113,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000056"
+            "id": "e0000000-0000-4000-8000-000000000057"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -176,7 +176,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000057"
+            "id": "e0000000-0000-4000-8000-000000000058"
           }
         ]
       }
@@ -190,7 +190,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000062",
+      "id": "e0000000-0000-4000-8000-000000000063",
       "children": {
         "true": [
           {
@@ -202,7 +202,7 @@
                 "value": "($1$ + 15) % 120"
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000059"
+            "id": "e0000000-0000-4000-8000-000000000060"
           },
           {
             "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -242,13 +242,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000060"
+            "id": "e0000000-0000-4000-8000-000000000061"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -305,7 +305,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000061"
+            "id": "e0000000-0000-4000-8000-000000000062"
           }
         ]
       }
@@ -319,7 +319,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000064",
+      "id": "e0000000-0000-4000-8000-000000000065",
       "children": {
         "true": [
           {
@@ -337,7 +337,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000063"
+            "id": "e0000000-0000-4000-8000-000000000064"
           }
         ]
       }

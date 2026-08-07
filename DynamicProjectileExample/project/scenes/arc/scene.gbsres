@@ -24,7 +24,7 @@
         "text": "Arc: the shot is thrown upward then pulled back by gravity.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000023"
+      "id": "e0000000-0000-4000-8000-000000000024"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "The tile and actor hit scripts are not hookshot-only - a plain",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000024"
+      "id": "e0000000-0000-4000-8000-000000000025"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "arc shot runs them too.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000025"
+      "id": "e0000000-0000-4000-8000-000000000026"
     },
     {
       "command": "EVENT_TEXT",
@@ -49,14 +49,14 @@
           "ARC\n\nB: lob a shot.\nSTART: menu"
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000026"
+      "id": "e0000000-0000-4000-8000-000000000027"
     },
     {
       "command": "DYNPROJ_EVENT_SET_ACTOR_HIT_SCRIPT",
       "args": {
         "action": 0
       },
-      "id": "e0000000-0000-4000-8000-000000000029",
+      "id": "e0000000-0000-4000-8000-000000000030",
       "children": {
         "script": [
           {
@@ -65,7 +65,7 @@
               "engineFieldKey": "projectile_hit_actor",
               "value": "7"
             },
-            "id": "e0000000-0000-4000-8000-000000000027"
+            "id": "e0000000-0000-4000-8000-000000000028"
           },
           {
             "command": "EVENT_TEXT_DRAW",
@@ -75,7 +75,7 @@
               "y": 1,
               "location": "background"
             },
-            "id": "e0000000-0000-4000-8000-000000000028"
+            "id": "e0000000-0000-4000-8000-000000000029"
           }
         ]
       }
@@ -83,9 +83,10 @@
     {
       "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
       "args": {
-        "action": 0
+        "action": 0,
+        "face": "4"
       },
-      "id": "e0000000-0000-4000-8000-000000000033",
+      "id": "e0000000-0000-4000-8000-000000000034",
       "children": {
         "script": [
           {
@@ -94,7 +95,7 @@
               "engineFieldKey": "projectile_hit_x",
               "value": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000030"
+            "id": "e0000000-0000-4000-8000-000000000031"
           },
           {
             "command": "EVENT_ENGINE_FIELD_STORE",
@@ -102,7 +103,7 @@
               "engineFieldKey": "projectile_hit_y",
               "value": "3"
             },
-            "id": "e0000000-0000-4000-8000-000000000031"
+            "id": "e0000000-0000-4000-8000-000000000032"
           },
           {
             "command": "EVENT_TEXT_DRAW",
@@ -112,7 +113,7 @@
               "y": 1,
               "location": "background"
             },
-            "id": "e0000000-0000-4000-8000-000000000032"
+            "id": "e0000000-0000-4000-8000-000000000033"
           }
         ]
       }
@@ -126,7 +127,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000036",
+      "id": "e0000000-0000-4000-8000-000000000037",
       "children": {
         "true": [
           {
@@ -167,13 +168,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000034"
+            "id": "e0000000-0000-4000-8000-000000000035"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -230,7 +231,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000035"
+            "id": "e0000000-0000-4000-8000-000000000036"
           }
         ]
       }
@@ -244,7 +245,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000038",
+      "id": "e0000000-0000-4000-8000-000000000039",
       "children": {
         "true": [
           {
@@ -262,7 +263,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000037"
+            "id": "e0000000-0000-4000-8000-000000000038"
           }
         ]
       }

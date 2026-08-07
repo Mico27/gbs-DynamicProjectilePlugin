@@ -24,7 +24,7 @@
         "text": "Boomerang: resistance slows the shot down until it comes back.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000040"
+      "id": "e0000000-0000-4000-8000-000000000041"
     },
     {
       "command": "EVENT_TEXT",
@@ -33,7 +33,7 @@
           "BOOMERANG\n\nB: light throw\nA: heavy throw"
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000041"
+      "id": "e0000000-0000-4000-8000-000000000042"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -44,7 +44,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000044",
+      "id": "e0000000-0000-4000-8000-000000000045",
       "children": {
         "true": [
           {
@@ -56,7 +56,7 @@
               "spriteStateId": "",
               "speed": 3,
               "animSpeed": 15,
-              "lifeTime": 4,
+              "lifeTime": 0,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
@@ -83,13 +83,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": true,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000042"
+            "id": "e0000000-0000-4000-8000-000000000043"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -146,7 +146,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000043"
+            "id": "e0000000-0000-4000-8000-000000000044"
           }
         ]
       }
@@ -160,7 +160,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000047",
+      "id": "e0000000-0000-4000-8000-000000000048",
       "children": {
         "true": [
           {
@@ -172,7 +172,7 @@
               "spriteStateId": "",
               "speed": 4,
               "animSpeed": 15,
-              "lifeTime": 4,
+              "lifeTime": 0,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
@@ -199,13 +199,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": true,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000045"
+            "id": "e0000000-0000-4000-8000-000000000046"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -262,7 +262,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000046"
+            "id": "e0000000-0000-4000-8000-000000000047"
           }
         ]
       }
@@ -276,7 +276,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000049",
+      "id": "e0000000-0000-4000-8000-000000000050",
       "children": {
         "true": [
           {
@@ -294,7 +294,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000048"
+            "id": "e0000000-0000-4000-8000-000000000049"
           }
         ]
       }

@@ -24,7 +24,7 @@
         "text": "Hookshot: one 'Head' projectile plus three chain links, which",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000079"
+      "id": "e0000000-0000-4000-8000-000000000080"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "always span the line from the source actor to the head - walk",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000080"
+      "id": "e0000000-0000-4000-8000-000000000081"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "around with a hook out and the chain follows.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000081"
+      "id": "e0000000-0000-4000-8000-000000000082"
     },
     {
       "command": "EVENT_COMMENT",
@@ -48,7 +48,7 @@
         "text": "A picks which On Tile Hit / On Actor Hit reactions B fires with.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000082"
+      "id": "e0000000-0000-4000-8000-000000000083"
     },
     {
       "command": "EVENT_COMMENT",
@@ -56,7 +56,7 @@
         "text": "The two impact scripts are set once here by their own events and",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000083"
+      "id": "e0000000-0000-4000-8000-000000000084"
     },
     {
       "command": "EVENT_COMMENT",
@@ -64,7 +64,7 @@
         "text": "read back what was hit through the Last Hit engine fields.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000084"
+      "id": "e0000000-0000-4000-8000-000000000085"
     },
     {
       "command": "EVENT_SET_VALUE",
@@ -75,14 +75,15 @@
           "value": 1
         }
       },
-      "id": "e0000000-0000-4000-8000-000000000085"
+      "id": "e0000000-0000-4000-8000-000000000086"
     },
     {
       "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
       "args": {
-        "action": 0
+        "action": 0,
+        "face": "4"
       },
-      "id": "e0000000-0000-4000-8000-000000000089",
+      "id": "e0000000-0000-4000-8000-000000000090",
       "children": {
         "script": [
           {
@@ -91,7 +92,7 @@
               "engineFieldKey": "projectile_hit_x",
               "value": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000086"
+            "id": "e0000000-0000-4000-8000-000000000087"
           },
           {
             "command": "EVENT_ENGINE_FIELD_STORE",
@@ -99,7 +100,7 @@
               "engineFieldKey": "projectile_hit_y",
               "value": "3"
             },
-            "id": "e0000000-0000-4000-8000-000000000087"
+            "id": "e0000000-0000-4000-8000-000000000088"
           },
           {
             "command": "EVENT_TEXT_DRAW",
@@ -109,7 +110,7 @@
               "y": 1,
               "location": "background"
             },
-            "id": "e0000000-0000-4000-8000-000000000088"
+            "id": "e0000000-0000-4000-8000-000000000089"
           }
         ]
       }
@@ -119,7 +120,7 @@
       "args": {
         "action": 0
       },
-      "id": "e0000000-0000-4000-8000-000000000092",
+      "id": "e0000000-0000-4000-8000-000000000093",
       "children": {
         "script": [
           {
@@ -128,7 +129,7 @@
               "engineFieldKey": "projectile_hit_actor",
               "value": "7"
             },
-            "id": "e0000000-0000-4000-8000-000000000090"
+            "id": "e0000000-0000-4000-8000-000000000091"
           },
           {
             "command": "EVENT_TEXT_DRAW",
@@ -138,7 +139,7 @@
               "y": 1,
               "location": "background"
             },
-            "id": "e0000000-0000-4000-8000-000000000091"
+            "id": "e0000000-0000-4000-8000-000000000092"
           }
         ]
       }
@@ -152,7 +153,7 @@
           "Walk while held -\nthe chain follows."
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000093"
+      "id": "e0000000-0000-4000-8000-000000000094"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -163,7 +164,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000123",
+      "id": "e0000000-0000-4000-8000-000000000124",
       "children": {
         "true": [
           {
@@ -173,7 +174,7 @@
               "choices": 4,
               "__disableElse": false
             },
-            "id": "e0000000-0000-4000-8000-000000000122",
+            "id": "e0000000-0000-4000-8000-000000000123",
             "children": {
               "false": [],
               "true0": [
@@ -183,7 +184,7 @@
                     "hookshot_state": 5,
                     "actor": "player"
                   },
-                  "id": "e0000000-0000-4000-8000-000000000095"
+                  "id": "e0000000-0000-4000-8000-000000000096"
                 },
                 {
                   "command": "EVENT_WAIT",
@@ -198,7 +199,7 @@
                       "value": 4
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000096"
+                  "id": "e0000000-0000-4000-8000-000000000097"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -209,7 +210,7 @@
                     "spriteStateId": "",
                     "speed": 4,
                     "animSpeed": 15,
-                    "lifeTime": 4,
+                    "lifeTime": 0,
                     "initialOffset": 8,
                     "loopAnim": true,
                     "destroyOnHit": true,
@@ -238,13 +239,13 @@
                     },
                     "hookshotTileHit": 1,
                     "hookshotActorHit": 3,
-                    "compInfiniteLifetime": true,
+                    "compTileEnterScript": false,
                     "compIgnorePlayer": false,
                     "compRemoveScript": true,
                     "compTileHitScript": true,
                     "compActorHitScript": true
                   },
-                  "id": "e0000000-0000-4000-8000-000000000094"
+                  "id": "e0000000-0000-4000-8000-000000000095"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -287,63 +288,6 @@
                     "paramX": {
                       "type": "number",
                       "value": 0
-                    },
-                    "paramY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramPhase": {
-                      "type": "number",
-                      "value": 64
-                    },
-                    "paramActorIndex": {
-                      "type": "number",
-                      "value": 0
-                    }
-                  },
-                  "id": "e0000000-0000-4000-8000-000000000097"
-                },
-                {
-                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
-                  "args": {
-                    "tabs": "source",
-                    "slot": 0,
-                    "sourceType": "actor",
-                    "posX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posUnits": "tiles",
-                    "actorId": "player",
-                    "x": 0,
-                    "y": 0,
-                    "directionType": "actor",
-                    "otherActorId": "player",
-                    "direction": "right",
-                    "angle": 0,
-                    "angleVariable": "0",
-                    "targetActorId": "player",
-                    "targetX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetUnits": "tiles",
-                    "paramBehaviour": "any",
-                    "frame": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramX": {
-                      "type": "number",
-                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -400,7 +344,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 2
+                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -457,7 +401,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 3
+                      "value": 2
                     },
                     "paramY": {
                       "type": "number",
@@ -473,6 +417,63 @@
                     }
                   },
                   "id": "e0000000-0000-4000-8000-000000000100"
+                },
+                {
+                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+                  "args": {
+                    "tabs": "source",
+                    "slot": 0,
+                    "sourceType": "actor",
+                    "posX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posUnits": "tiles",
+                    "actorId": "player",
+                    "x": 0,
+                    "y": 0,
+                    "directionType": "actor",
+                    "otherActorId": "player",
+                    "direction": "right",
+                    "angle": 0,
+                    "angleVariable": "0",
+                    "targetActorId": "player",
+                    "targetX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetUnits": "tiles",
+                    "paramBehaviour": "any",
+                    "frame": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramX": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "paramY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramPhase": {
+                      "type": "number",
+                      "value": 64
+                    },
+                    "paramActorIndex": {
+                      "type": "number",
+                      "value": 0
+                    }
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000101"
                 }
               ],
               "true1": [
@@ -482,7 +483,7 @@
                     "hookshot_state": 5,
                     "actor": "player"
                   },
-                  "id": "e0000000-0000-4000-8000-000000000102"
+                  "id": "e0000000-0000-4000-8000-000000000103"
                 },
                 {
                   "command": "EVENT_WAIT",
@@ -497,7 +498,7 @@
                       "value": 4
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000103"
+                  "id": "e0000000-0000-4000-8000-000000000104"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -508,7 +509,7 @@
                     "spriteStateId": "",
                     "speed": 4,
                     "animSpeed": 15,
-                    "lifeTime": 4,
+                    "lifeTime": 0,
                     "initialOffset": 8,
                     "loopAnim": true,
                     "destroyOnHit": true,
@@ -537,13 +538,13 @@
                     },
                     "hookshotTileHit": 3,
                     "hookshotActorHit": 4,
-                    "compInfiniteLifetime": true,
+                    "compTileEnterScript": false,
                     "compIgnorePlayer": false,
                     "compRemoveScript": true,
                     "compTileHitScript": true,
                     "compActorHitScript": true
                   },
-                  "id": "e0000000-0000-4000-8000-000000000101"
+                  "id": "e0000000-0000-4000-8000-000000000102"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -586,63 +587,6 @@
                     "paramX": {
                       "type": "number",
                       "value": 0
-                    },
-                    "paramY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramPhase": {
-                      "type": "number",
-                      "value": 64
-                    },
-                    "paramActorIndex": {
-                      "type": "number",
-                      "value": 0
-                    }
-                  },
-                  "id": "e0000000-0000-4000-8000-000000000104"
-                },
-                {
-                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
-                  "args": {
-                    "tabs": "source",
-                    "slot": 1,
-                    "sourceType": "actor",
-                    "posX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posUnits": "tiles",
-                    "actorId": "player",
-                    "x": 0,
-                    "y": 0,
-                    "directionType": "actor",
-                    "otherActorId": "player",
-                    "direction": "right",
-                    "angle": 0,
-                    "angleVariable": "0",
-                    "targetActorId": "player",
-                    "targetX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetUnits": "tiles",
-                    "paramBehaviour": "any",
-                    "frame": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramX": {
-                      "type": "number",
-                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -699,7 +643,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 2
+                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -756,7 +700,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 3
+                      "value": 2
                     },
                     "paramY": {
                       "type": "number",
@@ -772,6 +716,63 @@
                     }
                   },
                   "id": "e0000000-0000-4000-8000-000000000107"
+                },
+                {
+                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+                  "args": {
+                    "tabs": "source",
+                    "slot": 1,
+                    "sourceType": "actor",
+                    "posX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posUnits": "tiles",
+                    "actorId": "player",
+                    "x": 0,
+                    "y": 0,
+                    "directionType": "actor",
+                    "otherActorId": "player",
+                    "direction": "right",
+                    "angle": 0,
+                    "angleVariable": "0",
+                    "targetActorId": "player",
+                    "targetX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetUnits": "tiles",
+                    "paramBehaviour": "any",
+                    "frame": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramX": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "paramY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramPhase": {
+                      "type": "number",
+                      "value": 64
+                    },
+                    "paramActorIndex": {
+                      "type": "number",
+                      "value": 0
+                    }
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000108"
                 }
               ],
               "true2": [
@@ -781,7 +782,7 @@
                     "hookshot_state": 5,
                     "actor": "player"
                   },
-                  "id": "e0000000-0000-4000-8000-000000000109"
+                  "id": "e0000000-0000-4000-8000-000000000110"
                 },
                 {
                   "command": "EVENT_WAIT",
@@ -796,7 +797,7 @@
                       "value": 4
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000110"
+                  "id": "e0000000-0000-4000-8000-000000000111"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -807,7 +808,7 @@
                     "spriteStateId": "",
                     "speed": 4,
                     "animSpeed": 15,
-                    "lifeTime": 4,
+                    "lifeTime": 0,
                     "initialOffset": 8,
                     "loopAnim": true,
                     "destroyOnHit": true,
@@ -836,13 +837,13 @@
                     },
                     "hookshotTileHit": 3,
                     "hookshotActorHit": 5,
-                    "compInfiniteLifetime": true,
+                    "compTileEnterScript": false,
                     "compIgnorePlayer": false,
                     "compRemoveScript": true,
                     "compTileHitScript": true,
                     "compActorHitScript": true
                   },
-                  "id": "e0000000-0000-4000-8000-000000000108"
+                  "id": "e0000000-0000-4000-8000-000000000109"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -885,63 +886,6 @@
                     "paramX": {
                       "type": "number",
                       "value": 0
-                    },
-                    "paramY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramPhase": {
-                      "type": "number",
-                      "value": 64
-                    },
-                    "paramActorIndex": {
-                      "type": "number",
-                      "value": 0
-                    }
-                  },
-                  "id": "e0000000-0000-4000-8000-000000000111"
-                },
-                {
-                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
-                  "args": {
-                    "tabs": "source",
-                    "slot": 2,
-                    "sourceType": "actor",
-                    "posX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posUnits": "tiles",
-                    "actorId": "player",
-                    "x": 0,
-                    "y": 0,
-                    "directionType": "actor",
-                    "otherActorId": "player",
-                    "direction": "right",
-                    "angle": 0,
-                    "angleVariable": "0",
-                    "targetActorId": "player",
-                    "targetX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetUnits": "tiles",
-                    "paramBehaviour": "any",
-                    "frame": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramX": {
-                      "type": "number",
-                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -998,7 +942,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 2
+                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -1055,7 +999,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 3
+                      "value": 2
                     },
                     "paramY": {
                       "type": "number",
@@ -1071,6 +1015,63 @@
                     }
                   },
                   "id": "e0000000-0000-4000-8000-000000000114"
+                },
+                {
+                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+                  "args": {
+                    "tabs": "source",
+                    "slot": 2,
+                    "sourceType": "actor",
+                    "posX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posUnits": "tiles",
+                    "actorId": "player",
+                    "x": 0,
+                    "y": 0,
+                    "directionType": "actor",
+                    "otherActorId": "player",
+                    "direction": "right",
+                    "angle": 0,
+                    "angleVariable": "0",
+                    "targetActorId": "player",
+                    "targetX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetUnits": "tiles",
+                    "paramBehaviour": "any",
+                    "frame": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramX": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "paramY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramPhase": {
+                      "type": "number",
+                      "value": 64
+                    },
+                    "paramActorIndex": {
+                      "type": "number",
+                      "value": 0
+                    }
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000115"
                 }
               ],
               "true3": [
@@ -1080,7 +1081,7 @@
                     "hookshot_state": 5,
                     "actor": "player"
                   },
-                  "id": "e0000000-0000-4000-8000-000000000116"
+                  "id": "e0000000-0000-4000-8000-000000000117"
                 },
                 {
                   "command": "EVENT_WAIT",
@@ -1095,7 +1096,7 @@
                       "value": 4
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000117"
+                  "id": "e0000000-0000-4000-8000-000000000118"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -1106,7 +1107,7 @@
                     "spriteStateId": "",
                     "speed": 4,
                     "animSpeed": 15,
-                    "lifeTime": 4,
+                    "lifeTime": 0,
                     "initialOffset": 8,
                     "loopAnim": true,
                     "destroyOnHit": true,
@@ -1135,13 +1136,13 @@
                     },
                     "hookshotTileHit": 2,
                     "hookshotActorHit": 0,
-                    "compInfiniteLifetime": true,
+                    "compTileEnterScript": false,
                     "compIgnorePlayer": false,
                     "compRemoveScript": true,
                     "compTileHitScript": true,
                     "compActorHitScript": true
                   },
-                  "id": "e0000000-0000-4000-8000-000000000115"
+                  "id": "e0000000-0000-4000-8000-000000000116"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -1184,63 +1185,6 @@
                     "paramX": {
                       "type": "number",
                       "value": 0
-                    },
-                    "paramY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramPhase": {
-                      "type": "number",
-                      "value": 64
-                    },
-                    "paramActorIndex": {
-                      "type": "number",
-                      "value": 0
-                    }
-                  },
-                  "id": "e0000000-0000-4000-8000-000000000118"
-                },
-                {
-                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
-                  "args": {
-                    "tabs": "source",
-                    "slot": 3,
-                    "sourceType": "actor",
-                    "posX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "posUnits": "tiles",
-                    "actorId": "player",
-                    "x": 0,
-                    "y": 0,
-                    "directionType": "actor",
-                    "otherActorId": "player",
-                    "direction": "right",
-                    "angle": 0,
-                    "angleVariable": "0",
-                    "targetActorId": "player",
-                    "targetX": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetY": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "targetUnits": "tiles",
-                    "paramBehaviour": "any",
-                    "frame": {
-                      "type": "number",
-                      "value": 0
-                    },
-                    "paramX": {
-                      "type": "number",
-                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -1297,7 +1241,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 2
+                      "value": 1
                     },
                     "paramY": {
                       "type": "number",
@@ -1354,7 +1298,7 @@
                     },
                     "paramX": {
                       "type": "number",
-                      "value": 3
+                      "value": 2
                     },
                     "paramY": {
                       "type": "number",
@@ -1370,6 +1314,63 @@
                     }
                   },
                   "id": "e0000000-0000-4000-8000-000000000121"
+                },
+                {
+                  "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+                  "args": {
+                    "tabs": "source",
+                    "slot": 3,
+                    "sourceType": "actor",
+                    "posX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "posUnits": "tiles",
+                    "actorId": "player",
+                    "x": 0,
+                    "y": 0,
+                    "directionType": "actor",
+                    "otherActorId": "player",
+                    "direction": "right",
+                    "angle": 0,
+                    "angleVariable": "0",
+                    "targetActorId": "player",
+                    "targetX": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "targetUnits": "tiles",
+                    "paramBehaviour": "any",
+                    "frame": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramX": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "paramY": {
+                      "type": "number",
+                      "value": 0
+                    },
+                    "paramPhase": {
+                      "type": "number",
+                      "value": 64
+                    },
+                    "paramActorIndex": {
+                      "type": "number",
+                      "value": 0
+                    }
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000122"
                 }
               ]
             }
@@ -1386,7 +1387,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000131",
+      "id": "e0000000-0000-4000-8000-000000000132",
       "children": {
         "true": [
           {
@@ -1403,7 +1404,7 @@
               "option4": "Snap off",
               "option5": "Recall"
             },
-            "id": "e0000000-0000-4000-8000-000000000124"
+            "id": "e0000000-0000-4000-8000-000000000125"
           },
           {
             "command": "EVENT_SWITCH",
@@ -1412,7 +1413,7 @@
               "choices": 5,
               "__disableElse": false
             },
-            "id": "e0000000-0000-4000-8000-000000000130",
+            "id": "e0000000-0000-4000-8000-000000000131",
             "children": {
               "false": [],
               "true0": [
@@ -1425,7 +1426,7 @@
                       "value": 1
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000125"
+                  "id": "e0000000-0000-4000-8000-000000000126"
                 }
               ],
               "true1": [
@@ -1438,7 +1439,7 @@
                       "value": 2
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000126"
+                  "id": "e0000000-0000-4000-8000-000000000127"
                 }
               ],
               "true2": [
@@ -1451,7 +1452,7 @@
                       "value": 3
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000127"
+                  "id": "e0000000-0000-4000-8000-000000000128"
                 }
               ],
               "true3": [
@@ -1464,7 +1465,7 @@
                       "value": 4
                     }
                   },
-                  "id": "e0000000-0000-4000-8000-000000000128"
+                  "id": "e0000000-0000-4000-8000-000000000129"
                 }
               ],
               "true4": [
@@ -1474,7 +1475,7 @@
                     "hookshot_state": 1,
                     "actor": "player"
                   },
-                  "id": "e0000000-0000-4000-8000-000000000129"
+                  "id": "e0000000-0000-4000-8000-000000000130"
                 }
               ]
             }
@@ -1491,7 +1492,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000133",
+      "id": "e0000000-0000-4000-8000-000000000134",
       "children": {
         "true": [
           {
@@ -1503,7 +1504,7 @@
                 "value": 1
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000132"
+            "id": "e0000000-0000-4000-8000-000000000133"
           }
         ]
       }
@@ -1517,7 +1518,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000136",
+      "id": "e0000000-0000-4000-8000-000000000137",
       "children": {
         "true": [
           {
@@ -1526,7 +1527,7 @@
               "hookshot_state": 5,
               "actor": "player"
             },
-            "id": "e0000000-0000-4000-8000-000000000134"
+            "id": "e0000000-0000-4000-8000-000000000135"
           },
           {
             "command": "EVENT_SWITCH_SCENE",
@@ -1543,7 +1544,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000135"
+            "id": "e0000000-0000-4000-8000-000000000136"
           }
         ]
       }

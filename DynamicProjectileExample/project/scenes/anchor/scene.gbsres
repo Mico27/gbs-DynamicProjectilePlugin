@@ -24,7 +24,7 @@
         "text": "Anchor: the projectile is rigidly attached to an actor and",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000138"
+      "id": "e0000000-0000-4000-8000-000000000139"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "mirrors its facing - handy for held weapons. The actor is named",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000139"
+      "id": "e0000000-0000-4000-8000-000000000140"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "per projectile, so both of these can be out at the same time.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000140"
+      "id": "e0000000-0000-4000-8000-000000000141"
     },
     {
       "command": "EVENT_TEXT",
@@ -50,7 +50,7 @@
           "target actor. Both\ncan be out at once.\nSTART: menu"
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000141"
+      "id": "e0000000-0000-4000-8000-000000000142"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -61,7 +61,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000144",
+      "id": "e0000000-0000-4000-8000-000000000145",
       "children": {
         "true": [
           {
@@ -73,7 +73,7 @@
               "spriteStateId": "",
               "speed": 1,
               "animSpeed": 15,
-              "lifeTime": 4,
+              "lifeTime": 0,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
@@ -100,13 +100,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": true,
+              "compTileEnterScript": false,
               "compIgnorePlayer": true,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000142"
+            "id": "e0000000-0000-4000-8000-000000000143"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -160,7 +160,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000143"
+            "id": "e0000000-0000-4000-8000-000000000144"
           }
         ]
       }
@@ -174,7 +174,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000147",
+      "id": "e0000000-0000-4000-8000-000000000148",
       "children": {
         "true": [
           {
@@ -186,7 +186,7 @@
               "spriteStateId": "",
               "speed": 1,
               "animSpeed": 15,
-              "lifeTime": 4,
+              "lifeTime": 0,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
@@ -213,13 +213,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": true,
+              "compTileEnterScript": false,
               "compIgnorePlayer": true,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000145"
+            "id": "e0000000-0000-4000-8000-000000000146"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -273,7 +273,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000146"
+            "id": "e0000000-0000-4000-8000-000000000147"
           }
         ]
       }
@@ -287,7 +287,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000149",
+      "id": "e0000000-0000-4000-8000-000000000150",
       "children": {
         "true": [
           {
@@ -305,7 +305,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000148"
+            "id": "e0000000-0000-4000-8000-000000000149"
           }
         ]
       }

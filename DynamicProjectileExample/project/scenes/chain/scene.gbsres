@@ -24,7 +24,7 @@
         "text": "Chain: one projectile that draws a run of sprites between two",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000251"
+      "id": "e0000000-0000-4000-8000-000000000266"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "actors. Straight spreads the links evenly along the line; Loose",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000252"
+      "id": "e0000000-0000-4000-8000-000000000267"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "lets each link lag behind its neighbour and catch up, so the",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000253"
+      "id": "e0000000-0000-4000-8000-000000000268"
     },
     {
       "command": "EVENT_COMMENT",
@@ -48,7 +48,7 @@
         "text": "chain hangs and drags instead of staying taut.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000254"
+      "id": "e0000000-0000-4000-8000-000000000269"
     },
     {
       "command": "EVENT_COMMENT",
@@ -56,7 +56,7 @@
         "text": "Both are strung from the player to the Target actor, so walking",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000255"
+      "id": "e0000000-0000-4000-8000-000000000270"
     },
     {
       "command": "EVENT_COMMENT",
@@ -64,7 +64,7 @@
         "text": "around is what shows the difference.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000256"
+      "id": "e0000000-0000-4000-8000-000000000271"
     },
     {
       "command": "EVENT_TEXT",
@@ -75,7 +75,7 @@
           "Each lasts 4s. Only\n2 can be out at\nonce. START: menu"
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000257"
+      "id": "e0000000-0000-4000-8000-000000000272"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -86,7 +86,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000260",
+      "id": "e0000000-0000-4000-8000-000000000275",
       "children": {
         "true": [
           {
@@ -125,13 +125,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000258"
+            "id": "e0000000-0000-4000-8000-000000000273"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -188,7 +188,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000259"
+            "id": "e0000000-0000-4000-8000-000000000274"
           }
         ]
       }
@@ -202,7 +202,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000263",
+      "id": "e0000000-0000-4000-8000-000000000278",
       "children": {
         "true": [
           {
@@ -241,13 +241,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000261"
+            "id": "e0000000-0000-4000-8000-000000000276"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -304,7 +304,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000262"
+            "id": "e0000000-0000-4000-8000-000000000277"
           }
         ]
       }
@@ -318,7 +318,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000265",
+      "id": "e0000000-0000-4000-8000-000000000280",
       "children": {
         "true": [
           {
@@ -336,7 +336,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000264"
+            "id": "e0000000-0000-4000-8000-000000000279"
           }
         ]
       }

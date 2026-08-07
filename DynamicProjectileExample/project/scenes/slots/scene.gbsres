@@ -24,7 +24,7 @@
         "text": "GB Studio only fills projectile slots 0-4. With Max projectile",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000227"
+      "id": "e0000000-0000-4000-8000-000000000242"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "slots raised to 8, the plugin Load/Launch Slot events reach 5-7,",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000228"
+      "id": "e0000000-0000-4000-8000-000000000243"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "each holding a different sprite/speed/lifetime definition.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000229"
+      "id": "e0000000-0000-4000-8000-000000000244"
     },
     {
       "command": "EVENT_TEXT",
@@ -52,7 +52,7 @@
           "LEFT: aim at the\ntarget. RIGHT: point\nto point."
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000230"
+      "id": "e0000000-0000-4000-8000-000000000245"
     },
     {
       "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -90,13 +90,13 @@
         },
         "hookshotTileHit": 0,
         "hookshotActorHit": 0,
-        "compInfiniteLifetime": false,
+        "compTileEnterScript": false,
         "compIgnorePlayer": false,
         "compRemoveScript": true,
         "compTileHitScript": true,
         "compActorHitScript": true
       },
-      "id": "e0000000-0000-4000-8000-000000000231"
+      "id": "e0000000-0000-4000-8000-000000000246"
     },
     {
       "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -134,13 +134,13 @@
         },
         "hookshotTileHit": 0,
         "hookshotActorHit": 0,
-        "compInfiniteLifetime": false,
+        "compTileEnterScript": false,
         "compIgnorePlayer": false,
         "compRemoveScript": true,
         "compTileHitScript": true,
         "compActorHitScript": true
       },
-      "id": "e0000000-0000-4000-8000-000000000232"
+      "id": "e0000000-0000-4000-8000-000000000247"
     },
     {
       "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
@@ -151,7 +151,7 @@
         "spriteStateId": "",
         "speed": 4,
         "animSpeed": 7,
-        "lifeTime": 1,
+        "lifeTime": 0,
         "initialOffset": 8,
         "loopAnim": true,
         "destroyOnHit": true,
@@ -180,13 +180,13 @@
         },
         "hookshotTileHit": 0,
         "hookshotActorHit": 0,
-        "compInfiniteLifetime": true,
+        "compTileEnterScript": false,
         "compIgnorePlayer": false,
         "compRemoveScript": true,
         "compTileHitScript": true,
         "compActorHitScript": true
       },
-      "id": "e0000000-0000-4000-8000-000000000233"
+      "id": "e0000000-0000-4000-8000-000000000248"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -197,7 +197,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000235",
+      "id": "e0000000-0000-4000-8000-000000000250",
       "children": {
         "true": [
           {
@@ -255,7 +255,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000234"
+            "id": "e0000000-0000-4000-8000-000000000249"
           }
         ]
       }
@@ -269,7 +269,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000237",
+      "id": "e0000000-0000-4000-8000-000000000252",
       "children": {
         "true": [
           {
@@ -327,7 +327,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000236"
+            "id": "e0000000-0000-4000-8000-000000000251"
           }
         ]
       }
@@ -341,7 +341,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000239",
+      "id": "e0000000-0000-4000-8000-000000000254",
       "children": {
         "true": [
           {
@@ -399,7 +399,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000238"
+            "id": "e0000000-0000-4000-8000-000000000253"
           }
         ]
       }
@@ -413,7 +413,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000241",
+      "id": "e0000000-0000-4000-8000-000000000256",
       "children": {
         "true": [
           {
@@ -471,7 +471,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000240"
+            "id": "e0000000-0000-4000-8000-000000000255"
           }
         ]
       }
@@ -485,7 +485,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000243",
+      "id": "e0000000-0000-4000-8000-000000000258",
       "children": {
         "true": [
           {
@@ -543,7 +543,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000242"
+            "id": "e0000000-0000-4000-8000-000000000257"
           }
         ]
       }
@@ -557,7 +557,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000245",
+      "id": "e0000000-0000-4000-8000-000000000260",
       "children": {
         "true": [
           {
@@ -615,7 +615,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000244"
+            "id": "e0000000-0000-4000-8000-000000000259"
           }
         ]
       }
@@ -629,7 +629,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000247",
+      "id": "e0000000-0000-4000-8000-000000000262",
       "children": {
         "true": [
           {
@@ -687,7 +687,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000246"
+            "id": "e0000000-0000-4000-8000-000000000261"
           }
         ]
       }
@@ -701,7 +701,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000249",
+      "id": "e0000000-0000-4000-8000-000000000264",
       "children": {
         "true": [
           {
@@ -719,7 +719,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000248"
+            "id": "e0000000-0000-4000-8000-000000000263"
           }
         ]
       }

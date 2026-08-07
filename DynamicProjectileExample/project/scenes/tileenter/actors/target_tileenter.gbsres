@@ -1,13 +1,13 @@
 {
   "_resourceType": "actor",
-  "id": "ac000000-0000-4000-8000-000000000012",
+  "id": "ac000000-0000-4000-8000-000000000014",
   "_index": 0,
-  "symbol": "actor_target_chain",
+  "symbol": "actor_target_tileenter",
   "prefabId": "",
   "name": "Target",
   "coordinateType": "tiles",
-  "x": 14,
-  "y": 6,
+  "x": 17,
+  "y": 9,
   "frame": 0,
   "animate": false,
   "spriteSheetId": "daf95270-e30d-423b-9ee7-990ae29f57f6",
@@ -34,7 +34,7 @@
         "y": 1,
         "location": "background"
       },
-      "id": "e0000000-0000-4000-8000-000000000265"
+      "id": "e0000000-0000-4000-8000-000000000302"
     }
   ]
 }

@@ -21,10 +21,44 @@
 // Five flags in a five bit field: every bit 0-4 is in use, so adding another
 // means finding a bit elsewhere rather than widening this.
 #define EXECUTE_SCRIPT    (1 << 0)
-#define INFINITE_LIFETIME (1 << 1)
+#define TILE_ENTER_SCRIPT (1 << 1)
 #define IGNORE_PLAYER     (1 << 2)
 #define TILE_HIT_SCRIPT   (1 << 3)
 #define ACTOR_HIT_SCRIPT  (1 << 4)
+
+// "Tile enter" granularity, from the engine setting of the same name: the
+// origin point's tile is already worked out in 8x8 tiles for the off-screen
+// test, so a 16x16 grid is that shifted down once more rather than a second
+// conversion from sub-pixels.
+#ifndef DYNPROJ_TILE_ENTER_SIZE
+#define DYNPROJ_TILE_ENTER_SIZE 0
+#endif
+#define TILE_ENTER_SHIFT DYNPROJ_TILE_ENTER_SIZE
+#define TILE_ENTER_CELL(tile) ((tile) >> TILE_ENTER_SHIFT)
+
+// Which face of the solid tile was struck - the side the projectile came up
+// against, not the way it was travelling. The bounce tests already name it (a
+// COLLISION_TOP tile is one you land on top of); the remove path has only a
+// single COLLISION_ALL lookup, so there it is read back off the direction of
+// travel. Order matches the event's dropdown and the script slots below.
+#define TILE_FACE_TOP    0
+#define TILE_FACE_RIGHT  1
+#define TILE_FACE_BOTTOM 2
+#define TILE_FACE_LEFT   3
+#define TILE_FACES       4
+// The event's "Any" option, which writes every slot at once.
+#define TILE_FACE_ANY    4
+
+// "Tile hit script per face" setting. With it off there is a single shared
+// script again: one slot instead of four, and the face every call site works
+// out is folded away rather than used as an index.
+#ifdef DYNPROJ_TILE_HIT_BY_FACE
+#define TILE_HIT_SLOTS      TILE_FACES
+#define TILE_HIT_SLOT(face) (face)
+#else
+#define TILE_HIT_SLOTS      1
+#define TILE_HIT_SLOT(face) ((void)(face), 0)
+#endif
 
 // Actor collision tests are spread across frames rather than run for every
 // projectile every pass, exactly as stock projectiles.c does: a rotating
@@ -219,11 +253,23 @@ UBYTE script_bank;
 UBYTE *script_address;
 
 // Optional "on hit" scripts, shared by every projectile behaviour the same way
-// the removal script is. A zero bank means "none".
-UBYTE tile_hit_script_bank;
-UBYTE *tile_hit_script_address;
+// the removal script is. A zero bank means "none". Each has its own compile
+// time switch, so a game that uses none of them pays for none of them.
+#ifdef DYNPROJ_ENABLE_TILE_HIT_SCRIPT
+// One slot per face of the tile that was struck, in the same order as the
+// event's dropdown, so a shot that lands on a floor can run something different
+// from one that hits a wall.
+UBYTE tile_hit_script_bank[TILE_HIT_SLOTS];
+UBYTE *tile_hit_script_address[TILE_HIT_SLOTS];
+#endif
+#ifdef DYNPROJ_ENABLE_ACTOR_HIT_SCRIPT
 UBYTE actor_hit_script_bank;
 UBYTE *actor_hit_script_address;
+#endif
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+UBYTE tile_enter_script_bank;
+UBYTE *tile_enter_script_address;
+#endif
 
 #ifdef DYNPROJ_USES_STRANDS
 // How many points of the strand a definition actually occupies. A chain wants
@@ -336,21 +382,64 @@ static void record_projectile_hit(void) {
     projectile_hit_type = proj_def->type;
 }
 
+// The three shared triggers collapse to nothing when their setting is off, so
+// the call sites - which are scattered through the collision code - stay
+// readable instead of being wrapped in #ifdefs one by one.
+
 // Any projectile just reached a solid tile. Skipped unless a script has been
 // set and this projectile was launched with the tile hit trigger enabled.
-static void run_tile_hit_script(void) {
-    if (!tile_hit_script_bank || !(proj_def->flags & TILE_HIT_SCRIPT)) return;
+#ifdef DYNPROJ_ENABLE_TILE_HIT_SCRIPT
+static void run_tile_hit_script(UBYTE face) {
+    UBYTE slot = TILE_HIT_SLOT(face);
+    if (!tile_hit_script_bank[slot] || !(proj_def->flags & TILE_HIT_SCRIPT)) return;
     record_projectile_hit();
-    script_execute(tile_hit_script_bank, tile_hit_script_address, 0, 0);
+    script_execute(tile_hit_script_bank[slot], tile_hit_script_address[slot], 0, 0);
 }
 
+#ifdef DYNPROJ_TILE_HIT_BY_FACE
+// Which face a projectile in "Remove projectile" mode ran into: that lookup is
+// a single COLLISION_ALL test, so the face is the one opposite the way it was
+// going. DIR_RIGHT is the default arm rather than a case of its own - dir is a
+// two bit field, and an exhaustive switch makes the fall-through unreachable
+// (SDCC warning 126).
+static UBYTE tile_face_from_dir(void) {
+    switch (projectile->dir) {
+        case DIR_DOWN: return TILE_FACE_TOP;
+        case DIR_UP:   return TILE_FACE_BOTTOM;
+        case DIR_LEFT: return TILE_FACE_RIGHT;
+        default:       return TILE_FACE_LEFT;
+    }
+}
+#else
+// Nothing reads the face, so do not spend a call working it out.
+#define tile_face_from_dir() 0
+#endif
+#else
+#define run_tile_hit_script(face) ((void)(face))
+#define tile_face_from_dir() 0
+#endif
+
+// The origin point just crossed into a different cell of the tile enter grid.
+// Reports the position it landed on, like the other two.
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+static void run_tile_enter_script(void) {
+    if (!tile_enter_script_bank || !(proj_def->flags & TILE_ENTER_SCRIPT)) return;
+    record_projectile_hit();
+    script_execute(tile_enter_script_bank, tile_enter_script_address, 0, 0);
+}
+#endif
+
 // Any projectile just touched an actor in its collision mask.
+#ifdef DYNPROJ_ENABLE_ACTOR_HIT_SCRIPT
 static void run_actor_hit_script(actor_t *hit_actor) {
     if (!actor_hit_script_bank || !(proj_def->flags & ACTOR_HIT_SCRIPT)) return;
     record_projectile_hit();
     projectile_hit_actor = (UBYTE)(hit_actor - actors);
     script_execute(actor_hit_script_bank, actor_hit_script_address, 0, 0);
 }
+#else
+#define run_actor_hit_script(hit_actor) ((void)(hit_actor))
+#endif
 
 // Point the target at an actor the engine already has in hand. The index has to
 // be written as well as the pointer: projectiles_update() re-derives the pointer
@@ -1017,7 +1106,7 @@ static void handle_types(void) {
 static void projectile_hit_tile(void) {
     // Runs before the projectile is retired, so the script still sees where it
     // landed and gets in ahead of any removal script.
-    run_tile_hit_script();
+    run_tile_hit_script(tile_face_from_dir());
 #ifdef DYNPROJ_ENABLE_HOOKSHOT
     if (proj_def->type == HOOKSHOT) {
         hookshot_hit_tile();
@@ -1135,7 +1224,7 @@ static void handle_bounce(void) {
         // Bounce off the tiles just outside each edge, across that edge's span.
         if (tile_col_test_range_x(COLLISION_TOP, tile_y1, tile_x0, tile_x1)) {
             projectile->delta_pos.y = proj_def->bounce << 1;
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_TOP);
             return;
         }
 
@@ -1146,17 +1235,17 @@ static void handle_bounce(void) {
 
         if (tile_col_test_range_x(COLLISION_BOTTOM, tile_y0, tile_x0, tile_x1)) {
             projectile->delta_pos.y = -(proj_def->bounce << 1);
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_BOTTOM);
             return;
         }
         if (tile_col_test_range_y(COLLISION_RIGHT, tile_x1, tile_y0, tile_y1)) {
             projectile->delta_pos.x = -(proj_def->bounce << 1);
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_RIGHT);
             return;
         }
         if (tile_col_test_range_y(COLLISION_LEFT, tile_x0, tile_y0, tile_y1)) {
             projectile->delta_pos.x = proj_def->bounce << 1;
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_LEFT);
         }
     }
 #else
@@ -1172,7 +1261,7 @@ static void handle_bounce(void) {
     } else {
         if (tile_at(tile_x, tile_y) & COLLISION_TOP) {
             projectile->delta_pos.y = proj_def->bounce << 1;
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_TOP);
             return;
         }
 
@@ -1183,29 +1272,36 @@ static void handle_bounce(void) {
 
         if (tile_at(tile_x, tile_y) & COLLISION_BOTTOM) {
             projectile->delta_pos.y = -(proj_def->bounce << 1);
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_BOTTOM);
             return;
         }
         if (tile_at(tile_x, tile_y) & COLLISION_RIGHT) {
             projectile->delta_pos.x = -(proj_def->bounce << 1);
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_RIGHT);
             return;
         }
         if (tile_at(tile_x, tile_y) & COLLISION_LEFT) {
             projectile->delta_pos.x = proj_def->bounce << 1;
-            run_tile_hit_script();
+            run_tile_hit_script(TILE_FACE_LEFT);
         }
     }
 #endif
 }
 
 void projectiles_init(void) BANKED {
-    // All three script slots are plain globals, so they would otherwise still
-    // hold whatever the previous scene set. Cleared together on scene load so
-    // every scene starts from "no scripts attached".
+    // The script slots are plain globals, so they would otherwise still hold
+    // whatever the previous scene set. Cleared together on scene load so every
+    // scene starts from "no scripts attached".
     script_bank = 0;
-    tile_hit_script_bank = 0;
+#ifdef DYNPROJ_ENABLE_TILE_HIT_SCRIPT
+    for (UBYTE i = 0; i != TILE_HIT_SLOTS; ++i) tile_hit_script_bank[i] = 0;
+#endif
+#ifdef DYNPROJ_ENABLE_ACTOR_HIT_SCRIPT
     actor_hit_script_bank = 0;
+#endif
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+    tile_enter_script_bank = 0;
+#endif
 #ifdef DYNPROJ_ENABLE_HOOKSHOT
     head_pos.x = head_pos.y = 0;
 #endif
@@ -1274,13 +1370,32 @@ void projectiles_update(void) BANKED {
 
     while (projectile) {
         proj_def = projectile_defs + projectile->def_index;
+
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+        // Where the origin point started this pass, kept only when something is
+        // actually listening: the comparison happens beside the off-screen test
+        // at the bottom, which has the arrival tile in hand already.
+        UBYTE enter_cell_x = 0, enter_cell_y = 0;
+        bool watch_tile_enter =
+            tile_enter_script_bank && (proj_def->flags & TILE_ENTER_SCRIPT);
+        if (watch_tile_enter) {
+            enter_cell_x = TILE_ENTER_CELL(SUBPX_TO_TILE(projectile->pos.x));
+            enter_cell_y = TILE_ENTER_CELL(SUBPX_TO_TILE(projectile->pos.y));
+        }
+#endif
+
         if (!check_stop()) {
-            if (projectile->life_time == 0) {
-                remove_projectile();
-                continue;
-            }
-            if (!projectile_no_lifetime && !(proj_def->flags & INFINITE_LIFETIME)) {
-                projectile->life_time--;
+            // A definition with no life time at all never expires - that is
+            // what "infinite lifetime" is now, rather than a flag - so the
+            // countdown only exists for the ones that were given one.
+            if (proj_def->life_time) {
+                if (projectile->life_time == 0) {
+                    remove_projectile();
+                    continue;
+                }
+                if (!projectile_no_lifetime) {
+                    projectile->life_time--;
+                }
             }
 
             // Check reached animation tick frame
@@ -1403,6 +1518,17 @@ void projectiles_update(void) BANKED {
         // tiles against the clip window computed above, the way stock does it.
         UBYTE tile_x = SUBPX_TO_TILE(projectile->pos.x),
               tile_y = SUBPX_TO_TILE(projectile->pos.y);
+
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+        // Crossing into a new cell of the tile enter grid. Checked before the
+        // bounds test below so a shot that leaves the screen still reports the
+        // tile it left through.
+        if (watch_tile_enter &&
+            (enter_cell_x != TILE_ENTER_CELL(tile_x) ||
+             enter_cell_y != TILE_ENTER_CELL(tile_y))) {
+            run_tile_enter_script();
+        }
+#endif
 
         if (tile_x < min_x || tile_x >= max_x || tile_y < min_y || tile_y >= max_y) {
 #ifdef DYNPROJ_ENABLE_CHAIN
@@ -1732,14 +1858,34 @@ void set_removal_script(SCRIPT_CTX * THIS) OLDCALL BANKED {
     (void)THIS;
 }
 
+#ifdef DYNPROJ_ENABLE_TILE_HIT_SCRIPT
 void set_tile_hit_script(SCRIPT_CTX * THIS) OLDCALL BANKED {
     UBYTE *bank = VM_REF_TO_PTR(FN_ARG1);
     UBYTE **ptr = VM_REF_TO_PTR(FN_ARG0);
-    tile_hit_script_bank = *bank;
-    tile_hit_script_address = *ptr;
+    UBYTE face = *(UBYTE *)VM_REF_TO_PTR(FN_ARG2);
+#ifdef DYNPROJ_TILE_HIT_BY_FACE
+    if (face >= TILE_FACES) {
+        // "Any": one script for every face, so the common case needs one event.
+        for (UBYTE i = 0; i != TILE_FACES; ++i) {
+            tile_hit_script_bank[i] = *bank;
+            tile_hit_script_address[i] = *ptr;
+        }
+    } else {
+        tile_hit_script_bank[face] = *bank;
+        tile_hit_script_address[face] = *ptr;
+    }
+#else
+    // Single script: the event refuses to pick a face when this setting is off,
+    // so anything arriving here is the "Any" it does allow.
+    (void)face;
+    tile_hit_script_bank[0] = *bank;
+    tile_hit_script_address[0] = *ptr;
+#endif
     (void)THIS;
 }
+#endif
 
+#ifdef DYNPROJ_ENABLE_ACTOR_HIT_SCRIPT
 void set_actor_hit_script(SCRIPT_CTX * THIS) OLDCALL BANKED {
     UBYTE *bank = VM_REF_TO_PTR(FN_ARG1);
     UBYTE **ptr = VM_REF_TO_PTR(FN_ARG0);
@@ -1747,3 +1893,14 @@ void set_actor_hit_script(SCRIPT_CTX * THIS) OLDCALL BANKED {
     actor_hit_script_address = *ptr;
     (void)THIS;
 }
+#endif
+
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+void set_tile_enter_script(SCRIPT_CTX * THIS) OLDCALL BANKED {
+    UBYTE *bank = VM_REF_TO_PTR(FN_ARG1);
+    UBYTE **ptr = VM_REF_TO_PTR(FN_ARG0);
+    tile_enter_script_bank = *bank;
+    tile_enter_script_address = *ptr;
+    (void)THIS;
+}
+#endif

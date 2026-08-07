@@ -24,7 +24,7 @@
         "text": "Gravity pulls the projectile down; the collision behaviour",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000167"
+      "id": "e0000000-0000-4000-8000-000000000168"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "decides what happens when it reaches a solid tile.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000168"
+      "id": "e0000000-0000-4000-8000-000000000169"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,22 +40,39 @@
         "text": "The tile hit script fires on every bounce, not just on removal.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000169"
+      "id": "e0000000-0000-4000-8000-000000000170"
     },
     {
       "command": "EVENT_COMMENT",
       "args": {
-        "text": "SELECT's shot unticks Run Tile Hit Script, so it stays silent.",
+        "text": "There is one script per tile face, so the print says which side",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000170"
+      "id": "e0000000-0000-4000-8000-000000000171"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "was struck. SELECT's shot unticks Run Tile Hit Script instead,",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000172"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "so it stays silent whichever face it reaches.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000173"
     },
     {
       "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
       "args": {
-        "action": 0
+        "action": 0,
+        "face": "0"
       },
-      "id": "e0000000-0000-4000-8000-000000000174",
+      "id": "e0000000-0000-4000-8000-000000000177",
       "children": {
         "script": [
           {
@@ -64,7 +81,7 @@
               "engineFieldKey": "projectile_hit_x",
               "value": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000171"
+            "id": "e0000000-0000-4000-8000-000000000174"
           },
           {
             "command": "EVENT_ENGINE_FIELD_STORE",
@@ -72,7 +89,45 @@
               "engineFieldKey": "projectile_hit_y",
               "value": "3"
             },
-            "id": "e0000000-0000-4000-8000-000000000172"
+            "id": "e0000000-0000-4000-8000-000000000175"
+          },
+          {
+            "command": "EVENT_TEXT_DRAW",
+            "args": {
+              "text": "T%D3$2$,%D3$3$",
+              "x": 8,
+              "y": 1,
+              "location": "background"
+            },
+            "id": "e0000000-0000-4000-8000-000000000176"
+          }
+        ]
+      }
+    },
+    {
+      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
+      "args": {
+        "action": 0,
+        "face": "2"
+      },
+      "id": "e0000000-0000-4000-8000-000000000181",
+      "children": {
+        "script": [
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_x",
+              "value": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000178"
+          },
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_y",
+              "value": "3"
+            },
+            "id": "e0000000-0000-4000-8000-000000000179"
           },
           {
             "command": "EVENT_TEXT_DRAW",
@@ -82,7 +137,83 @@
               "y": 1,
               "location": "background"
             },
-            "id": "e0000000-0000-4000-8000-000000000173"
+            "id": "e0000000-0000-4000-8000-000000000180"
+          }
+        ]
+      }
+    },
+    {
+      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
+      "args": {
+        "action": 0,
+        "face": "3"
+      },
+      "id": "e0000000-0000-4000-8000-000000000185",
+      "children": {
+        "script": [
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_x",
+              "value": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000182"
+          },
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_y",
+              "value": "3"
+            },
+            "id": "e0000000-0000-4000-8000-000000000183"
+          },
+          {
+            "command": "EVENT_TEXT_DRAW",
+            "args": {
+              "text": "L%D3$2$,%D3$3$",
+              "x": 8,
+              "y": 1,
+              "location": "background"
+            },
+            "id": "e0000000-0000-4000-8000-000000000184"
+          }
+        ]
+      }
+    },
+    {
+      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
+      "args": {
+        "action": 0,
+        "face": "1"
+      },
+      "id": "e0000000-0000-4000-8000-000000000189",
+      "children": {
+        "script": [
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_x",
+              "value": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000186"
+          },
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_y",
+              "value": "3"
+            },
+            "id": "e0000000-0000-4000-8000-000000000187"
+          },
+          {
+            "command": "EVENT_TEXT_DRAW",
+            "args": {
+              "text": "R%D3$2$,%D3$3$",
+              "x": 8,
+              "y": 1,
+              "location": "background"
+            },
+            "id": "e0000000-0000-4000-8000-000000000188"
           }
         ]
       }
@@ -95,7 +226,7 @@
           "SELECT: remove on\ncollision, no hit\nscript\nSTART: menu"
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000175"
+      "id": "e0000000-0000-4000-8000-000000000190"
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -106,7 +237,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000178",
+      "id": "e0000000-0000-4000-8000-000000000193",
       "children": {
         "true": [
           {
@@ -145,13 +276,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000176"
+            "id": "e0000000-0000-4000-8000-000000000191"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -208,7 +339,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000177"
+            "id": "e0000000-0000-4000-8000-000000000192"
           }
         ]
       }
@@ -222,7 +353,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000181",
+      "id": "e0000000-0000-4000-8000-000000000196",
       "children": {
         "true": [
           {
@@ -261,13 +392,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000179"
+            "id": "e0000000-0000-4000-8000-000000000194"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -324,7 +455,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000180"
+            "id": "e0000000-0000-4000-8000-000000000195"
           }
         ]
       }
@@ -338,7 +469,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000184",
+      "id": "e0000000-0000-4000-8000-000000000199",
       "children": {
         "true": [
           {
@@ -377,13 +508,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": false,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000182"
+            "id": "e0000000-0000-4000-8000-000000000197"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -440,7 +571,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000183"
+            "id": "e0000000-0000-4000-8000-000000000198"
           }
         ]
       }
@@ -454,7 +585,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000186",
+      "id": "e0000000-0000-4000-8000-000000000201",
       "children": {
         "true": [
           {
@@ -472,7 +603,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000185"
+            "id": "e0000000-0000-4000-8000-000000000200"
           }
         ]
       }

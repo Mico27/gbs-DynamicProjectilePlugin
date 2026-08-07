@@ -24,7 +24,7 @@
         "text": "Every projectile runs the removal script unless Run On Remove",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000188"
+      "id": "e0000000-0000-4000-8000-000000000203"
     },
     {
       "command": "EVENT_COMMENT",
@@ -32,7 +32,7 @@
         "text": "Script is unticked. The script reads where it died and which",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000189"
+      "id": "e0000000-0000-4000-8000-000000000204"
     },
     {
       "command": "EVENT_COMMENT",
@@ -40,7 +40,7 @@
         "text": "behaviour it was straight out of the Last Hit engine fields.",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000190"
+      "id": "e0000000-0000-4000-8000-000000000205"
     },
     {
       "command": "EVENT_TEXT",
@@ -49,14 +49,14 @@
           "ON REMOVAL\n\nB: fire\nSTART: menu"
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000191"
+      "id": "e0000000-0000-4000-8000-000000000206"
     },
     {
       "command": "DYNPROJ_EVENT_SET_REMOVAL_SCRIPT",
       "args": {
         "action": 0
       },
-      "id": "e0000000-0000-4000-8000-000000000196",
+      "id": "e0000000-0000-4000-8000-000000000211",
       "children": {
         "script": [
           {
@@ -65,7 +65,7 @@
               "engineFieldKey": "projectile_hit_x",
               "value": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000192"
+            "id": "e0000000-0000-4000-8000-000000000207"
           },
           {
             "command": "EVENT_ENGINE_FIELD_STORE",
@@ -73,7 +73,7 @@
               "engineFieldKey": "projectile_hit_y",
               "value": "3"
             },
-            "id": "e0000000-0000-4000-8000-000000000193"
+            "id": "e0000000-0000-4000-8000-000000000208"
           },
           {
             "command": "EVENT_ENGINE_FIELD_STORE",
@@ -81,7 +81,7 @@
               "engineFieldKey": "projectile_hit_type",
               "value": "8"
             },
-            "id": "e0000000-0000-4000-8000-000000000194"
+            "id": "e0000000-0000-4000-8000-000000000209"
           },
           {
             "command": "EVENT_TEXT_DRAW",
@@ -91,7 +91,7 @@
               "y": 1,
               "location": "background"
             },
-            "id": "e0000000-0000-4000-8000-000000000195"
+            "id": "e0000000-0000-4000-8000-000000000210"
           }
         ]
       }
@@ -105,7 +105,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000199",
+      "id": "e0000000-0000-4000-8000-000000000214",
       "children": {
         "true": [
           {
@@ -146,13 +146,13 @@
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compInfiniteLifetime": false,
+              "compTileEnterScript": false,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000197"
+            "id": "e0000000-0000-4000-8000-000000000212"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -209,7 +209,7 @@
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000198"
+            "id": "e0000000-0000-4000-8000-000000000213"
           }
         ]
       }
@@ -223,7 +223,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000201",
+      "id": "e0000000-0000-4000-8000-000000000216",
       "children": {
         "true": [
           {
@@ -241,7 +241,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000200"
+            "id": "e0000000-0000-4000-8000-000000000215"
           }
         ]
       }

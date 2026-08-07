@@ -1,9 +1,9 @@
 {
   "_resourceType": "scene",
-  "id": "5c000000-0000-4000-8000-000000000004",
-  "_index": 4,
-  "name": "4 - Orbit",
-  "symbol": "scene_orbit",
+  "id": "5c000000-0000-4000-8000-000000000014",
+  "_index": 14,
+  "name": "14 - Tile Enter",
+  "symbol": "scene_tileenter",
   "backgroundId": "b0000000-0000-4000-8000-000000000001",
   "tilesetId": "",
   "width": 20,
@@ -15,33 +15,79 @@
   "playerSpriteSheetId": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
   "collisions": "0f15+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f15+",
   "autoFadeSpeed": 1,
-  "x": 820,
+  "x": 1560,
   "y": 300,
   "script": [
     {
       "command": "EVENT_COMMENT",
       "args": {
-        "text": "Orbit: projectiles circle an actor, evenly spaced by their",
+        "text": "The tile enter script runs each time a projectile's origin",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000067"
+      "id": "e0000000-0000-4000-8000-000000000303"
     },
     {
       "command": "EVENT_COMMENT",
       "args": {
-        "text": "starting phase, until their lifetime runs out.",
+        "text": "point crosses into a new cell of the Tile enter grid engine",
         "__collapse": true
       },
-      "id": "e0000000-0000-4000-8000-000000000068"
+      "id": "e0000000-0000-4000-8000-000000000304"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "setting. Life Time 0 means these never expire on their own.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000305"
     },
     {
       "command": "EVENT_TEXT",
       "args": {
         "text": [
-          "ORBIT\n\nB: add 3 orbiters\nSTART: menu"
+          "TILE ENTER\n\nB: reporting shot\nA: silent shot",
+          "The counter only\nmoves for B - the\nslot opts in."
         ]
       },
-      "id": "e0000000-0000-4000-8000-000000000069"
+      "id": "e0000000-0000-4000-8000-000000000306"
+    },
+    {
+      "command": "DYNPROJ_EVENT_SET_TILE_ENTER_SCRIPT",
+      "args": {
+        "action": 0
+      },
+      "id": "e0000000-0000-4000-8000-000000000310",
+      "children": {
+        "script": [
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_x",
+              "value": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000307"
+          },
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_y",
+              "value": "3"
+            },
+            "id": "e0000000-0000-4000-8000-000000000308"
+          },
+          {
+            "command": "EVENT_TEXT_DRAW",
+            "args": {
+              "text": "TILE %D3$2$,%D3$3$",
+              "x": 1,
+              "y": 1,
+              "location": "background"
+            },
+            "id": "e0000000-0000-4000-8000-000000000309"
+          }
+        ]
+      }
     },
     {
       "command": "EVENT_SET_INPUT_SCRIPT",
@@ -52,7 +98,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000076",
+      "id": "e0000000-0000-4000-8000-000000000313",
       "children": {
         "true": [
           {
@@ -64,14 +110,14 @@
               "spriteStateId": "",
               "speed": 1,
               "animSpeed": 15,
-              "lifeTime": 4,
+              "lifeTime": 0,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
               "collisionGroup": "3",
               "collisionMask": [],
               "preset": "custom",
-              "type": "4",
+              "type": "0",
               "collision": "1",
               "gravity": {
                 "type": "number",
@@ -83,21 +129,21 @@
               },
               "amplitude": {
                 "type": "number",
-                "value": 100
+                "value": 30
               },
               "frequency": {
                 "type": "number",
-                "value": 16
+                "value": 10
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
-              "compTileEnterScript": false,
+              "compTileEnterScript": true,
               "compIgnorePlayer": false,
               "compRemoveScript": true,
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000070"
+            "id": "e0000000-0000-4000-8000-000000000311"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -147,15 +193,30 @@
               },
               "paramPhase": {
                 "type": "number",
-                "value": 0
+                "value": 64
               },
               "paramActorIndex": {
                 "type": "number",
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000071"
-          },
+            "id": "e0000000-0000-4000-8000-000000000312"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "a"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000316",
+      "children": {
+        "true": [
           {
             "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
             "args": {
@@ -165,14 +226,14 @@
               "spriteStateId": "",
               "speed": 1,
               "animSpeed": 15,
-              "lifeTime": 4,
+              "lifeTime": 0,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
               "collisionGroup": "3",
               "collisionMask": [],
               "preset": "custom",
-              "type": "4",
+              "type": "0",
               "collision": "1",
               "gravity": {
                 "type": "number",
@@ -184,11 +245,11 @@
               },
               "amplitude": {
                 "type": "number",
-                "value": 100
+                "value": 30
               },
               "frequency": {
                 "type": "number",
-                "value": 16
+                "value": 10
               },
               "hookshotTileHit": 0,
               "hookshotActorHit": 0,
@@ -198,7 +259,7 @@
               "compTileHitScript": true,
               "compActorHitScript": true
             },
-            "id": "e0000000-0000-4000-8000-000000000072"
+            "id": "e0000000-0000-4000-8000-000000000314"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
@@ -248,124 +309,14 @@
               },
               "paramPhase": {
                 "type": "number",
-                "value": 85
+                "value": 64
               },
               "paramActorIndex": {
                 "type": "number",
                 "value": 0
               }
             },
-            "id": "e0000000-0000-4000-8000-000000000073"
-          },
-          {
-            "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
-            "args": {
-              "tabs": "behavior",
-              "slot": 2,
-              "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
-              "spriteStateId": "",
-              "speed": 1,
-              "animSpeed": 15,
-              "lifeTime": 4,
-              "initialOffset": 8,
-              "loopAnim": true,
-              "destroyOnHit": true,
-              "collisionGroup": "3",
-              "collisionMask": [],
-              "preset": "custom",
-              "type": "4",
-              "collision": "1",
-              "gravity": {
-                "type": "number",
-                "value": 0
-              },
-              "bounce": {
-                "type": "number",
-                "value": 0
-              },
-              "amplitude": {
-                "type": "number",
-                "value": 100
-              },
-              "frequency": {
-                "type": "number",
-                "value": 16
-              },
-              "hookshotTileHit": 0,
-              "hookshotActorHit": 0,
-              "compTileEnterScript": false,
-              "compIgnorePlayer": false,
-              "compRemoveScript": true,
-              "compTileHitScript": true,
-              "compActorHitScript": true
-            },
-            "id": "e0000000-0000-4000-8000-000000000074"
-          },
-          {
-            "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT_BY_INDEX",
-            "args": {
-              "tabs": "source",
-              "slot": 2,
-              "sourceType": "actor",
-              "posX": {
-                "type": "number",
-                "value": 0
-              },
-              "posY": {
-                "type": "number",
-                "value": 0
-              },
-              "posUnits": "tiles",
-              "x": 0,
-              "y": 0,
-              "directionType": "actor",
-              "direction": "right",
-              "angle": 0,
-              "angleVariable": "0",
-              "targetX": {
-                "type": "number",
-                "value": 0
-              },
-              "targetY": {
-                "type": "number",
-                "value": 0
-              },
-              "targetUnits": "tiles",
-              "paramBehaviour": "any",
-              "frame": {
-                "type": "number",
-                "value": 0
-              },
-              "paramX": {
-                "type": "number",
-                "value": 0
-              },
-              "paramY": {
-                "type": "number",
-                "value": 0
-              },
-              "paramPhase": {
-                "type": "number",
-                "value": 170
-              },
-              "paramActorIndex": {
-                "type": "number",
-                "value": 0
-              },
-              "actorIndex": {
-                "type": "number",
-                "value": 0
-              },
-              "otherActorIndex": {
-                "type": "number",
-                "value": 0
-              },
-              "targetActorIndex": {
-                "type": "number",
-                "value": 0
-              }
-            },
-            "id": "e0000000-0000-4000-8000-000000000075"
+            "id": "e0000000-0000-4000-8000-000000000315"
           }
         ]
       }
@@ -379,7 +330,7 @@
         "override": true,
         "__scriptTabs": "press"
       },
-      "id": "e0000000-0000-4000-8000-000000000078",
+      "id": "e0000000-0000-4000-8000-000000000318",
       "children": {
         "true": [
           {
@@ -397,7 +348,7 @@
               "direction": "down",
               "fadeSpeed": "2"
             },
-            "id": "e0000000-0000-4000-8000-000000000077"
+            "id": "e0000000-0000-4000-8000-000000000317"
           }
         ]
       }

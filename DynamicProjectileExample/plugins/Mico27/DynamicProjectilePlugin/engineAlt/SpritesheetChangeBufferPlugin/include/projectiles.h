@@ -47,8 +47,15 @@ void projectile_launch(UBYTE index, upoint16_t *pos, UBYTE angle) BANKED;
 // VM native: stores the bank/pointer of the "on removal" script.
 void vm_define_projectile_behavior(SCRIPT_CTX * THIS) OLDCALL BANKED;
 void set_removal_script(SCRIPT_CTX * THIS) OLDCALL BANKED;
+#ifdef DYNPROJ_ENABLE_TILE_HIT_SCRIPT
 void set_tile_hit_script(SCRIPT_CTX * THIS) OLDCALL BANKED;
+#endif
+#ifdef DYNPROJ_ENABLE_ACTOR_HIT_SCRIPT
 void set_actor_hit_script(SCRIPT_CTX * THIS) OLDCALL BANKED;
+#endif
+#ifdef DYNPROJ_ENABLE_TILE_ENTER_SCRIPT
+void set_tile_enter_script(SCRIPT_CTX * THIS) OLDCALL BANKED;
+#endif
 
 // Engine-field globals (declaration order must match engine.json field order).
 extern UBYTE projectile_pause;
