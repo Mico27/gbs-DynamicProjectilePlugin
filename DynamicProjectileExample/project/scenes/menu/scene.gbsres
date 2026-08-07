@@ -1,0 +1,371 @@
+{
+  "_resourceType": "scene",
+  "id": "5c000000-0000-4000-8000-000000000000",
+  "_index": 0,
+  "name": "Demo Menu",
+  "symbol": "scene_menu",
+  "backgroundId": "b0000000-0000-4000-8000-000000000002",
+  "tilesetId": "",
+  "width": 20,
+  "height": 18,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "playerSpriteSheetId": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
+  "collisions": "",
+  "autoFadeSpeed": 1,
+  "x": 260,
+  "y": 40,
+  "script": [
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "=== Dynamic Projectile Plugin - demo menu ===",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000001"
+    },
+    {
+      "command": "EVENT_ACTOR_HIDE",
+      "args": {
+        "actorId": "player"
+      },
+      "id": "e0000000-0000-4000-8000-000000000002"
+    },
+    {
+      "command": "EVENT_TEXT",
+      "args": {
+        "text": [
+          "DYNAMIC PROJECTILE\nPLUGIN",
+          "Every behaviour of\nthe plugin has its\nown demo scene.",
+          "In each demo:\nB fires, START\nreturns here."
+        ]
+      },
+      "id": "e0000000-0000-4000-8000-000000000003"
+    },
+    {
+      "command": "EVENT_LOOP",
+      "args": {},
+      "id": "e0000000-0000-4000-8000-000000000021",
+      "children": {
+        "true": [
+          {
+            "command": "EVENT_MENU",
+            "args": {
+              "variable": "0",
+              "items": 8,
+              "layout": "menu",
+              "cancelOnLastOption": false,
+              "cancelOnB": false,
+              "option1": "Arc",
+              "option2": "Boomerang",
+              "option3": "Sine Wave",
+              "option4": "Orbit",
+              "option5": "Hookshot",
+              "option6": "Anchor",
+              "option7": "Custom",
+              "option8": "More..."
+            },
+            "id": "e0000000-0000-4000-8000-000000000004"
+          },
+          {
+            "command": "EVENT_SWITCH",
+            "args": {
+              "variable": "0",
+              "choices": 8,
+              "__disableElse": false
+            },
+            "id": "e0000000-0000-4000-8000-000000000020",
+            "children": {
+              "false": [],
+              "true0": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000001",
+                    "x": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000005"
+                }
+              ],
+              "true1": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000002",
+                    "x": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000006"
+                }
+              ],
+              "true2": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000003",
+                    "x": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000007"
+                }
+              ],
+              "true3": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000004",
+                    "x": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000008"
+                }
+              ],
+              "true4": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000005",
+                    "x": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000009"
+                }
+              ],
+              "true5": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000006",
+                    "x": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000010"
+                }
+              ],
+              "true6": [
+                {
+                  "command": "EVENT_SWITCH_SCENE",
+                  "args": {
+                    "sceneId": "5c000000-0000-4000-8000-000000000007",
+                    "x": {
+                      "type": "number",
+                      "value": 3
+                    },
+                    "y": {
+                      "type": "number",
+                      "value": 9
+                    },
+                    "direction": "right",
+                    "fadeSpeed": "2"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000011"
+                }
+              ],
+              "true7": [
+                {
+                  "command": "EVENT_MENU",
+                  "args": {
+                    "variable": "1",
+                    "items": 7,
+                    "layout": "menu",
+                    "cancelOnLastOption": false,
+                    "cancelOnB": false,
+                    "option1": "Chain",
+                    "option2": "Trail",
+                    "option3": "Gravity",
+                    "option4": "On Removal",
+                    "option5": "Globals",
+                    "option6": "Slots",
+                    "option7": "Back"
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000012"
+                },
+                {
+                  "command": "EVENT_SWITCH",
+                  "args": {
+                    "variable": "1",
+                    "choices": 7,
+                    "__disableElse": false
+                  },
+                  "id": "e0000000-0000-4000-8000-000000000019",
+                  "children": {
+                    "false": [],
+                    "true0": [
+                      {
+                        "command": "EVENT_SWITCH_SCENE",
+                        "args": {
+                          "sceneId": "5c000000-0000-4000-8000-000000000012",
+                          "x": {
+                            "type": "number",
+                            "value": 3
+                          },
+                          "y": {
+                            "type": "number",
+                            "value": 9
+                          },
+                          "direction": "right",
+                          "fadeSpeed": "2"
+                        },
+                        "id": "e0000000-0000-4000-8000-000000000013"
+                      }
+                    ],
+                    "true1": [
+                      {
+                        "command": "EVENT_SWITCH_SCENE",
+                        "args": {
+                          "sceneId": "5c000000-0000-4000-8000-000000000013",
+                          "x": {
+                            "type": "number",
+                            "value": 3
+                          },
+                          "y": {
+                            "type": "number",
+                            "value": 9
+                          },
+                          "direction": "right",
+                          "fadeSpeed": "2"
+                        },
+                        "id": "e0000000-0000-4000-8000-000000000014"
+                      }
+                    ],
+                    "true2": [
+                      {
+                        "command": "EVENT_SWITCH_SCENE",
+                        "args": {
+                          "sceneId": "5c000000-0000-4000-8000-000000000008",
+                          "x": {
+                            "type": "number",
+                            "value": 3
+                          },
+                          "y": {
+                            "type": "number",
+                            "value": 9
+                          },
+                          "direction": "right",
+                          "fadeSpeed": "2"
+                        },
+                        "id": "e0000000-0000-4000-8000-000000000015"
+                      }
+                    ],
+                    "true3": [
+                      {
+                        "command": "EVENT_SWITCH_SCENE",
+                        "args": {
+                          "sceneId": "5c000000-0000-4000-8000-000000000009",
+                          "x": {
+                            "type": "number",
+                            "value": 3
+                          },
+                          "y": {
+                            "type": "number",
+                            "value": 9
+                          },
+                          "direction": "right",
+                          "fadeSpeed": "2"
+                        },
+                        "id": "e0000000-0000-4000-8000-000000000016"
+                      }
+                    ],
+                    "true4": [
+                      {
+                        "command": "EVENT_SWITCH_SCENE",
+                        "args": {
+                          "sceneId": "5c000000-0000-4000-8000-000000000010",
+                          "x": {
+                            "type": "number",
+                            "value": 3
+                          },
+                          "y": {
+                            "type": "number",
+                            "value": 9
+                          },
+                          "direction": "right",
+                          "fadeSpeed": "2"
+                        },
+                        "id": "e0000000-0000-4000-8000-000000000017"
+                      }
+                    ],
+                    "true5": [
+                      {
+                        "command": "EVENT_SWITCH_SCENE",
+                        "args": {
+                          "sceneId": "5c000000-0000-4000-8000-000000000011",
+                          "x": {
+                            "type": "number",
+                            "value": 3
+                          },
+                          "y": {
+                            "type": "number",
+                            "value": 9
+                          },
+                          "direction": "right",
+                          "fadeSpeed": "2"
+                        },
+                        "id": "e0000000-0000-4000-8000-000000000018"
+                      }
+                    ],
+                    "true6": []
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

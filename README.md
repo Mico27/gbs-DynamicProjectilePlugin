@@ -29,11 +29,11 @@ The plugin ships with `DynamicProjectileExample/`, a complete project with one d
 
 ### Slots and Launches
 
-A projectile is described by a **slot** — an entry in a shared definition table holding its sprite, speed, lifetime, collision groups and behaviour. Slots are what you launch from, and a single slot can be launched any number of times. The two core events map onto that split: **Define Projectile Slot** writes a slot, **Launch Projectile From Slot (Extended)** fires one.
+A projectile is described by a **slot** — an entry in a shared definition table holding its sprite, speed, lifetime, collision groups and behaviour. Slots are what you launch from, and a single slot can be launched any number of times. The two core events map onto that split: **Load Dynamic Projectile Into Slot** writes a slot, **Launch Dynamic Projectile From Slot** fires one.
 
-Stock GB Studio has the same model — its *Load Projectile Slot* / *Launch Projectile From Slot* events — and this plugin's events use the same compiler helpers, so the two sets interoperate. A slot written by one can be launched by the other.
+Stock GB Studio has the same model — its *Load Projectile Into Slot* / *Launch Projectile In Slot* events — and this plugin's events use the same compiler helpers, so the two sets interoperate. A slot written by one can be launched by the other.
 
-> **Order matters if you mix them.** *Define Projectile Slot* writes the whole definition, so running the stock *Load Projectile Slot* afterwards on the same slot wipes the behaviour back to Default.
+> **Order matters if you mix them.** *Load Dynamic Projectile Into Slot* writes the whole definition, so running the stock *Load Projectile Into Slot* afterwards on the same slot wipes the behaviour back to Default.
 
 ### What Lives Where
 
@@ -41,8 +41,8 @@ A slot is a fixed 32 bytes, which is not enough room for everything, so configur
 
 | Lives on | Holds | Applies to |
 |----------|-------|------------|
-| **Define Projectile Slot** | Sprite, speed, lifetime, collision groups, behaviour, and the behaviour's shape (gravity, bounce, wave size, chain slack, trail length…) | Every projectile launched from that slot |
-| **Launch Projectile From Slot** | Source, aim, and the handful of values that vary shot to shot (arc height, orbit target, chain endpoints, trail head…) | That one shot |
+| **Load Dynamic Projectile Into Slot** | Sprite, speed, lifetime, collision groups, behaviour, and the behaviour's shape (gravity, bounce, wave size, chain slack, trail length…) | Every projectile launched from that slot |
+| **Launch Dynamic Projectile From Slot** | Source, aim, and the handful of values that vary shot to shot (arc height, orbit target, chain endpoints, trail head…) | That one shot |
 
 Because a live projectile stores only an *index* into the slot table, redefining a slot changes the behaviour of anything already in flight from it. Only the lifetime and the per-launch parameters are truly per-projectile.
 
@@ -69,7 +69,7 @@ This plugin replaces the stock projectile engine files. Three other plugins in t
 
 ### 1. Define a Slot
 
-Add **Define Projectile Slot** wherever the projectile should be configured — usually a scene's **On Init**, since a slot persists until something overwrites it.
+Add **Load Dynamic Projectile Into Slot** wherever the projectile should be configured — usually a scene's **On Init**, since a slot persists until something overwrites it.
 
 The *Projectile* tab is the stock projectile definition: sprite sheet, animation state, speed, animation speed, life time, initial offset, collision group and collide-with mask.
 
@@ -94,7 +94,7 @@ Choosing **Custom (choose components)** instead reveals the individual fields, a
 
 ### 2. Launch From the Slot
 
-Add **Launch Projectile From Slot (Extended)**. The *Source* tab picks where the shot starts and where it aims; the *Dynamic projectile* tab carries the per-launch parameters.
+Add **Launch Dynamic Projectile From Slot**. The *Source* tab picks where the shot starts and where it aims; the *Dynamic projectile* tab carries the per-launch parameters.
 
 Set **Slot Behaviour** on that tab to whatever the slot holds. It has no effect on the projectile — it only decides which parameter fields are shown, since the launch event cannot know what the slot contains.
 
@@ -106,7 +106,7 @@ Each slot has a matching checkbox (*Run On Remove script* and friends) so an ind
 
 ### 4. Trim the Behaviours You Do Not Use (optional)
 
-Every behaviour except Default has an on/off switch under **Settings → Engine → Custom Projectiles**. These are compile-time switches — turning one off removes its code from the ROM rather than merely skipping it at runtime. The behaviours are by far the biggest lever on the plugin's ROM cost.
+Every behaviour except Default has an on/off switch under **Settings → Engine → Dynamic Projectiles**. These are compile-time switches — turning one off removes its code from the ROM rather than merely skipping it at runtime. The behaviours are by far the biggest lever on the plugin's ROM cost.
 
 The events refuse to compile against a behaviour that has been switched off, naming the offending scene, rather than silently producing a projectile that does nothing.
 
@@ -128,7 +128,7 @@ A live projectile stores only an index into the slot table, so redefining a slot
 
 ### Order matters if you mix with the stock events
 
-*Define Projectile Slot* writes the whole definition, so running the stock *Load Projectile Slot* afterwards on the same slot wipes the behaviour back to Default.
+*Load Dynamic Projectile Into Slot* writes the whole definition, so running the stock *Load Projectile Into Slot* afterwards on the same slot wipes the behaviour back to Default.
 
 ### Stock engine files are replaced
 
@@ -309,7 +309,7 @@ Only the head reacts: chain links never trigger tile or actor collisions and nev
 
 ## Engine Settings
 
-Found under **Settings → Engine → Custom Projectiles**. Indented entries belong to the behaviour above them and only appear while it is switched on.
+Found under **Settings → Engine → Dynamic Projectiles**. Indented entries belong to the behaviour above them and only appear while it is switched on.
 
 | Setting | Range | Default | Description |
 |---------|-------|---------|-------------|
@@ -335,11 +335,11 @@ All events appear under the **Projectiles** group in the script editor.
 
 ---
 
-### Define Projectile Slot
+### Load Dynamic Projectile Into Slot
 
-**`DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT`** — auto-label: *Define Projectile Slot N : &lt;preset&gt;*
+**`DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT`** — auto-label: *Load Dynamic Projectile Into Slot N : &lt;preset&gt;*
 
-Writes a complete projectile definition into a slot: everything the stock *Load Projectile Slot* event writes, plus this plugin's behaviour. Both halves are written in one event because the order matters — the stock half copies a whole definition into the slot and would wipe the behaviour if it ran second.
+Writes a complete projectile definition into a slot: everything the stock *Load Projectile Into Slot* event writes, plus this plugin's behaviour. Both halves are written in one event because the order matters — the stock half copies a whole definition into the slot and would wipe the behaviour if it ran second.
 
 **Projectile tab**
 
@@ -370,7 +370,7 @@ Writes a complete projectile definition into a slot: everything the stock *Load 
 
 ---
 
-### Launch Projectile From Slot (Extended)
+### Launch Dynamic Projectile From Slot
 
 **`DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT`**
 
@@ -384,6 +384,7 @@ Fires a projectile from a slot. Same as the stock launch event, but the slot is 
 | Launch From | **Actor** (with a pixel *Offset X / Y*) or **Position** (a fixed point, no actor involved). |
 | X / Y | Position source only. Values with a tiles / pixels unit toggle, so a random spawn column can be an expression like `16 + rnd(120)` in pixels. |
 | Launch At | *Fixed Direction* · *Angle* · *Angle Variable* · *Actor Direction* · *Actor Target* · *Position Target*. The actor-relative options need an actor source. |
+| Start Frame | How many frames into the animation this shot starts, counted from the first frame of whichever direction it faces. 0 starts at the beginning. Not range checked — keep it inside the animation's length, or the shot starts on whatever frame follows. |
 
 *Position Target* computes the angle at runtime the same way the stock *Actor Target* does, so a turret can aim at a fixed point in the room — and with a *Position* source you get a shot fired from one coordinate towards another with no actors involved at either end.
 
@@ -396,7 +397,7 @@ Fires a projectile from a slot. Same as the stock launch event, but the slot is 
 
 ---
 
-### Launch Projectile From Slot By Index (Extended)
+### Launch Dynamic Projectile From Slot By Index
 
 **`DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT_BY_INDEX`**
 
@@ -596,13 +597,11 @@ ceiling rather than a recipe: you keep whatever your game actually uses.
 
 <details><summary>How these were measured</summary>
 
-GB Studio 4.3.0-e1. Each of this plugin's `engine/src/**/*.c` files was compiled with
-the toolchain and flags GB Studio itself uses (`lcc -msm83:gb
--Wf--max-allocs-per-node 3000 -DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged
-include tree, once with every setting at its default and once per setting toggled. The
-SDCC object files' area records were then diffed: `_HOME` is bank 0,
-`_DATA`/`_INITIALIZED`/`_BSS` are WRAM, and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are
-banked ROM.
+GB Studio 4.3.0-e1. This plugin's `engine/src/**/*.c` was compiled with the
+toolchain and flags GB Studio itself uses (`lcc -msm83:gb -Wf--max-allocs-per-node 3000
+-DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged include tree, and the SDCC object
+files' area records were read: `_HOME` is bank 0, `_DATA`/`_INITIALIZED`/`_BSS` are WRAM,
+and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are banked ROM.
 
 Two caveats. Only this plugin's own engine sources are measured, so a setting that also
 changes a struct shared with stock engine files can move a few more bytes in files the

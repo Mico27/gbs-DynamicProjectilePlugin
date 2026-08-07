@@ -63,13 +63,16 @@ typedef struct actor_t
     uint8_t using_sprite_buffer;
 
     //Dynamic actor
-    uint8_t actor_index;
-    uint8_t actor_behavior_id : 4;
-    uint8_t actor_state       : 4;
+    uint8_t actor_behavior_id;
+    uint8_t actor_state;
     int8_t actor_vel_x;
     int8_t actor_vel_y;
 #ifdef DYNAMIC_ACTOR_ENABLE_PARENT
     struct actor_t *actor_parent;
+    // prev_pos is only used by the "Apply all parents positions delta" parenting
+    // mode (DYNAMIC_ACTOR_PARENT_MODE == 2). The static and velocity modes drop
+    // it to save 4 bytes per actor. Kept in sync with DYNAMIC_ACTOR_USES_PREV_POS
+    // in dynamic_actor.h; the default (undefined) is delta.
 #if !defined(DYNAMIC_ACTOR_PARENT_MODE) || (DYNAMIC_ACTOR_PARENT_MODE == 2)
     upoint16_t prev_pos;
 #endif

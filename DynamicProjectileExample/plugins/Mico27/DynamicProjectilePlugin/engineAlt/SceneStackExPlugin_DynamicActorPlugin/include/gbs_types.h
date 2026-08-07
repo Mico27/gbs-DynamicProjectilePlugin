@@ -61,14 +61,7 @@ typedef struct actor_t
     // Collisions
     uint8_t collision_group;
 
-      //Dynamic actor
-    // This actor's own index in actors[], cached once per scene by actors_init.
-    // The runtime often holds only a pointer to an actor but has to report its
-    // index (event fields, per-actor side tables). Deriving it with
-    // (actor - actors) makes SDCC emit a call to __divsint - a 16 bit restoring
-    // division, ~2600 cycles - because sizeof(actor_t) is not a power of two.
-    // One byte per actor buys that back everywhere.
-    uint8_t actor_index;
+    //Dynamic actor
     uint8_t actor_behavior_id;
     uint8_t actor_state;
     int8_t actor_vel_x;

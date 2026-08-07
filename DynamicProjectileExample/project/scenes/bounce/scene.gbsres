@@ -1,0 +1,484 @@
+{
+  "_resourceType": "scene",
+  "id": "5c000000-0000-4000-8000-000000000008",
+  "_index": 8,
+  "name": "8 - Gravity & Bounce",
+  "symbol": "scene_bounce",
+  "backgroundId": "b0000000-0000-4000-8000-000000000001",
+  "tilesetId": "",
+  "width": 20,
+  "height": 18,
+  "type": "TOPDOWN",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "playerSpriteSheetId": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
+  "collisions": "0f15+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f15+",
+  "autoFadeSpeed": 1,
+  "x": 820,
+  "y": 560,
+  "script": [
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "Gravity pulls the projectile down; the collision behaviour",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000167"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "decides what happens when it reaches a solid tile.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000168"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "The tile hit script fires on every bounce, not just on removal.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000169"
+    },
+    {
+      "command": "EVENT_COMMENT",
+      "args": {
+        "text": "SELECT's shot unticks Run Tile Hit Script, so it stays silent.",
+        "__collapse": true
+      },
+      "id": "e0000000-0000-4000-8000-000000000170"
+    },
+    {
+      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
+      "args": {
+        "action": 0
+      },
+      "id": "e0000000-0000-4000-8000-000000000174",
+      "children": {
+        "script": [
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_x",
+              "value": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000171"
+          },
+          {
+            "command": "EVENT_ENGINE_FIELD_STORE",
+            "args": {
+              "engineFieldKey": "projectile_hit_y",
+              "value": "3"
+            },
+            "id": "e0000000-0000-4000-8000-000000000172"
+          },
+          {
+            "command": "EVENT_TEXT_DRAW",
+            "args": {
+              "text": "B%D3$2$,%D3$3$",
+              "x": 8,
+              "y": 1,
+              "location": "background"
+            },
+            "id": "e0000000-0000-4000-8000-000000000173"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_TEXT",
+      "args": {
+        "text": [
+          "GRAVITY/BOUNCE\n\nB: bounce\nA: floor bounce",
+          "SELECT: remove on\ncollision, no hit\nscript\nSTART: menu"
+        ]
+      },
+      "id": "e0000000-0000-4000-8000-000000000175"
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "b"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000178",
+      "children": {
+        "true": [
+          {
+            "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "behavior",
+              "slot": 0,
+              "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
+              "spriteStateId": "",
+              "speed": 3,
+              "animSpeed": 15,
+              "lifeTime": 4,
+              "initialOffset": 8,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [],
+              "preset": "custom",
+              "type": "0",
+              "collision": "2",
+              "gravity": {
+                "type": "number",
+                "value": 4
+              },
+              "bounce": {
+                "type": "number",
+                "value": 60
+              },
+              "amplitude": {
+                "type": "number",
+                "value": 30
+              },
+              "frequency": {
+                "type": "number",
+                "value": 10
+              },
+              "hookshotTileHit": 0,
+              "hookshotActorHit": 0,
+              "compInfiniteLifetime": false,
+              "compIgnorePlayer": false,
+              "compRemoveScript": true,
+              "compTileHitScript": true,
+              "compActorHitScript": true
+            },
+            "id": "e0000000-0000-4000-8000-000000000176"
+          },
+          {
+            "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "source",
+              "slot": 0,
+              "sourceType": "actor",
+              "posX": {
+                "type": "number",
+                "value": 0
+              },
+              "posY": {
+                "type": "number",
+                "value": 0
+              },
+              "posUnits": "tiles",
+              "actorId": "player",
+              "x": 0,
+              "y": 0,
+              "directionType": "actor",
+              "otherActorId": "player",
+              "direction": "right",
+              "angle": 0,
+              "angleVariable": "0",
+              "targetActorId": "player",
+              "targetX": {
+                "type": "number",
+                "value": 0
+              },
+              "targetY": {
+                "type": "number",
+                "value": 0
+              },
+              "targetUnits": "tiles",
+              "paramBehaviour": "any",
+              "frame": {
+                "type": "number",
+                "value": 0
+              },
+              "paramX": {
+                "type": "number",
+                "value": 0
+              },
+              "paramY": {
+                "type": "number",
+                "value": 0
+              },
+              "paramPhase": {
+                "type": "number",
+                "value": 64
+              },
+              "paramActorIndex": {
+                "type": "number",
+                "value": 0
+              }
+            },
+            "id": "e0000000-0000-4000-8000-000000000177"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "a"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000181",
+      "children": {
+        "true": [
+          {
+            "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "behavior",
+              "slot": 1,
+              "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
+              "spriteStateId": "",
+              "speed": 3,
+              "animSpeed": 15,
+              "lifeTime": 4,
+              "initialOffset": 8,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [],
+              "preset": "custom",
+              "type": "0",
+              "collision": "3",
+              "gravity": {
+                "type": "number",
+                "value": 4
+              },
+              "bounce": {
+                "type": "number",
+                "value": 80
+              },
+              "amplitude": {
+                "type": "number",
+                "value": 30
+              },
+              "frequency": {
+                "type": "number",
+                "value": 10
+              },
+              "hookshotTileHit": 0,
+              "hookshotActorHit": 0,
+              "compInfiniteLifetime": false,
+              "compIgnorePlayer": false,
+              "compRemoveScript": true,
+              "compTileHitScript": true,
+              "compActorHitScript": true
+            },
+            "id": "e0000000-0000-4000-8000-000000000179"
+          },
+          {
+            "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "source",
+              "slot": 1,
+              "sourceType": "actor",
+              "posX": {
+                "type": "number",
+                "value": 0
+              },
+              "posY": {
+                "type": "number",
+                "value": 0
+              },
+              "posUnits": "tiles",
+              "actorId": "player",
+              "x": 0,
+              "y": 0,
+              "directionType": "actor",
+              "otherActorId": "player",
+              "direction": "right",
+              "angle": 0,
+              "angleVariable": "0",
+              "targetActorId": "player",
+              "targetX": {
+                "type": "number",
+                "value": 0
+              },
+              "targetY": {
+                "type": "number",
+                "value": 0
+              },
+              "targetUnits": "tiles",
+              "paramBehaviour": "any",
+              "frame": {
+                "type": "number",
+                "value": 0
+              },
+              "paramX": {
+                "type": "number",
+                "value": 0
+              },
+              "paramY": {
+                "type": "number",
+                "value": 0
+              },
+              "paramPhase": {
+                "type": "number",
+                "value": 64
+              },
+              "paramActorIndex": {
+                "type": "number",
+                "value": 0
+              }
+            },
+            "id": "e0000000-0000-4000-8000-000000000180"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "select"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000184",
+      "children": {
+        "true": [
+          {
+            "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "behavior",
+              "slot": 2,
+              "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
+              "spriteStateId": "",
+              "speed": 3,
+              "animSpeed": 15,
+              "lifeTime": 4,
+              "initialOffset": 8,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [],
+              "preset": "custom",
+              "type": "0",
+              "collision": "1",
+              "gravity": {
+                "type": "number",
+                "value": 4
+              },
+              "bounce": {
+                "type": "number",
+                "value": 0
+              },
+              "amplitude": {
+                "type": "number",
+                "value": 30
+              },
+              "frequency": {
+                "type": "number",
+                "value": 10
+              },
+              "hookshotTileHit": 0,
+              "hookshotActorHit": 0,
+              "compInfiniteLifetime": false,
+              "compIgnorePlayer": false,
+              "compRemoveScript": true,
+              "compTileHitScript": false,
+              "compActorHitScript": true
+            },
+            "id": "e0000000-0000-4000-8000-000000000182"
+          },
+          {
+            "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
+            "args": {
+              "tabs": "source",
+              "slot": 2,
+              "sourceType": "actor",
+              "posX": {
+                "type": "number",
+                "value": 0
+              },
+              "posY": {
+                "type": "number",
+                "value": 0
+              },
+              "posUnits": "tiles",
+              "actorId": "player",
+              "x": 0,
+              "y": 0,
+              "directionType": "actor",
+              "otherActorId": "player",
+              "direction": "right",
+              "angle": 0,
+              "angleVariable": "0",
+              "targetActorId": "player",
+              "targetX": {
+                "type": "number",
+                "value": 0
+              },
+              "targetY": {
+                "type": "number",
+                "value": 0
+              },
+              "targetUnits": "tiles",
+              "paramBehaviour": "any",
+              "frame": {
+                "type": "number",
+                "value": 0
+              },
+              "paramX": {
+                "type": "number",
+                "value": 0
+              },
+              "paramY": {
+                "type": "number",
+                "value": 0
+              },
+              "paramPhase": {
+                "type": "number",
+                "value": 64
+              },
+              "paramActorIndex": {
+                "type": "number",
+                "value": 0
+              }
+            },
+            "id": "e0000000-0000-4000-8000-000000000183"
+          }
+        ]
+      }
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "start"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "id": "e0000000-0000-4000-8000-000000000186",
+      "children": {
+        "true": [
+          {
+            "command": "EVENT_SWITCH_SCENE",
+            "args": {
+              "sceneId": "5c000000-0000-4000-8000-000000000000",
+              "x": {
+                "type": "number",
+                "value": 9
+              },
+              "y": {
+                "type": "number",
+                "value": 9
+              },
+              "direction": "down",
+              "fadeSpeed": "2"
+            },
+            "id": "e0000000-0000-4000-8000-000000000185"
+          }
+        ]
+      }
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": []
+}

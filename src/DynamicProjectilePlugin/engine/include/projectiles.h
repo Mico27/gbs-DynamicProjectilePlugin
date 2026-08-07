@@ -14,7 +14,7 @@
 #include "vm.h"
 
 // Size of the live projectile pool, from the "Max concurrent projectiles"
-// setting under Settings -> Engine -> Custom Projectiles. Each entry is a
+// setting under Settings -> Engine -> Dynamic Projectiles. Each entry is a
 // projectile_t in WRAM, so raising it costs memory; the fallback keeps this
 // header usable if the define is ever missing.
 #ifndef DYNPROJ_MAX_PROJECTILES
@@ -58,6 +58,7 @@ extern UBYTE projectile_actor_index;
 extern BYTE  projectile_distance;
 extern BYTE  projectile_distance2;
 extern UBYTE projectile_phase;
+extern UBYTE projectile_frame;
 extern UBYTE projectile_hookshot_state;
 extern UBYTE projectile_hookshot_tile_hit;
 extern UBYTE projectile_hookshot_actor_hit;
