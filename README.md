@@ -22,6 +22,8 @@ The plugin ships with `DynamicProjectileExample/`, a complete project with one d
 8. [Media](#media)
 9. [Memory Footprint](#memory-footprint)
 10. [Credits](#credits)
+11. [Bank 0 (HOME) Usage](#bank-0-home-usage)
+12. [Changelog](#changelog)
 
 ---
 
