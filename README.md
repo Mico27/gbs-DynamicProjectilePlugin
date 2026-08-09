@@ -721,3 +721,30 @@ the core compiles, move it independently of this plugin.
 
 </details>
 <!-- BANK0:END -->
+
+## Changelog
+
+Grouped by the date each change was merged into the official
+[gb-studio-plugins](https://github.com/gb-studio-dev/gb-studio-plugins) repository.
+
+Only bug fixes, new features and feature changes are listed. Engine version
+bumps, patch regeneration, packaging fixes and documentation edits are omitted.
+
+### 2026-08-08
+
+- Fixed projectile bouncing.
+
+### 2026-08-07
+
+- Renamed the "Custom Projectiles" settings group to "Dynamic Projectiles".
+- Added an initial animation frame when shooting a projectile.
+- Added an onTileEnter event, and split the tile collision handling.
+- Added more `#define` engine settings.
+
+### 2026-08-03
+
+- Fixed the stock projectile applying inverted gravity.
+
+### 2026-08-02
+
+- Initial release: arc, boomerang, sine wave, orbit, hookshot, anchor and custom projectile types, with gravity, bounce and tile collision.
