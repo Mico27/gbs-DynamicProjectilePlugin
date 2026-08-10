@@ -178,7 +178,13 @@ typedef struct projectile_def_t
     uint8_t collision_group;
     uint8_t collision_mask;
     // --- Dynamic Projectile Plugin behaviour ---
-    uint8_t bounce;
+    // XOR'd into every tile collision mask this definition tests, so a
+    // projectile can ignore a collision direction or treat an extra tile
+    // property bit as solid (0 = stock collision). Only read when
+    // DYNPROJ_ENABLE_XOR_TILE_COLLISION is on. The CHAIN behaviour never tests
+    // tiles at all, so it borrows this byte for its link catch-up speed - the
+    // same trick it already plays with `collision`.
+    uint8_t xor_tile_collision;
     int8_t  amplitude;        // sine / orbit wave
 } projectile_def_t;
 
