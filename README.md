@@ -401,62 +401,36 @@ two the behaviour actually uses.
 
 ### Painting the extra collision values
 
-The XOR is only useful if the tile bits it tests can actually be painted, and the
-top half of the collision byte is mostly unreachable in the editor: only the
-Platformer palette offers anything above `0x0F`, and `0x80` could not be painted
-anywhere at all.
+A mask XOR is only useful if the tile bits it tests can be painted, and the top half of
+the collision byte is mostly unreachable in the stock editor: only the Platformer palette
+offers anything above `0x0F`, and `0x80` could not be painted anywhere.
 
-This plugin's `engine.json` overrides the stock scene types to add the bits each
-one leaves spare — as one **Extra** swatch per possible *value* of those bits, so a
-scene type with three spare bits gets seven swatches rather than three. Nothing
-stock is removed or renamed:
+This plugin therefore declares the collision tile palettes itself, adding the bits each
+scene type leaves spare as **Extra** swatches — one per possible *value* of those bits:
 
 | Scene type | Spare bits | Extra swatches added |
 |---|---|---|
-| **Top Down** | `0x10 0x20 0x40 0x80` | 15: Extra 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240 |
+| **Top Down** | `0x10 0x20 0x40 0x80` | 15: Extra 16 … 240 |
 | **Shmup** | `0x10 0x20 0x40 0x80` | the same 15 |
-| **Point and Click** | `0x10 0x20 0x40 0x80` | the same 15, plus the four direction bits — nothing the player does there is tile based, but an actor or projectile in the scene tests them like anywhere else |
-| **Platformer** | `0x80` | 1: Extra 128. `0x10`-`0x70` is the stock ladder and slope value space |
-| **Adventure** | `0x20 0x40 0x80` | 7: Extra 32, 64, 96, 128, 160, 192, 224. `adventure.c` uses `0x10` as its "this is a slope" flag together with the direction bits and masks its tests with `0x1F` |
-| **Logo** | — | *nothing — a logo scene has no actors and no projectiles, so nothing in it ever reads a collision tile* |
+| **Point and Click** | `0x10 0x20 0x40 0x80` | the same 15, plus the four direction bits |
+| **Platformer** | `0x80` | 1: Extra 128 — `0x10`-`0x70` is the stock ladder and slope value space |
+| **Adventure** | `0x20 0x40 0x80` | 7: Extra 32, 64, 96, 128, 160, 192, 224 |
+| **Logo** | — | *nothing — no actors, no projectiles, nothing reads a collision tile* |
 
-Each swatch paints one exact value over the whole spare-bit space, so picking one
-replaces whatever was there — *Extra 48* is `0x10` **and** `0x20` together, not a
-third bit. That makes every combination a single click, and every painted tile show
-the one swatch that matches it. The swatch icon draws the bits it sets as quadrants
-of a square (`0x10` top-left, `0x20` top-right, `0x40` bottom-left, `0x80`
-bottom-right), so the same value looks the same in every scene type.
+Ladder and the six slopes stay Platformer-only: they are a value space `platform.c` reads,
+not free bits. Each Extra swatch paints one exact value over the whole spare-bit space, so
+*Extra 48* is `0x10` **and** `0x20` in a single click.
 
-**Ladder and the six slopes stay Platformer-only.** They are a value space that
-`platform.c` reads, not free bits, so they are not offered in the scene types that
-have no ladder or slope handling of their own.
+**CollisionExPlugin declares the same palettes**, and so does DynamicActorPlugin. That is deliberate
+and safe: GB Studio applies a plugin's scene type override as a shallow replacement, so
+whichever loads last decides the palette — the three arrays are kept **byte-identical** so
+the result is the same in any combination. It also means this plugin needs none of the
+others installed to have its own XOR values paintable. If you edit one, edit all three.
 
-One deliberate change to the stock Platformer entries: the ladder and slope
-swatches now paint with mask `0x70` instead of `0xF0`. At `0xF0` they cleared the
-`0x80` bit every time, which made *Extra 128* impossible to combine with them.
-Nothing else about them changed, and no existing collision data is affected.
+For the full reference — the swatch schema, the collision byte layout, and why a tile
+carrying both a direction bit and an Extra value highlights only the direction — see
+[CollisionExPlugin](https://github.com/gb-studio-dev/gb-studio-plugins/tree/main/plugins/Mico27/CollisionExPlugin#painting-the-extra-collision-values).
 
-Three things worth knowing:
-
-* **An Extra value is only "extra" to the scene type's own code.** Projectiles never
-  read slope bits, so to this plugin the Extra values are inert until a mask XOR
-  tests them. But if **DynamicActorPlugin** is installed with its slope collision
-  on, it reads the Platformer ladder/slope encoding in every scene type — so *Extra
-  32* through *Extra 112* is a slope to a dynamic actor whatever the scene type.
-* **Scene type overrides do not merge.** GB Studio applies a plugin's scene type as
-  a shallow override, so `collisionTiles` is replaced wholesale (`label`, `files`
-  and the actor collision flags are inherited, which is why the palettes restate the
-  stock swatches). If another installed plugin also overrides the same scene type's
-  collision palette — **ContinuousScenePlugin** does, for Top Down — whichever loads
-  last wins and the other's palette is lost. The Dynamic Actor and Dynamic
-  Projectile plugins declare byte-identical palettes, so those two agree with each
-  other whichever order they load in.
-* **A direction bit plus an Extra value highlights only the direction.** GB Studio's
-  palette picks a single "exact match" per tile, so a tile that is *Solid* **and**
-  *Extra 128* highlights only *Solid*. The value is painted and compiled correctly
-  either way, and a tile carrying only the extra value highlights normally. This is
-  existing editor behaviour for overlapping values — stock does the same for a ladder
-  painted onto a solid tile.
 ---
 
 ## Events Reference
@@ -859,11 +833,9 @@ bumps, patch regeneration, packaging fixes and documentation edits are omitted.
   had is ignored.
 
 - Added the spare collision tile bits to every scene type's paint palette as **Extra**
-  swatches — one per possible value of the bits that scene type leaves free, so 15 in Top
-  Down / Shmup / Point and Click, 7 in Adventure and the previously unreachable `0x80` in
-  Platformer, plus the four direction bits in Point and Click. Ladder and the six slopes
-  stay Platformer-only. See
-  [Painting the extra collision values](#painting-the-extra-collision-values).
+  swatches — one per possible value of the bits each scene type leaves free. CollisionExPlugin
+  declares the same palettes; the arrays are byte-identical, so this plugin's mask XOR has
+  its tile values paintable whether or not that plugin is installed.
 
 ### 2026-08-08
 
