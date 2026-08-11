@@ -133,7 +133,7 @@
           {
             "command": "DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT",
             "args": {
-              "tabs": "projectile",
+              "tabs": "behavior",
               "slot": 0,
               "spriteSheetId": "ec0f660e-c420-43ee-9d1e-6d8e9f320213",
               "spriteStateId": "",
@@ -258,7 +258,7 @@
               "spriteStateId": "",
               "speed": 3,
               "animSpeed": 15,
-              "lifeTime": 3,
+              "lifeTime": 4,
               "initialOffset": 8,
               "loopAnim": true,
               "destroyOnHit": true,
@@ -268,7 +268,7 @@
               ],
               "preset": "custom",
               "type": "1",
-              "collision": "1",
+              "collision": "3",
               "gravity": {
                 "type": "number",
                 "value": 6
@@ -289,16 +289,16 @@
               "hookshotActorHit": 0,
               "compTileEnterScript": false,
               "compIgnorePlayer": false,
-              "compRemoveScript": true,
-              "compTileHitScript": true,
-              "compActorHitScript": true
+              "compRemoveScript": false,
+              "compTileHitScript": false,
+              "compActorHitScript": false
             },
             "id": "e0000000-0000-4000-8000-000000000035"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
             "args": {
-              "tabs": "source",
+              "tabs": "params",
               "slot": 1,
               "sourceType": "actor",
               "posX": {
@@ -328,7 +328,7 @@
                 "value": 0
               },
               "targetUnits": "tiles",
-              "paramBehaviour": "any",
+              "paramBehaviour": "arc",
               "frame": {
                 "type": "number",
                 "value": 0

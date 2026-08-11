@@ -67,158 +67,6 @@
       "id": "e0000000-0000-4000-8000-000000000173"
     },
     {
-      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
-      "args": {
-        "action": 0,
-        "face": "0"
-      },
-      "id": "e0000000-0000-4000-8000-000000000177",
-      "children": {
-        "script": [
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_x",
-              "value": "2"
-            },
-            "id": "e0000000-0000-4000-8000-000000000174"
-          },
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_y",
-              "value": "3"
-            },
-            "id": "e0000000-0000-4000-8000-000000000175"
-          },
-          {
-            "command": "EVENT_TEXT_DRAW",
-            "args": {
-              "text": "T%D3$2$,%D3$3$",
-              "x": 8,
-              "y": 1,
-              "location": "background"
-            },
-            "id": "e0000000-0000-4000-8000-000000000176"
-          }
-        ]
-      }
-    },
-    {
-      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
-      "args": {
-        "action": 0,
-        "face": "2"
-      },
-      "id": "e0000000-0000-4000-8000-000000000181",
-      "children": {
-        "script": [
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_x",
-              "value": "2"
-            },
-            "id": "e0000000-0000-4000-8000-000000000178"
-          },
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_y",
-              "value": "3"
-            },
-            "id": "e0000000-0000-4000-8000-000000000179"
-          },
-          {
-            "command": "EVENT_TEXT_DRAW",
-            "args": {
-              "text": "B%D3$2$,%D3$3$",
-              "x": 8,
-              "y": 1,
-              "location": "background"
-            },
-            "id": "e0000000-0000-4000-8000-000000000180"
-          }
-        ]
-      }
-    },
-    {
-      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
-      "args": {
-        "action": 0,
-        "face": "3"
-      },
-      "id": "e0000000-0000-4000-8000-000000000185",
-      "children": {
-        "script": [
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_x",
-              "value": "2"
-            },
-            "id": "e0000000-0000-4000-8000-000000000182"
-          },
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_y",
-              "value": "3"
-            },
-            "id": "e0000000-0000-4000-8000-000000000183"
-          },
-          {
-            "command": "EVENT_TEXT_DRAW",
-            "args": {
-              "text": "L%D3$2$,%D3$3$",
-              "x": 8,
-              "y": 1,
-              "location": "background"
-            },
-            "id": "e0000000-0000-4000-8000-000000000184"
-          }
-        ]
-      }
-    },
-    {
-      "command": "DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT",
-      "args": {
-        "action": 0,
-        "face": "1"
-      },
-      "id": "e0000000-0000-4000-8000-000000000189",
-      "children": {
-        "script": [
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_x",
-              "value": "2"
-            },
-            "id": "e0000000-0000-4000-8000-000000000186"
-          },
-          {
-            "command": "EVENT_ENGINE_FIELD_STORE",
-            "args": {
-              "engineFieldKey": "projectile_hit_y",
-              "value": "3"
-            },
-            "id": "e0000000-0000-4000-8000-000000000187"
-          },
-          {
-            "command": "EVENT_TEXT_DRAW",
-            "args": {
-              "text": "R%D3$2$,%D3$3$",
-              "x": 8,
-              "y": 1,
-              "location": "background"
-            },
-            "id": "e0000000-0000-4000-8000-000000000188"
-          }
-        ]
-      }
-    },
-    {
       "command": "EVENT_TEXT",
       "args": {
         "text": [
@@ -278,16 +126,16 @@
               "hookshotActorHit": 0,
               "compTileEnterScript": false,
               "compIgnorePlayer": false,
-              "compRemoveScript": true,
-              "compTileHitScript": true,
-              "compActorHitScript": true
+              "compRemoveScript": false,
+              "compTileHitScript": false,
+              "compActorHitScript": false
             },
             "id": "e0000000-0000-4000-8000-000000000191"
           },
           {
             "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
             "args": {
-              "tabs": "source",
+              "tabs": "params",
               "slot": 0,
               "sourceType": "actor",
               "posX": {
@@ -394,9 +242,9 @@
               "hookshotActorHit": 0,
               "compTileEnterScript": false,
               "compIgnorePlayer": false,
-              "compRemoveScript": true,
-              "compTileHitScript": true,
-              "compActorHitScript": true
+              "compRemoveScript": false,
+              "compTileHitScript": false,
+              "compActorHitScript": false
             },
             "id": "e0000000-0000-4000-8000-000000000194"
           },
@@ -510,9 +358,9 @@
               "hookshotActorHit": 0,
               "compTileEnterScript": false,
               "compIgnorePlayer": false,
-              "compRemoveScript": true,
+              "compRemoveScript": false,
               "compTileHitScript": false,
-              "compActorHitScript": true
+              "compActorHitScript": false
             },
             "id": "e0000000-0000-4000-8000-000000000197"
           },

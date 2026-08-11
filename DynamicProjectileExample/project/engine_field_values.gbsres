@@ -52,6 +52,14 @@
     {
       "id": "DYNPROJ_ENABLE_HOOKSHOT",
       "value": 1
+    },
+    {
+      "id": "DYNPROJ_ENABLE_XOR_TILE_COLLISION",
+      "value": 1
+    },
+    {
+      "id": "DYNPROJ_ENABLE_OVERRIDE_TILE_COLLISION",
+      "value": 1
     }
   ]
 }

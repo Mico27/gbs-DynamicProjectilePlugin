@@ -94,7 +94,7 @@
               ],
               "preset": "custom",
               "type": "3",
-              "collision": "1",
+              "collision": "2",
               "gravity": {
                 "type": "number",
                 "value": 0

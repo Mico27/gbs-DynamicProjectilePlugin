@@ -7,7 +7,7 @@
   "startAnimSpeed": 15,
   "startDirection": "down",
   "showCollisionExtraTiles": false,
-  "showCollisionTileValues": false,
+  "showCollisionTileValues": true,
   "collisionLayerOpacity": 50,
   "sgbEnabled": false,
   "customHead": "",
@@ -99,7 +99,7 @@
   "customControlsSelect": [
     "Shift"
   ],
-  "colorMode": "mono",
+  "colorMode": "mixed",
   "colorCorrection": "default",
   "generateDebugFilesEnabled": false,
   "compilerPreset": 3000,

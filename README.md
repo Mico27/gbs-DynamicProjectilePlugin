@@ -161,7 +161,7 @@ Every numeric field on both events is a script **value**, so it accepts a variab
 
 A straight-line projectile — the stock behaviour, plus this plugin's tile collision, bounce/stop and impact scripts.
 
-**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Mask XOR
+**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override
 **Launch parameters:** none
 
 ---
@@ -172,7 +172,7 @@ https://github.com/user-attachments/assets/0d3824fa-a344-497f-a642-c7efe43db31b
 
 Thrown upward, then pulled back down by gravity. Gravity is applied every other frame.
 
-**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Mask XOR
+**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override
 **Launch parameters:** *Launch Height* — how high it is thrown before gravity takes over
 
 ---
@@ -183,7 +183,7 @@ https://github.com/user-attachments/assets/e3679382-6c15-4327-ba99-926d23725815
 
 Sheds speed as it travels, reverses, and comes back.
 
-**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Mask XOR
+**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override
 **Launch parameters:** *Range* — how quickly it sheds speed. Higher values bring it back sooner, so it travels **less** far
 
 ---
@@ -194,7 +194,7 @@ https://github.com/user-attachments/assets/842b81e3-ade3-430f-b2c8-fd8149c46fea
 
 Weaves from side to side, perpendicular to its direction of travel.
 
-**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Mask XOR · *Wave Amplitude* (how far it weaves) · *Wave Frequency* (how tight the zigzag)
+**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override · *Wave Amplitude* (how far it weaves) · *Wave Frequency* (how tight the zigzag)
 **Launch parameters:** *Starting Phase* — where in the wave it begins, so shots fired together do not overlap
 
 ---
@@ -279,7 +279,7 @@ https://github.com/user-attachments/assets/63cda598-eb4a-4046-9ae4-25615ea18b8c
 
 Travels like a plain shot — speed, gravity, bounce/stop and tile collision all behave normally — and additionally records where it has been, hanging a sprite off its own history every few updates.
 
-**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Mask XOR · *Trail Segments* · *Trail Spacing*
+**Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override · *Trail Segments* · *Trail Spacing*
 **Launch parameters:** *Trail Head* (this projectile / an actor) · *Head Actor*
 
 The tail is tested for actor collisions along with the head, so the whole trail is dangerous rather than just the sprite leading it. Widening the spacing stretches the tail further behind at no extra sprite cost, but it costs strand points: a trail needs `segments × spacing` of them.
@@ -332,7 +332,7 @@ Found under **Settings → Engine → Dynamic Projectiles**. Indented entries be
 | **Max projectile slots** | 5–20 | 5 | Size of the definition table. Five is a floor, not a choice — GB Studio's scene loader always fills slots 0–4 itself. Each slot costs 32 bytes of WRAM. |
 | **Off-screen margin (tiles)** | 0–10 | 2 | How far past the screen edge a projectile may travel before it is retired. 0 retires it the moment its origin leaves the screen. |
 | **Tile collision detection** | Origin point / Bounding box | Origin point | Whether tile tests use a single lookup at the projectile's position, or every tile its bounds rect covers. Bounding box makes large projectiles stop as soon as any part of them touches a wall, at the cost of several tile reads per projectile per frame. |
-| **Enable tile collision mask XOR** | on / off | **off** | Compile the per-definition *Tile Collision Mask XOR*. Off, every tile test a projectile makes compiles exactly as it did without the feature and the field is ignored — see [Tile collision mask XOR](#tile-collision-mask-xor). |
+| **Enable tile collision override** | on / off | **off** | Compile the per-definition *Tile Collision Override*. Off, every tile test a projectile makes compiles exactly as it did without the feature and the field is ignored — see [Tile collision override](#tile-collision-override). |
 | **Enable script: Tile Hit** | on / off | on | Compile-time switch for the shared tile hit trigger. Off removes its global, its native and its trigger from the ROM. |
 | ↳ **Tile hit script per face** | on / off | on | Whether the tile hit trigger keeps one script per face of the tile, or a single shared one. Off collapses the four slots to one and folds away the work of deciding which face was struck; the event's *Tile Face* must then stay on *Any*. |
 | **Enable script: Actor Hit** | on / off | on | Same for the actor hit trigger. |
@@ -367,31 +367,32 @@ that travel by it (Default, Arc, Boomerang, Sine, Trail, and a Hookshot head).
 Orbit, Held and Scripted are placed by other means and never fill in a velocity;
 for those, **Remove projectile** is the mode that reacts to tiles.
 
-### Tile collision mask XOR
+### Tile collision override
 
-Off by default — tick **Enable tile collision mask XOR** in the engine settings to
+Off by default — tick **Enable tile collision override** in the engine settings to
 use it. While it is off, every tile test a projectile makes compiles exactly as it
-did before the feature existed, and setting a slot's XOR to a non-zero constant is
+did before the feature existed, and setting a slot's override to a non-zero constant is
 reported as a compile error naming the setting rather than silently doing nothing.
 
 Each tile test asks whether the tile carries the collision bit for the side being
-entered. **Tile Collision Mask XOR** is XOR'd into that mask first, so one slot can
-count different tile bits as solid from everything else in the scene. **0 is stock
-collision.** The bits are top `1`, bottom `2`, left `4`, right `8`. Above those, `16`-`112` is a value
+entered. **Tile Collision Override** replaces that mask outright when it is non-zero, so
+one slot can react to a fixed set of tile bits regardless of which direction it is
+testing. **0 is stock collision** — the mask tested is still whichever side the
+projectile is approaching from. The bits are top `1`, bottom `2`, left `4`, right `8`. Above those, `16`-`112` is a value
 space — `16` ladder, `32`-`112` the six slopes — and `128` is the one bit no engine code
 reads at all.
 
-**Property bits (16 and above) are the clean case.** No directional test uses them,
-so XOR'ing one in only ever *adds* to the test: `16` makes ladder-flagged tiles
-solid for that slot alone — a grapple that only catches tiles you marked, a shot
-stopped by a window the player walks past.
+**Property bits (16 and above)** make any tile carrying them solid from every
+direction at once: `16` makes ladder-flagged tiles solid for that slot alone — a
+grapple that only catches tiles you marked, a shot stopped by a window the player
+walks past.
 
-**Direction bits (1-8) cut both ways.** One value is applied to every mask, so a
-direction bit is removed from the test that owns it and *added* to the other three.
-`1` gives a projectile no floor, but its ceiling test then also matches floor
-tiles. Fine on something travelling on one axis, worth checking on anything else.
+**Direction bits (1-8)** replace the direction being tested rather than adding to
+it: setting `1` makes the projectile react only to a tile's floor bit, from
+whichever side it actually touches the tile — useful for a shot that should only
+ever be stopped by ground, never by a wall or ceiling.
 
-No XOR value can make an *empty* tile solid: a tile with no bits set matches no
+No override value can make an *empty* tile solid: a tile with no bits set matches no
 mask. Blank space stays passable.
 
 A **Chain** never tests tiles, so its slot borrows this same definition byte for
@@ -401,7 +402,7 @@ two the behaviour actually uses.
 
 ### Painting the extra collision values
 
-A mask XOR is only useful if the tile bits it tests can be painted, and the top half of
+A tile collision override is only useful if the tile bits it tests can be painted, and the top half of
 the collision byte is mostly unreachable in the stock editor: only the Platformer palette
 offers anything above `0x0F`, and `0x80` could not be painted anywhere.
 
@@ -425,7 +426,7 @@ not free bits. Each Extra swatch paints one exact value over the whole spare-bit
 and safe: GB Studio applies a plugin's scene type override as a shallow replacement, so
 whichever loads last decides the palette — the three arrays are kept **byte-identical** so
 the result is the same in any combination. It also means this plugin needs none of the
-others installed to have its own XOR values paintable. If you edit one, edit all three.
+others installed to have its own override values paintable. If you edit one, edit all three.
 
 For the full reference — the swatch schema, the collision byte layout, and why a tile
 carrying both a direction bit and an Extra value highlights only the direction — see
@@ -466,7 +467,7 @@ Writes a complete projectile definition into a slot: everything the stock *Load 
 | Behaviour | Which behaviour this slot holds (Custom only). |
 | Tile Collision Behaviour | Pass through · Remove projectile · Bounce (perfect reflect) · Stop on impact. |
 | Gravity | Downward pull, applied every other frame. Clamped to −8…7. |
-| Tile Collision Mask XOR | Advanced. Changes which tile bits count as solid for this slot — see [Tile collision mask XOR](#tile-collision-mask-xor). Needs the engine setting of the same name. |
+| Tile Collision Override | Advanced. Changes which tile bits count as solid for this slot — see [Tile collision override](#tile-collision-override). Needs the engine setting of the same name. |
 | *(behaviour shape fields)* | Wave amplitude/frequency, orbit radius/speed, chain type/links/slack/catch-up, trail segments/spacing, hookshot reactions, custom delta variables — see [Behaviours Reference](#behaviours-reference). |
 | Run Tile Enter script | Whether this slot triggers the shared tile enter script. Off by default — it fires far more often than the impact scripts. |
 | Ignore player collision | Pass through the player. |
@@ -819,12 +820,12 @@ bumps, patch regeneration, packaging fixes and documentation edits are omitted.
 
 ### 2026-08-09
 
-- Replaced the definition's *Bounce* strength with a **Tile Collision Mask XOR**,
-  XOR'd into every tile collision mask a projectile tests, so one slot can ignore a
-  collision direction or treat an extra tile property bit as solid. Compiled out
-  unless the new **Enable tile collision mask XOR** engine setting is ticked. A
-  Chain borrows the same byte for its *Catch-Up Speed*, as it already does with the
-  collision field.
+- Replaced the definition's *Bounce* strength with a **Tile Collision Override**,
+  which replaces the tile collision mask a projectile tests outright when non-zero, so one
+  slot can react to a fixed set of tile bits regardless of which direction it is testing.
+  Compiled out unless the new **Enable tile collision override** engine setting is
+  ticked. A Chain borrows the same byte for its *Catch-Up Speed*, as it already does
+  with the collision field.
 - Reworked *Tile Collision Behaviour* into **Pass through / Remove projectile /
   Bounce (perfect reflect) / Stop on impact**. Bounce now negates the struck axis
   exactly instead of rebounding at a set strength, and the new Stop on impact mode
@@ -834,8 +835,8 @@ bumps, patch regeneration, packaging fixes and documentation edits are omitted.
 
 - Added the spare collision tile bits to every scene type's paint palette as **Extra**
   swatches — one per possible value of the bits each scene type leaves free. CollisionExPlugin
-  declares the same palettes; the arrays are byte-identical, so this plugin's mask XOR has
-  its tile values paintable whether or not that plugin is installed.
+  declares the same palettes; the arrays are byte-identical, so this plugin's tile collision
+  override has its tile values paintable whether or not that plugin is installed.
 
 ### 2026-08-08
 

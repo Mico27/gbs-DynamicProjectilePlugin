@@ -13,7 +13,7 @@
   "paletteIds": [],
   "spritePaletteIds": [],
   "playerSpriteSheetId": "581d34d0-9591-4e6e-a609-1d94f203b0cd",
-  "collisions": "0f15+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f2+004+0f2+006+0f2+004+0f2+004+0f2+006+0f2+004+0f2+0012+0f2+0012+0f2+0012+0f2+0012+0f15+",
+  "collisions": "ff15+0012+ff2+0012+ff2+0012+ff2+0012+ff2+004+0f2+006+0f2+004+ff2+004+0f2+006+0f2+004+ff2+0012+ff2+0012+ff2+0012+ff2+0012+ff2+004+0f2+006+0f2+004+ff2+004+0f2+006+0f2+004+ff2+0012+ff2+0012+ff2+0012+ff2+0012+ff15+",
   "autoFadeSpeed": 1,
   "x": 40,
   "y": 560,
@@ -243,14 +243,22 @@
                     "compIgnorePlayer": false,
                     "compRemoveScript": true,
                     "compTileHitScript": true,
-                    "compActorHitScript": true
+                    "compActorHitScript": true,
+                    "xorTileCollision": {
+                      "type": "number",
+                      "value": 240
+                    },
+                    "overrideTileCollision": {
+                      "type": "number",
+                      "value": 240
+                    }
                   },
                   "id": "e0000000-0000-4000-8000-000000000095"
                 },
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
                   "args": {
-                    "tabs": "source",
+                    "tabs": "params",
                     "slot": 0,
                     "sourceType": "actor",
                     "posX": {
@@ -280,7 +288,7 @@
                       "value": 0
                     },
                     "targetUnits": "tiles",
-                    "paramBehaviour": "any",
+                    "paramBehaviour": "hookshot",
                     "frame": {
                       "type": "number",
                       "value": 0
@@ -307,7 +315,7 @@
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
                   "args": {
-                    "tabs": "source",
+                    "tabs": "params",
                     "slot": 0,
                     "sourceType": "actor",
                     "posX": {
@@ -337,7 +345,7 @@
                       "value": 0
                     },
                     "targetUnits": "tiles",
-                    "paramBehaviour": "any",
+                    "paramBehaviour": "hookshot",
                     "frame": {
                       "type": "number",
                       "value": 0
@@ -364,7 +372,7 @@
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
                   "args": {
-                    "tabs": "source",
+                    "tabs": "params",
                     "slot": 0,
                     "sourceType": "actor",
                     "posX": {
@@ -394,7 +402,7 @@
                       "value": 0
                     },
                     "targetUnits": "tiles",
-                    "paramBehaviour": "any",
+                    "paramBehaviour": "hookshot",
                     "frame": {
                       "type": "number",
                       "value": 0
@@ -421,7 +429,7 @@
                 {
                   "command": "DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT",
                   "args": {
-                    "tabs": "source",
+                    "tabs": "params",
                     "slot": 0,
                     "sourceType": "actor",
                     "posX": {
@@ -451,7 +459,7 @@
                       "value": 0
                     },
                     "targetUnits": "tiles",
-                    "paramBehaviour": "any",
+                    "paramBehaviour": "hookshot",
                     "frame": {
                       "type": "number",
                       "value": 0
