@@ -692,28 +692,29 @@ move.
 | Max concurrent projectiles *(slider 1–20, default 6)* | — | 16 B/step | — |
 | Max projectile slots *(slider 5–20, default 5)* | — | 32 B/step | — |
 | Off-screen margin (tiles) *(slider 0–10, default 2)* | — | — | 1.2 B/step |
-| Tile collision detection → *Bounding box* | — | — | −89 B |
-| Enable script: Tile Hit | — | **12 B** | **338 B** |
+| Tile collision detection → *Bounding box* | — | — | +271 B |
+| Enable tile collision override *(off by default — cost of turning it on)* | — | — | +112 B |
+| Enable script: Tile Hit | — | **12 B** | **12 B** |
 | Tile hit script per face | — | **9 B** | **204 B** |
 | Enable script: Actor Hit | — | **3 B** | **125 B** |
-| Enable script: Tile Enter | — | **3 B** | **213 B** |
+| Enable script: Tile Enter | — | **3 B** | **7 B** |
 | Tile enter grid → *16x16 tiles* | — | — | +8 B |
 | Enable behaviour: Arc | — | — | **23 B** |
 | Enable behaviour: Boomerang | — | — | **222 B** |
 | Enable behaviour: Sine Wave | — | — | **138 B** |
 | Enable behaviour: Orbit | — | — | **187 B** |
-| Enable behaviour: Hookshot | — | **6 B** | **2,920 B** |
+| Enable behaviour: Hookshot | — | **6 B** | **2,897 B** |
 | Hookshot pull realigns to grid → *Off (leave where it stopped)* | — | — | −304 B |
 | Hookshot pull realigns to grid → *16px grid* | — | — | +9 B |
 | Hookshot pulls stop at obstacles | — | — | **954 B** |
 | Enable behaviour: Anchor | — | — | **183 B** |
 | Enable behaviour: Custom | — | — | **104 B** |
-| Enable behaviour: Chain | **128 B** | **4 B** | **1,395 B** |
-| Enable behaviour: Trail | **201 B** | — | **784 B** |
+| Enable behaviour: Chain | **128 B** | **4 B** | **1,398 B** |
+| Enable behaviour: Trail | **201 B** | — | **789 B** |
 | Max chains + trails *(slider 1–8, default 2)* | — | 66 B/step | — |
 | Points per chain / trail *(slider 2–32, default 16)* | — | 8 B/step | — |
 
-Turning off every on-by-default switch above frees **329 B** of bank 0, **37 B** of WRAM, **7,790 B** of banked ROM — the full
+Turning off every on-by-default switch above frees **329 B** of bank 0, **37 B** of WRAM, **7,229 B** of banked ROM — the full
 span between this plugin at its fullest and stripped to nothing. Treat it as a
 ceiling rather than a recipe: you keep whatever your game actually uses.
 
@@ -749,19 +750,20 @@ and settings that gate other settings only show their own contribution.
 
 ## Memory Footprint
 
-Measured against the stock GB Studio **4.3.0-e1** engine at default engine settings, by diffing the link maps of the `gbs2` template built with and without the plugin installed. Values are the plugin's *delta* versus the stock engine. **DMG and CGB deltas are identical** — the plugin has no colour-specific paths. Using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks.
+Measured against the stock GB Studio **4.3.0-e1** engine by `measure_plugin_memory.js` (per-file SDCC compile with GB Studio's own build flags, at default engine settings; report of 2026-08-13). Figures are this plugin's *delta* versus stock — a file that replaces a stock engine file counts only the difference, which is why a plugin can come out negative. Using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks, on top of the fixed cost below.
 
-| Configuration | ROM | WRAM | Engine WRAM left |
-|---------------|-----|------|------------------|
-| **All behaviours on (defaults)** | **+8,805 bytes** | **+90 bytes** | **764 bytes** |
-| Chain and Trail off, rest on | +5,380 bytes | −46 bytes | 900 bytes |
-| All optional behaviours off | +1,175 bytes | −52 bytes | 906 bytes |
+| Budget | Cost |
+|---|---|
+| Bank 0 (HOME) | +85 bytes |
+| WRAM | +103 bytes |
+| Banked ROM | +9,050 bytes |
 
-- **WRAM:** the figure can go *negative* because the plugin reshapes the pool. Stock GB Studio embeds a full 28-byte definition in every live projectile (41 bytes per entry); this plugin's entry is 16 bytes holding an index into the shared table instead. At default sizes that is 256 bytes of pool against stock's 345 — enough to pay for the plugin's own globals, and for the strand pool too once Chain and Trail are switched off.
-- **Engine WRAM headroom:** the stock 4.3.0 engine leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922). With this plugin installed and everything enabled, roughly **764 bytes** remain. This figure does not depend on how many global variables your project defines: the script memory array is a fixed 3,584 bytes at stock engine settings.
-- **Tuning:** the pool is 16 bytes × *Max concurrent projectiles* (96 by default), the slot table 32 bytes × *Max projectile slots* (160), and the strand pool 4 bytes × *Max chains + trails* × *Points per chain / trail* (128). The strand pool disappears entirely when both Chain and Trail are off.
-- **ROM:** dominated by the behaviours themselves, so switching off the ones a game does not use is by far the biggest lever. Hookshot is the largest single behaviour.
-- **SRAM:** none. Save slots and cartridge requirements are unaffected.
+- **Bank 0:** 85 bytes are resident in the non-switchable bank (`projectiles.c`); everything else lives in a switchable bank. See [Bank 0 (HOME) Usage](#bank-0-home-usage).
+- **WRAM:** 103 bytes at the default pool sizes, with every behaviour enabled. The plugin reshapes the stock pool rather than adding to it: stock GB Studio embeds a full 28-byte definition in every live projectile (41 bytes per entry), while this plugin's entry is 16 bytes holding an index into a shared table — which is what pays for its own globals and the strand pool.
+- **Banked ROM:** 9,050 bytes with every behaviour on, 7 of which land in stock files the plugin does not ship but which recompile differently because it overrides `gbs_types.h` and `projectiles.h`. Behaviours dominate the figure, so switching off the ones a game does not use is by far the biggest lever — Hookshot alone is 2,897 bytes. See [What each engine setting costs](#what-each-engine-setting-costs).
+- **Tuning:** the pool is 16 B × *Max concurrent projectiles*, the slot table 32 B × *Max projectile slots*, and the strand pool 4 B × *Max chains + trails* × *Points per chain / trail* (66 B and 8 B per step respectively). The strand pool disappears entirely when both Chain and Trail are off, which also returns 128 B and 201 B of bank 0.
+- **Engine WRAM headroom:** a stock GB Studio 4.3.0 project leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922). With this plugin installed roughly **751 bytes** remain. That does not change with the number of global variables your project defines: the script memory array is a fixed 3,584 bytes at stock engine settings (VM_HEAP_SIZE + VM_MAX_CONTEXTS × VM_CONTEXT_STACK_SIZE = 768 + 16 × 64 words).
+- **SRAM:** not used. Save slots and cartridge requirements are unaffected.
 
 ---
 
@@ -789,19 +791,17 @@ Everything else this plugin adds lives in banked ROM.
 
 | Module | This plugin | Stock engine | Bank 0 cost |
 |---|---|---|---|
-| `projectiles.c` | 1,293 | 1,208 | +85 |
+| `core/projectiles.c` | 1,293 | 1,208 | +85 |
 
 Modules that replace or patch a stock engine file only cost the *difference*:
 the stock version's bank 0 bytes were being spent anyway.
 
 <details><summary>How this was measured</summary>
 
-GB Studio 4.3.2, DMG target, default engine settings. Each module's bank 0
-contribution is the `A _HOME size` record that SDCC writes into its `.rel`
-object, summed over the engine sources this plugin provides. Stock sizes come
-from building projects whose only plugin ships no engine C, so every module in
-them is the untouched engine; two such builds were compared and agreed on all
-73 shared modules.
+GB Studio 4.3.0-e1, default engine settings. Each module is compiled with the
+toolchain and flags GB Studio itself uses, and the `A _HOME size` record SDCC
+writes into the resulting `.rel` object is read back; the stock column is the
+same compile of the engine file this module replaces.
 
 The "free" figure is a stock project with this plugin and nothing else. Your
 own number will differ: other plugins, and any engine settings that change what

@@ -1,4 +1,4 @@
-﻿#ifndef GBS_TYPES_H
+#ifndef GBS_TYPES_H
 #define GBS_TYPES_H
 
 #include <gbdk/platform.h>
