@@ -1,8 +1,10 @@
 # gbs-DynamicProjectilePlugin
 
-**Version 4.3.0 — Requires GB Studio ≥ 4.3.0**
+**Version 4.3.0. Requires GB Studio 4.3.0 or newer.**
 
-A GB Studio engine plugin that replaces the built-in projectile system with a configurable one. A projectile is no longer only a sprite travelling in a straight line: it can arc under gravity, weave, boomerang back, orbit an actor, act as a grappling hookshot, hang off an actor, be driven frame by frame from script variables, string a chain of sprites between two actors, or leave a trail of sprites behind it. Every projectile also gains tile-collision reactions, bouncing, impact scripts, and a set of per-launch parameters.
+Replaces GB Studio projectiles, which travel in straight lines, with ones that can do a great deal more.
+
+A shot can arc like a thrown rock, weave through the air, come back like a boomerang, orbit a character as a shield, act as a grappling hook that pulls the player across a gap, hang off an actor, be steered frame by frame from variables, string a chain of sprites between two actors, or leave a trail behind it. Every projectile also gains collision with walls, bouncing, scripts that run on impact, and a set of parameters you choose per launch.
 
 This is a port of [fredrikofstad's CustomProjectile plugin](https://github.com/fredrikofstad/GBStudioPlugins) (originally written for GB Studio 4.1.x), rebuilt for the reworked 4.3.0 engine and extended well beyond it.
 
@@ -20,11 +22,12 @@ The plugin ships with `DynamicProjectileExample/`, a complete project with one d
 6. [Tile Collision Modes](#tile-collision-modes)
 7. [Events Reference](#events-reference)
 8. [Engine Fields Reference](#engine-fields-reference)
-9. [Media](#media)
-10. [Memory Footprint](#memory-footprint)
-11. [Credits](#credits)
-12. [Bank 0 (HOME) Usage](#bank-0-home-usage)
-13. [Changelog](#changelog)
+9. [FAQ](#faq)
+10. [Media](#media)
+11. [Memory Footprint](#memory-footprint)
+12. [Credits](#credits)
+13. [Bank 0 (HOME) Usage](#bank-0-home-usage)
+14. [Changelog](#changelog)
 
 ---
 
@@ -32,9 +35,9 @@ The plugin ships with `DynamicProjectileExample/`, a complete project with one d
 
 ### Slots and Launches
 
-A projectile is described by a **slot** — an entry in a shared definition table holding its sprite, speed, lifetime, collision groups and behaviour. Slots are what you launch from, and a single slot can be launched any number of times. The two core events map onto that split: **Load Dynamic Projectile Into Slot** writes a slot, **Launch Dynamic Projectile From Slot** fires one.
+A projectile is described by a **slot**, an entry in a shared table holding its sprite, speed, lifetime, collision groups and behaviour. Slots are what you launch from, and a single slot can be launched any number of times. The two core events follow that split: **Load Dynamic Projectile Into Slot** writes a slot, and **Launch Dynamic Projectile From Slot** fires one.
 
-Stock GB Studio has the same model — its *Load Projectile Into Slot* / *Launch Projectile In Slot* events — and this plugin's events use the same compiler helpers, so the two sets interoperate. A slot written by one can be launched by the other.
+GB Studio works the same way with its own **Load Projectile Into Slot** and **Launch Projectile In Slot** events, and this plugin's events build on the same foundation, so the two sets work together. A slot written by one can be launched by the other.
 
 > **Order matters if you mix them.** *Load Dynamic Projectile Into Slot* writes the whole definition, so running the stock *Load Projectile Into Slot* afterwards on the same slot wipes the behaviour back to Default.
 
@@ -51,11 +54,11 @@ Because a live projectile stores only an *index* into the slot table, redefining
 
 ### The Projectile Pool
 
-All live projectiles come from a fixed pool, sized by the **Max concurrent projectiles** setting (default 6). A launch that finds the pool full is silently dropped. Bear in mind how many entries a shot actually consumes: most behaviours take one, but a **hookshot takes four** — the head plus three chain links.
+All live projectiles come from a fixed pool, sized by the **Max concurrent projectiles** setting (default 6). A launch that finds the pool full is silently dropped. Bear in mind how many entries a shot really uses: most behaviours take one, but a **hookshot takes four**, the head plus three chain links.
 
 ### Strands
 
-**Chain** and **Trail** are the two behaviours that draw a *run* of sprites from a single projectile. Those sprite positions cannot be derived from the projectile's own position, so they are kept in a **strand** — a small buffer taken from a second pool, sized by **Max chains + trails** and **Points per chain / trail**.
+**Chain** and **Trail** are the two behaviours that draw a *run* of sprites from a single projectile. Those sprite positions cannot be worked out from the projectile's own position, so they are kept in a **strand**, a small buffer from a second pool sized by **Max chains + trails** and **Points per chain / trail**.
 
 A chain or trail launched when every strand is busy is silently not launched, exactly as it would be if the projectile pool were full.
 
@@ -67,12 +70,12 @@ A chain or trail launched when every strand is busy is silently not launched, ex
 
 Copy `src/DynamicProjectilePlugin` into your project's `plugins/` folder, keeping the whole folder intact.
 
-This plugin replaces the stock projectile engine files. Three other plugins in the same collection — **SceneStackExPlugin**, **DynamicActorPlugin** and **SpritesheetChangeBufferPlugin** — touch some of the same files, so pre-merged compatibility variants are included for every combination of them and are selected automatically. Because this plugin is applied last of the four, its merged build also resolves the clash between DynamicActorPlugin and SpritesheetChangeBufferPlugin.
+This plugin replaces the stock projectile engine files. Three other plugins in the same collection touch some of the same files: **SceneStackExPlugin**, **DynamicActorPlugin** and **SpritesheetChangeBufferPlugin**. Compatibility variants ship for every combination of them and are selected automatically. Because this plugin is applied last of the four, its merged build also resolves the clash between DynamicActorPlugin and SpritesheetChangeBufferPlugin.
 
 
 ### 1. Define a Slot
 
-Add **Load Dynamic Projectile Into Slot** wherever the projectile should be configured — usually a scene's **On Init**, since a slot persists until something overwrites it.
+Add **Load Dynamic Projectile Into Slot** wherever the projectile should be set up, usually a scene's **On Init**, since a slot lasts until something overwrites it.
 
 The *Projectile* tab is the stock projectile definition: sprite sheet, animation state, speed, animation speed, life time, initial offset, collision group and collide-with mask.
 
@@ -99,7 +102,7 @@ Choosing **Custom (choose components)** instead reveals the individual fields, a
 
 Add **Launch Dynamic Projectile From Slot**. The *Source* tab picks where the shot starts and where it aims; the *Dynamic projectile* tab carries the per-launch parameters.
 
-Set **Slot Behaviour** on that tab to whatever the slot holds. It has no effect on the projectile — it only decides which parameter fields are shown, since the launch event cannot know what the slot contains.
+Set **Slot Behaviour** on that tab to whatever the slot holds. It has no effect on the projectile and only decides which fields are shown, since the launch event cannot know what the slot contains.
 
 ### 3. Add Impact Scripts (optional)
 
@@ -107,13 +110,13 @@ Set **Slot Behaviour** on that tab to whatever the slot holds. It has no effect 
 
 Each slot has a matching checkbox (*Run On Remove script* and friends) so an individual slot can opt out.
 
-*Set Projectile Tile Hit Script* holds **one script per face of the tile** — run it once per face, or leave it on *Any* to fill all four at once.
+**Set Projectile Tile Hit Script** holds one script per side of the tile. Run it once per side, or leave it on **Any** to fill all four at once.
 
 ### 4. Trim the Behaviours You Do Not Use (optional)
 
-Every behaviour except Default has an on/off switch under **Settings → Engine → Dynamic Projectiles**. These are compile-time switches — turning one off removes its code from the ROM rather than merely skipping it at runtime. The behaviours are by far the biggest lever on the plugin's ROM cost.
+Every behaviour except Default has an on/off switch under **Settings → Engine → Dynamic Projectiles**. These take effect at build time, so turning one off removes its code from the ROM rather than skipping it while the game runs. The behaviours are by far the biggest lever on the plugin's ROM cost.
 
-The three shared impact scripts have their own switches too — **Enable script: Tile Hit / Actor Hit / Tile Enter** — which remove the trigger, its global and its native from the ROM. **Tile hit script per face** sits under the first of those and decides whether the tile hit trigger keeps four scripts or one.
+The three shared impact scripts have their own switches, **Enable script: Tile Hit**, **Actor Hit** and **Tile Enter**, which remove them from the ROM entirely. **Tile hit script per face** sits under the first of those and decides whether the tile hit trigger keeps four scripts or one.
 
 The events refuse to compile against a behaviour or script that has been switched off, naming the offending scene, rather than silently producing a projectile that does nothing. The one exception is the per-slot checkboxes: a slot ticking *Run Tile Hit script* while that switch is off simply has the flag cleared, since a field cannot be hidden based on an engine setting and the flag would be dead weight either way. Turning the switch back on restores it without touching the slot.
 
@@ -123,7 +126,7 @@ The events refuse to compile against a behaviour or script that has been switche
 
 ### The projectile pool can run out
 
-All live projectiles come from a fixed pool, sized by **Max concurrent projectiles**. A launch that finds the pool full is **silently dropped**. Remember how many entries a shot really consumes: most behaviours take one, but a **hookshot takes four** — the head plus three chain links.
+All live projectiles come from a fixed pool, sized by **Max concurrent projectiles**. A launch that finds the pool full is **silently dropped**. Remember how many entries a shot really uses: most behaviours take one, but a **hookshot takes four**, the head plus three chain links.
 
 ### The strand pool can run out
 
@@ -159,7 +162,7 @@ Every numeric field on both events is a script **value**, so it accepts a variab
 
 ### Default
 
-A straight-line projectile — the stock behaviour, plus this plugin's tile collision, bounce/stop and impact scripts.
+A straight-line shot. This is the stock behaviour plus this plugin's tile collision, bounce and stop handling, and its impact scripts.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override
 **Launch parameters:** none
@@ -173,7 +176,7 @@ https://github.com/user-attachments/assets/0d3824fa-a344-497f-a642-c7efe43db31b
 Thrown upward, then pulled back down by gravity. Gravity is applied every other frame.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override
-**Launch parameters:** *Launch Height* — how high it is thrown before gravity takes over
+**Launch parameters:** **Launch Height** sets how high it is thrown before gravity takes over
 
 ---
 
@@ -184,7 +187,7 @@ https://github.com/user-attachments/assets/e3679382-6c15-4327-ba99-926d23725815
 Sheds speed as it travels, reverses, and comes back.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override
-**Launch parameters:** *Range* — how quickly it sheds speed. Higher values bring it back sooner, so it travels **less** far
+**Launch parameters:** **Range** sets how quickly it sheds speed. Higher values bring it back sooner, so it travels **less** far
 
 ---
 
@@ -195,7 +198,7 @@ https://github.com/user-attachments/assets/842b81e3-ade3-430f-b2c8-fd8149c46fea
 Weaves from side to side, perpendicular to its direction of travel.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override · *Wave Amplitude* (how far it weaves) · *Wave Frequency* (how tight the zigzag)
-**Launch parameters:** *Starting Phase* — where in the wave it begins, so shots fired together do not overlap
+**Launch parameters:** **Starting Phase** sets where in the wave it begins, so shots fired together do not overlap
 
 ---
 
@@ -210,7 +213,7 @@ Circles an actor at a fixed radius, following it as it moves.
 **Slot fields:** Tile Collision Behaviour · *Orbit Radius* · *Orbit Speed*
 **Launch parameters:** *X / Y Offset* (offset from the actor's centre) · *Starting Angle* · *Actor To Circle* (actor index, 0 = player)
 
-Orbiters share one target actor — the one resolved by the most recent launch. Space several out around the same actor by giving each a different starting angle.
+Orbiters share one target actor, the one set by the most recent launch. Space several around the same actor by giving each a different starting angle.
 
 ---
 
@@ -244,7 +247,7 @@ Unlike Orbit, each anchored projectile carries its own target, so several can ha
 
 https://github.com/user-attachments/assets/29c73909-2e20-42ce-9271-9ec0c8c0c56a
 
-Moves by whatever two script variables contain, re-read every frame. Everything else — collision, lifetime, impact scripts — behaves normally.
+Moves by whatever two script variables contain, read again every frame. Everything else, meaning collision, lifetime and impact scripts, behaves normally.
 
 **Slot fields:** Tile Collision Behaviour · *Delta X Variable* · *Delta Y Variable*
 **Launch parameters:** none
@@ -267,7 +270,7 @@ A run of sprites strung between two actors. A chain has no velocity, no aim and 
 
 A loose chain is seeded straight when launched and only then starts relaxing, so a leash appears taut for a frame and then sags.
 
-Give the slot a **Collide With** mask and every link becomes dangerous along its whole length; leave it empty and the chain is decoration. The two end links are never tested — they sit on the actors the chain is tied to, so testing them would report a hit on its own anchors every pass.
+Give the slot a **Collide With** mask and every link becomes dangerous along its whole length; leave it empty and the chain is decoration. The two end links are never tested, because they sit on the actors the chain is tied to and would report a hit on its own anchors every pass.
 
 A chain is **not** removed when it scrolls off screen, unlike every other behaviour: both its ends are actors, which the engine keeps alive on or off screen, and a leash cut the moment its midpoint scrolled away would never come back. It ends when its lifetime runs out.
 
@@ -277,16 +280,16 @@ A chain is **not** removed when it scrolls off screen, unlike every other behavi
 
 https://github.com/user-attachments/assets/63cda598-eb4a-4046-9ae4-25615ea18b8c
 
-Travels like a plain shot — speed, gravity, bounce/stop and tile collision all behave normally — and additionally records where it has been, hanging a sprite off its own history every few updates.
+Travels like a plain shot, with speed, gravity, bounce, stop and tile collision all behaving normally, and also records where it has been, hanging a sprite off its own history every few updates.
 
 **Slot fields:** Tile Collision Behaviour · Gravity · Tile Collision Override · *Trail Segments* · *Trail Spacing*
 **Launch parameters:** *Trail Head* (this projectile / an actor) · *Head Actor*
 
 The tail is tested for actor collisions along with the head, so the whole trail is dangerous rather than just the sprite leading it. Widening the spacing stretches the tail further behind at no extra sprite cost, but it costs strand points: a trail needs `segments × spacing` of them.
 
-Spacing starts at 2, not 1 — entry 0 of the history is the position written this pass, which is where the projectile itself is drawn, so a spacing of 1 would stack the first segment on top of the head.
+Spacing starts at 2 rather than 1, because the newest entry in the history is where the projectile itself is drawn, so a spacing of 1 would stack the first segment on top of the head.
 
-**Hanging a trail off an actor.** Set *Trail Head* to *An actor* and the projectile stops being a shot and becomes pure tail: it records where that actor has been and draws segments along it. This is how to give a trail to something that already moves under its own logic — a walking NPC, a platform, the player. With a head actor the projectile hands everything positional over to that actor, so it is not drawn, does not move, ignores tile collision, is not removed off screen, and never reports a hit on its own head.
+**Hanging a trail off an actor.** Set *Trail Head* to *An actor* and the projectile stops being a shot and becomes pure tail: it records where that actor has been and draws segments along it. This is how to give a trail to something that already moves on its own: a walking NPC, a platform, the player. With a head actor the projectile hands everything positional over to that actor, so it is not drawn, does not move, ignores tile collision, is not removed off screen, and never reports a hit on its own head.
 
 Successive chain links and tail segments step on through the slot's animation, wrapping at its end. With a one-frame animation they all look alike; with a two-frame one they alternate.
 
@@ -301,24 +304,24 @@ The hookshot decides for itself what to do when its head lands, so a working gra
 | *Hookshot: On Tile Hit* (needs *Tile Collision Behaviour* = React to tiles) | **Return** · Pull Player · Remove Hook · Stay Where It Hit |
 | *Hookshot: On Actor Hit* | **Remove Hook** · Return · Pull Player · Pull Actor · Stay Where It Hit · Stick To Actor |
 
-- **Return** — the head turns around and comes back.
-- **Pull Player** — drags the source actor over to where the head landed.
-- **Remove Hook** — the hook and its chain disappear on impact.
-- **Stay Where It Hit** — the head parks at the impact point and the chain keeps spanning the gap. Recall it later with *Set Hookshot State → Returning*.
-- **Pull Actor** — reels the actor that was hit back in. The plugin picks up the actor it actually touched, so no index has to be known in advance.
-- **Stick To Actor** — the head latches onto the actor it hit and rides along with it, chain and all, keeping the offset it made contact at. A hook that catches an enemy's shoulder stays on the shoulder.
+- **Return** turns the head around and brings it back.
+- **Pull Player** drags the firing actor over to where the head landed.
+- **Remove Hook** makes the hook and its chain disappear on impact.
+- **Stay Where It Hit** parks the head at the impact point, with the chain still spanning the gap. Recall it later by setting the hookshot state to Returning.
+- **Pull Actor** reels the actor that was hit back in. The plugin picks up whichever actor it touched, so nothing has to be known in advance.
+- **Stick To Actor** latches the head onto the actor it hit and rides along with it, chain and all, keeping the offset it made contact at. A hook that catches an enemy's shoulder stays on the shoulder.
 
 Set *On Tile Hit* to **Pull Player** and *On Actor Hit* to **Pull Actor** for the usual grappling-hook behaviour: walls pull you to them, enemies get pulled to you. The defaults (Return / Remove Hook) preserve the original plugin's behaviour.
 
-*Pull Player* and *Stay Where It Hit* leave the hook in play until something ends it, so pair them with a recall or with firing again — a new shot clears the old one.
+**Pull Player** and **Stay Where It Hit** leave the hook in play until something ends it, so pair them with a recall or with firing again, since a new shot clears the old one.
 
 Only the head reacts: chain links never trigger tile or actor collisions and never end the shot by scrolling off screen, and a hookshot stops looking for actors once it lands, so a target's hit script fires once rather than every frame of a pull.
 
 **The chain follows its source.** The links are placed each frame at 3/4, 1/2 and 1/4 of the way along the line from the *Anchored To Actor* actor to the head, so walking around with a hook parked or stuck keeps the chain spanning the gap. That parameter is an actor index, so pointing it at any actor gives an NPC a hookshot.
 
-**Pulls stop at obstacles.** A pull moves an actor by writing its position directly, which nothing else in the engine gets a say in — so on its own it would reel somebody into a wall and leave them standing inside it. With **Hookshot pulls stop at obstacles** on (the default), each step is tested before it is committed and the pull ends the moment it is blocked. *Pull Player* stops the source actor short of a solid tile or actor; *Pull Actor* stops the reeled-in actor short of the same, which includes the source actor itself, so a catch is never dragged inside the player. Testing is per axis, so a pull dragged along a wall slides down it. An actor counts as solid when it has collision enabled, and only the edge being moved towards is tested, so one-way tiles still block just the side they face.
+**Pulls stop at obstacles.** A pull moves an actor by writing its position directly, which nothing else in the engine gets a say in, so on its own it would reel somebody into a wall and leave them standing inside it. With **Hookshot pulls stop at obstacles** on (the default), each step is tested before it is committed and the pull ends the moment it is blocked. **Pull Player** stops the firing actor short of a solid tile or actor. **Pull Actor** stops the reeled-in actor short of the same, including the firing actor itself, so a catch is never dragged inside the player. Testing is per axis, so a pull dragged along a wall slides down it. An actor counts as solid when it has collision enabled, and only the edge being moved towards is tested, so one-way tiles still block just the side they face.
 
-**Pulls put the player back on the grid.** A pull moves in sub-pixel steps, so it almost never stops exactly on a grid point — and a top-down scene only reads input while the player is *on* one, so an actor left between two can end up unable to move at all. Every pull therefore realigns the source actor before it lets go, to the nearest point on the grid chosen by **Hookshot pull realigns to grid**. If the aligned spot turns out to be inside something, the actor gives that cell back, and failing that stays where the pull stopped it — off grid being better than inside a wall.
+**Pulls put the player back on the grid.** A pull moves in fractions of a pixel, so it almost never stops exactly on a grid point, and a top-down scene only reads input while the player is on one, so an actor left between two can end up unable to move at all. Every pull therefore realigns the source actor before it lets go, to the nearest point on the grid chosen by **Hookshot pull realigns to grid**. If the aligned spot turns out to be inside something, the actor gives that cell back, and failing that stays where the pull stopped it. Off grid is better than inside a wall.
 
 ---
 
@@ -329,10 +332,10 @@ Found under **Settings → Engine → Dynamic Projectiles**. Indented entries be
 | Setting | Range | Default | Description |
 |---------|-------|---------|-------------|
 | **Max concurrent projectiles** | 1–20 | 6 | Size of the live projectile pool. A launch that finds it full is dropped. Each entry costs 16 bytes of WRAM. |
-| **Max projectile slots** | 5–20 | 5 | Size of the definition table. Five is a floor, not a choice — GB Studio's scene loader always fills slots 0–4 itself. Each slot costs 32 bytes of WRAM. |
+| **Max projectile slots** | 5 to 20 | 5 | How many definitions are held. Five is the minimum, because GB Studio always fills the first five itself. Each slot costs 32 bytes of memory. |
 | **Off-screen margin (tiles)** | 0–10 | 2 | How far past the screen edge a projectile may travel before it is retired. 0 retires it the moment its origin leaves the screen. |
 | **Tile collision detection** | Origin point / Bounding box | Origin point | Whether tile tests use a single lookup at the projectile's position, or every tile its bounds rect covers. Bounding box makes large projectiles stop as soon as any part of them touches a wall, at the cost of several tile reads per projectile per frame. |
-| **Enable tile collision override** | on / off | **off** | Compile the per-definition *Tile Collision Override*. Off, every tile test a projectile makes compiles exactly as it did without the feature and the field is ignored — see [Tile collision override](#tile-collision-override). |
+| **Enable tile collision override** | on or off | **off** | Builds the per-slot **Tile Collision Override**. Off, every tile test compiles as it did without the feature and the field is ignored. See [Tile collision override](#tile-collision-override). |
 | **Enable script: Tile Hit** | on / off | on | Compile-time switch for the shared tile hit trigger. Off removes its global, its native and its trigger from the ROM. |
 | ↳ **Tile hit script per face** | on / off | on | Whether the tile hit trigger keeps one script per face of the tile, or a single shared one. Off collapses the four slots to one and folds away the work of deciding which face was struck; the event's *Tile Face* must then stay on *Any*. |
 | **Enable script: Actor Hit** | on / off | on | Same for the actor hit trigger. |
@@ -359,7 +362,7 @@ Collision Behaviour**:
 |---|---|
 | **Pass through** | No tile tests at all. The projectile flies until its lifetime runs out or it leaves the screen. |
 | **Remove projectile** | The first solid tile removes it, running the removal and tile hit scripts. One lookup for any solid side, so it works for every behaviour including the ones that are placed rather than moved. |
-| **Bounce (perfect reflect)** | The struck axis has its velocity negated exactly — no rebound strength, no damping. The other axis keeps running, so a shot skimming a floor keeps its forward speed. |
+| **Bounce (perfect reflect)** | The struck axis reverses exactly, with no rebound strength and no damping. The other axis keeps running, so a shot skimming a floor keeps its forward speed. |
 | **Stop on impact** | Both axes drop to zero. The projectile halts where it struck and lives out its lifetime there, still animating. Under gravity it settles onto the surface instead of resting on one frame and falling the next. |
 
 Bounce and Stop both act on the velocity, so they only apply to the behaviours
@@ -369,7 +372,7 @@ for those, **Remove projectile** is the mode that reacts to tiles.
 
 ### Tile collision override
 
-Off by default — tick **Enable tile collision override** in the engine settings to
+Off by default. Tick **Enable tile collision override** in the engine settings to
 use it. While it is off, every tile test a projectile makes compiles exactly as it
 did before the feature existed, and setting a slot's override to a non-zero constant is
 reported as a compile error naming the setting rather than silently doing nothing.
@@ -377,26 +380,26 @@ reported as a compile error naming the setting rather than silently doing nothin
 Each tile test asks whether the tile carries the collision bit for the side being
 entered. **Tile Collision Override** replaces that mask outright when it is non-zero, so
 one slot can react to a fixed set of tile bits regardless of which direction it is
-testing. **0 is stock collision** — the mask tested is still whichever side the
+testing. **0 is normal collision**, where the side being approached is what gets
 projectile is approaching from. The bits are top `1`, bottom `2`, left `4`, right `8`. Above those, `16`-`112` is a value
-space — `16` ladder, `32`-`112` the six slopes — and `128` is the one bit no engine code
+range: `16` is a ladder and `32` to `112` are the six slopes. `128` is a value no engine code
 reads at all.
 
 **Property bits (16 and above)** make any tile carrying them solid from every
-direction at once: `16` makes ladder-flagged tiles solid for that slot alone — a
+direction at once. Setting `16` makes ladder tiles solid for that slot alone, giving a
 grapple that only catches tiles you marked, a shot stopped by a window the player
 walks past.
 
 **Direction bits (1-8)** replace the direction being tested rather than adding to
 it: setting `1` makes the projectile react only to a tile's floor bit, from
-whichever side it actually touches the tile — useful for a shot that should only
+whichever side it touches the tile, which suits a shot that should only
 ever be stopped by ground, never by a wall or ceiling.
 
 No override value can make an *empty* tile solid: a tile with no bits set matches no
 mask. Blank space stays passable.
 
 A **Chain** never tests tiles, so its slot borrows this same definition byte for
-*Catch-Up Speed* — the same trick it already plays with *Tile Collision Behaviour*,
+**Catch-Up Speed**, the same trick it already plays with **Tile Collision Behaviour**,
 which it reuses as *Chain Type*. Nothing to set: the event shows whichever of the
 two the behaviour actually uses.
 
@@ -407,16 +410,16 @@ the collision byte is mostly unreachable in the stock editor: only the Platforme
 offers anything above `0x0F`, and `0x80` could not be painted anywhere.
 
 This plugin therefore declares the collision tile palettes itself, adding the bits each
-scene type leaves spare as **Extra** swatches — one per possible *value* of those bits:
+scene type leaves spare as **Extra** swatches, one per possible value:
 
 | Scene type | Spare bits | Extra swatches added |
 |---|---|---|
 | **Top Down** | `0x10 0x20 0x40 0x80` | 15: Extra 16 … 240 |
 | **Shmup** | `0x10 0x20 0x40 0x80` | the same 15 |
 | **Point and Click** | `0x10 0x20 0x40 0x80` | the same 15, plus the four direction bits |
-| **Platformer** | `0x80` | 1: Extra 128 — `0x10`-`0x70` is the stock ladder and slope value space |
+| **Platformer** | 128 | 1: Extra 128. 16 to 112 is the ladder and slope range |
 | **Adventure** | `0x20 0x40 0x80` | 7: Extra 32, 64, 96, 128, 160, 192, 224 |
-| **Logo** | — | *nothing — no actors, no projectiles, nothing reads a collision tile* |
+| **Logo** | none | nothing. No actors, no projectiles, nothing reads a collision tile |
 
 Ladder and the six slopes stay Platformer-only: they are a value space `platform.c` reads,
 not free bits. Each Extra swatch paints one exact value over the whole spare-bit space, so
@@ -424,12 +427,12 @@ not free bits. Each Extra swatch paints one exact value over the whole spare-bit
 
 **CollisionExPlugin declares the same palettes**, and so does DynamicActorPlugin. That is deliberate
 and safe: GB Studio applies a plugin's scene type override as a shallow replacement, so
-whichever loads last decides the palette — the three arrays are kept **byte-identical** so
+whichever loads last decides the swatches, and all three are kept identical so
 the result is the same in any combination. It also means this plugin needs none of the
 others installed to have its own override values paintable. If you edit one, edit all three.
 
-For the full reference — the swatch schema, the collision byte layout, and why a tile
-carrying both a direction bit and an Extra value highlights only the direction — see
+For the full reference, including the collision value layout and why a tile carrying both
+a direction and an Extra value highlights only the direction, see
 [CollisionExPlugin](https://github.com/gb-studio-dev/gb-studio-plugins/tree/main/plugins/Mico27/CollisionExPlugin#painting-the-extra-collision-values).
 
 ---
@@ -442,18 +445,18 @@ All events appear under the **Projectiles** group in the script editor.
 
 ### Load Dynamic Projectile Into Slot
 
-**`DYNPROJ_EVENT_LOAD_PROJECTILE_SLOT`** — auto-label: *Load Dynamic Projectile Into Slot N : &lt;preset&gt;*
+Shown in scripts as *Load Dynamic Projectile Into Slot N : &lt;preset&gt;*.
 
-Writes a complete projectile definition into a slot: everything the stock *Load Projectile Into Slot* event writes, plus this plugin's behaviour. Both halves are written in one event because the order matters — the stock half copies a whole definition into the slot and would wipe the behaviour if it ran second.
+Writes a complete projectile definition into a slot: everything the stock *Load Projectile Into Slot* event writes, plus this plugin's behaviour. Both halves are written in one event because the order matters. The stock half copies a whole definition into the slot and would wipe the behaviour if it ran second.
 
 **Projectile tab**
 
 | Field | Description |
 |-------|-------------|
-| Projectile Slot | Slot to write (0 to *Max projectile slots* − 1). A plain number, not one of five buttons. |
+| Projectile Slot | Slot to write (0 to *Max projectile slots* - 1). A plain number, not one of five buttons. |
 | Sprite Sheet / Animation State | The projectile's appearance. |
 | Speed / Animation Speed | Travel speed and animation rate. |
-| Life Time | Seconds before it expires on its own. **0 means it never does** — it then only goes away by hitting something, leaving the screen, or a script removing it. |
+| Life Time | Seconds before it expires on its own. **0 means it never does**, so it then only goes away by hitting something, leaving the screen, or a script removing it. |
 | Initial Offset | Distance in front of the source to spawn at, in pixels. |
 | Loop Animation | Whether the animation repeats or holds on its last frame. |
 | Destroy On Hit | Unchecked makes it a *strong* projectile that survives contact. |
@@ -466,18 +469,16 @@ Writes a complete projectile definition into a slot: everything the stock *Load 
 | Preset | Ready-made behaviour, or *Custom* to choose components. |
 | Behaviour | Which behaviour this slot holds (Custom only). |
 | Tile Collision Behaviour | Pass through · Remove projectile · Bounce (perfect reflect) · Stop on impact. |
-| Gravity | Downward pull, applied every other frame. Clamped to −8…7. |
-| Tile Collision Override | Advanced. Changes which tile bits count as solid for this slot — see [Tile collision override](#tile-collision-override). Needs the engine setting of the same name. |
-| *(behaviour shape fields)* | Wave amplitude/frequency, orbit radius/speed, chain type/links/slack/catch-up, trail segments/spacing, hookshot reactions, custom delta variables — see [Behaviours Reference](#behaviours-reference). |
-| Run Tile Enter script | Whether this slot triggers the shared tile enter script. Off by default — it fires far more often than the impact scripts. |
+| Gravity | Downward pull, applied every other frame. Clamped to -8…7. |
+| Tile Collision Override | Advanced. Changes what counts as solid for this slot. See [Tile collision override](#tile-collision-override). Needs the engine setting of the same name. |
+| *(behaviour shape fields)* | Wave amplitude and frequency, orbit radius and speed, chain type, links, slack and catch-up, trail segments and spacing, hookshot reactions, and the custom movement variables. See [Behaviours Reference](#behaviours-reference). |
+| Run Tile Enter script | Whether this slot runs the shared tile enter script. Off by default, since it fires far more often than the impact scripts. |
 | Ignore player collision | Pass through the player. |
 | Run On Remove / Tile Hit / Actor Hit script | Whether this slot triggers each shared impact script. All on by default. |
 
 ---
 
 ### Launch Dynamic Projectile From Slot
-
-**`DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT`**
 
 Fires a projectile from a slot. Same as the stock launch event, but the slot is a plain number so it reaches the extra slots, and it adds a source-from-position mode, a position-target aim mode, and the per-launch parameters.
 
@@ -489,30 +490,26 @@ Fires a projectile from a slot. Same as the stock launch event, but the slot is 
 | Launch From | **Actor** (with a pixel *Offset X / Y*) or **Position** (a fixed point, no actor involved). |
 | X / Y | Position source only. Values with a tiles / pixels unit toggle, so a random spawn column can be an expression like `16 + rnd(120)` in pixels. |
 | Launch At | *Fixed Direction* · *Angle* · *Angle Variable* · *Actor Direction* · *Actor Target* · *Position Target*. The actor-relative options need an actor source. |
-| Start Frame | How many frames into the animation this shot starts, counted from the first frame of whichever direction it faces. 0 starts at the beginning. Not range checked — keep it inside the animation's length, or the shot starts on whatever frame follows. |
+| Start Frame | How many frames into the animation this shot starts, counted from the first frame of whichever direction it faces. 0 starts at the beginning. Nothing checks the range, so keep it inside the animation's length or the shot starts on whatever frame follows. |
 
-*Position Target* computes the angle at runtime the same way the stock *Actor Target* does, so a turret can aim at a fixed point in the room — and with a *Position* source you get a shot fired from one coordinate towards another with no actors involved at either end.
+*Position Target* computes the angle at runtime the same way the stock *Actor Target* does, so a turret can aim at a fixed point in the room. With a **Position** source you get a shot fired from one coordinate towards another with no actors involved at either end.
 
 **Dynamic projectile tab**
 
 | Field | Description |
 |-------|-------------|
-| Slot Behaviour | Display only — decides which parameters below are shown. The real behaviour comes from the slot. |
+| Slot Behaviour | Display only. It decides which parameters below are shown, and the real behaviour comes from the slot. |
 | *(per-launch parameters)* | See each behaviour in [Behaviours Reference](#behaviours-reference). |
 
 ---
 
 ### Launch Dynamic Projectile From Slot By Index
 
-**`DYNPROJ_EVENT_LAUNCH_PROJECTILE_SLOT_BY_INDEX`**
-
-Identical to the above, except every actor picker is an actor **index** script value instead — the source actor, the *Actor Direction* actor, the *Actor Target* actor, Anchor's *Attached To Actor* and Trail's *Head Actor*. Use it when the actor has to come from a variable.
+The same, with every actor given as a number rather than picked from the scene: the firing actor, the **Actor Direction** actor, the **Actor Target** actor, Anchor's **Attached To Actor** and Trail's **Head Actor**. Use it when the actor has to come from a variable.
 
 ---
 
 ### Set Hookshot State
-
-**`DYNPROJ_EVENT_SET_HOOKSHOT`**
 
 Drives the active hookshot's state machine by hand, whatever its impact reactions are set to.
 
@@ -527,17 +524,13 @@ Drives the active hookshot's state machine by hand, whatever its impact reaction
 
 ### Set Hookshot State By Index
 
-**`DYNPROJ_EVENT_SET_HOOKSHOT_BY_INDEX`**
-
 As above, with the actor given as an index script value.
 
 ---
 
 ### Set Projectile Removal Script
 
-**`DYNPROJ_EVENT_SET_REMOVAL_SCRIPT`**
-
-Registers a script that runs whenever any projectile is removed — expired, off screen, or destroyed on impact.
+Registers a script that runs whenever any projectile is removed, whether it expired, left the screen, or was destroyed on impact.
 
 | Field | Description |
 |-------|-------------|
@@ -547,8 +540,6 @@ Registers a script that runs whenever any projectile is removed — expired, off
 ---
 
 ### Set Projectile Tile Hit Script
-
-**`DYNPROJ_EVENT_SET_TILE_HIT_SCRIPT`**
 
 Registers a script that runs whenever a projectile's *Tile Collision Behaviour* reacts to a solid tile. A projectile in the Bounce mode runs it on **every** bounce, so keep it short.
 
@@ -560,15 +551,13 @@ There is **one script per face of the tile**, so a shot landing on a floor can d
 | Tile Face | Any · Top · Right · Bottom · Left. *Any* writes all four slots at once, which is the default. Naming a single face needs the **Tile hit script per face** engine setting; with that off there is one shared script and the event refuses anything but *Any*. |
 | On Tile Hit | The script to run. |
 
-**Face means the side of the tile that was struck**, not the way the projectile was travelling — a shot falling onto a floor hits its *Top*, one flying right into a wall hits that wall's *Left*. Bounce and Stop on impact already test each face separately, so they report it exactly. *Remove projectile* mode does a single lookup for any solid side, so there the face is read back off the direction of travel.
+**Face means the side of the tile that was struck**, not the way the projectile was travelling. A shot falling onto a floor hits its **Top**, and one flying right into a wall hits that wall's **Left**. Bounce and Stop on impact already test each face separately, so they report it exactly. *Remove projectile* mode does a single lookup for any solid side, so there the face is read back off the direction of travel.
 
-The per-slot *Run Tile Hit script* checkbox is still one opt-in covering all four faces — the definition's flags field is full, so there is no room for four.
+The per-slot **Run Tile Hit script** tickbox is still one switch covering all four faces, because there is no room in the definition for four.
 
 ---
 
 ### Set Projectile Actor Hit Script
-
-**`DYNPROJ_EVENT_SET_ACTOR_HIT_SCRIPT`**
 
 Registers a script that runs whenever a projectile touches an actor in its collision mask. A *strong* projectile runs it for as long as it overlaps.
 
@@ -581,9 +570,7 @@ Registers a script that runs whenever a projectile touches an actor in its colli
 
 ### Set Projectile Tile Enter Script
 
-**`DYNPROJ_EVENT_SET_TILE_ENTER_SCRIPT`**
-
-Registers a script that runs whenever a projectile's origin point crosses into a new cell of the **Tile enter grid**. Only slots with *Run Tile Enter script* ticked trigger it, since it fires far more often than the impact scripts — a shot crossing the screen runs it once per tile.
+Registers a script that runs whenever a projectile's origin point crosses into a new cell of the **Tile enter grid**. Only slots with **Run Tile Enter script** ticked trigger it, since it fires far more often than the impact scripts. A shot crossing the screen runs it once per tile.
 
 The crossing is detected by comparing the cell the origin point started the pass in with the one it ended in, so a projectile fast enough to jump a whole tile reports where it landed rather than every tile on the line between. A shot that leaves the screen still reports the tile it left through, before it is retired.
 
@@ -596,9 +583,7 @@ The crossing is detected by comparing the cell the origin point started the pass
 
 ### Set Projectile Lifetime
 
-**`DYNPROJ_EVENT_PROJECTILE_LIFETIME`**
-
-Globally suspends lifetime countdown, so nothing expires on its own until it is switched back. Slots given a *Life Time* of 0 are unaffected either way — they already never expire.
+Globally suspends lifetime countdown, so nothing expires on its own until it is switched back. Slots given a **Life Time** of 0 are unaffected either way, since they never expire.
 
 | Field | Description |
 |-------|-------------|
@@ -607,8 +592,6 @@ Globally suspends lifetime countdown, so nothing expires on its own until it is 
 ---
 
 ### Pause Projectiles
-
-**`DYNPROJ_EVENT_PAUSE_PROJECTILES`**
 
 Freezes projectile updates. Paused projectiles keep their pool entry and resume where they left off.
 
@@ -622,9 +605,7 @@ Freezes projectile updates. Paused projectiles keep their pool entry and resume 
 
 ### Show All Projectiles / Hide All Projectiles
 
-**`DYNPROJ_EVENT_SHOW_ALL_PROJECTILES`** · **`DYNPROJ_EVENT_HIDE_ALL_PROJECTILES`**
-
-Stops or resumes drawing every projectile. They keep updating while hidden — this only affects rendering. No fields.
+Stops or resumes drawing every projectile. They keep moving while hidden, since this only affects what is drawn. No fields.
 
 ---
 
@@ -638,7 +619,67 @@ These runtime fields are written by the engine just before an impact script runs
 | `Last Hit: Behaviour` | Which behaviour the projectile was using (Default … Trail). |
 | `Last Hit: Actor` | The actor that was hit. Set by the **actor hit** script only, and stale for the other two. |
 
-The remaining runtime fields are the working state the events drive — the per-launch parameters, the hookshot state and the resolved actor index. They are readable and writable through **Engine Field Store** / **Engine Field Update**, but every launch overwrites them.
+The remaining fields are the working state the events drive: the per-launch parameters, the hookshot state and the actor that was resolved. They can be read and written with **Engine Field Store** and **Engine Field Update**, but every launch overwrites them.
+
+---
+
+## FAQ
+
+**How do I make a hookshot like Zelda's?**
+Load a slot with the **Hookshot** behaviour, choose what happens on impact, such as **Pull Player**
+to swing across a gap or **Pull Actor** to reel an enemy in, and launch it. The chain, the return
+and the pull are all handled for you.
+
+**How do I make a boomerang?**
+Use the **Boomerang** behaviour. **Range** decides how quickly it turns round, and a higher value
+brings it back sooner, so it travels less far.
+
+**How do I make a bullet that weaves as it flies?**
+Use the **Wave** behaviour and set its amplitude and frequency. **Starting Phase** staggers shots
+fired together so they do not overlap.
+
+**How do I make something orbit a character, like a shield spinner?**
+Use the **Orbit** behaviour with the character as the target. Space several out by giving each a
+different starting angle.
+
+**How do I give a moving actor a trail?**
+Use the **Trail** behaviour and set **Trail Head** to **An actor**. The projectile then draws only
+the tail, following wherever that actor goes.
+
+**My projectiles stopped appearing after a while.**
+The pool is full. Raise **Max concurrent projectiles**, shorten the **Life Time**, or remember that
+a hookshot takes four entries rather than one.
+
+**How do I run a script when a shot hits a wall or an enemy?**
+Use **Set Projectile Tile Hit Script** or the actor hit script event, and tick the matching **Run**
+box on the slot.
+
+**Can a projectile bounce off walls?**
+Yes. Set the slot's tile collision behaviour to bounce, and choose between a damped rebound and a
+perfect reflection.
+
+**Can I use these alongside the stock projectile events?**
+Yes. Both write the same slots, so a slot loaded by one can be launched by the other.
+
+**Where do I put the Load event?**
+Usually the scene's **On Init**. A slot lasts until something overwrites it, so it only needs
+loading once.
+
+**How do I fire at a fixed point rather than an actor?**
+Use a **Position Target**. Combined with a **Position** source you get a shot from one coordinate
+to another with no actors involved at all.
+
+**My pull dragged the player into a wall.**
+Turn on **Hookshot pulls stop at obstacles**, which is the default. Each step is tested before it
+is taken and the pull stops when blocked.
+
+**How do I keep the ROM cost down?**
+Turn off the behaviours you do not use. They dominate the total, and Hookshot alone is 2,897
+bytes.
+
+**Does it work with the DynamicActor, SceneStackEx or SpritesheetChangeBuffer plugins?**
+Yes, in any combination. Compatibility variants ship for all of them and are selected
+automatically.
 
 ---
 
@@ -665,7 +706,7 @@ It boots into a menu; each entry is a self-contained demo scene. In every demo *
 | 9 - On Removal | A removal script reading position and behaviour back out of the `Last Hit` fields | B: fire |
 | 10 - Global Controls | Pause / hide / lifetime switches, plus per-slot *Ignore player collision* | B: fire, A: options menu |
 | 11 - Extra Slots | Slots 5–7, past what stock GB Studio can address, plus all four launch sources | B / A / SELECT, and the d-pad |
-| 12 - Chain | Both placement modes strung from the player to the target — walk around to see the difference | B: straight chain, A: loose chain |
+| 12 - Chain | Both placement modes strung from the player to the target. Walk around to see the difference | B: straight chain, A: loose chain |
 | 13 - Trail | A trail that hops under gravity, one that flies straight at the target with a longer tail, and a tail hung off the player | B / A / SELECT |
 | 14 - Tile Enter | A tile enter script counting cells as a slow shot crosses the room, and an identical slot with the opt-in unticked | B: reporting shot, A: silent shot |
 
@@ -682,41 +723,40 @@ Notes on the demos:
 <!-- SETTINGCOST:BEGIN -->
 ### What each engine setting costs
 
-Every setting here changes what gets compiled. Figures are what you **get back by
-turning the setting off**; rows marked *off by default* show what turning it **on**
-costs instead, and sliders show the cost per step. A dash means that budget does not
-move.
+Each setting changes what gets compiled. Figures are what you **get back by turning
+the setting off**. Rows marked *off by default* show what turning it **on** costs, and
+sliders show the cost per step. "none" means that budget does not move.
 
 | Setting | Bank 0 | WRAM | Banked ROM |
 |---|---|---|---|
-| Max concurrent projectiles *(slider 1–20, default 6)* | — | 16 B/step | — |
-| Max projectile slots *(slider 5–20, default 5)* | — | 32 B/step | — |
-| Off-screen margin (tiles) *(slider 0–10, default 2)* | — | — | 1.2 B/step |
-| Tile collision detection → *Bounding box* | — | — | +271 B |
-| Enable tile collision override *(off by default — cost of turning it on)* | — | — | +112 B |
-| Enable script: Tile Hit | — | **12 B** | **12 B** |
-| Tile hit script per face | — | **9 B** | **204 B** |
-| Enable script: Actor Hit | — | **3 B** | **125 B** |
-| Enable script: Tile Enter | — | **3 B** | **7 B** |
-| Tile enter grid → *16x16 tiles* | — | — | +8 B |
-| Enable behaviour: Arc | — | — | **23 B** |
-| Enable behaviour: Boomerang | — | — | **222 B** |
-| Enable behaviour: Sine Wave | — | — | **138 B** |
-| Enable behaviour: Orbit | — | — | **187 B** |
-| Enable behaviour: Hookshot | — | **6 B** | **2,897 B** |
-| Hookshot pull realigns to grid → *Off (leave where it stopped)* | — | — | −304 B |
-| Hookshot pull realigns to grid → *16px grid* | — | — | +9 B |
-| Hookshot pulls stop at obstacles | — | — | **954 B** |
-| Enable behaviour: Anchor | — | — | **183 B** |
-| Enable behaviour: Custom | — | — | **104 B** |
+| Max concurrent projectiles *(slider 1–20, default 6)* | none | 16 B/step | none |
+| Max projectile slots *(slider 5–20, default 5)* | none | 32 B/step | none |
+| Off-screen margin (tiles) *(slider 0–10, default 2)* | none | none | 1.2 B/step |
+| Tile collision detection → *Bounding box* | none | none | +271 B |
+| Enable tile collision override *(off by default, so this is the cost of turning it on)* | none | none | +112 B |
+| Enable script: Tile Hit | none | **12 B** | **12 B** |
+| Tile hit script per face | none | **9 B** | **204 B** |
+| Enable script: Actor Hit | none | **3 B** | **125 B** |
+| Enable script: Tile Enter | none | **3 B** | **7 B** |
+| Tile enter grid → *16x16 tiles* | none | none | +8 B |
+| Enable behaviour: Arc | none | none | **23 B** |
+| Enable behaviour: Boomerang | none | none | **222 B** |
+| Enable behaviour: Sine Wave | none | none | **138 B** |
+| Enable behaviour: Orbit | none | none | **187 B** |
+| Enable behaviour: Hookshot | none | **6 B** | **2,897 B** |
+| Hookshot pull realigns to grid → *Off (leave where it stopped)* | none | none | -304 B |
+| Hookshot pull realigns to grid → *16px grid* | none | none | +9 B |
+| Hookshot pulls stop at obstacles | none | none | **954 B** |
+| Enable behaviour: Anchor | none | none | **183 B** |
+| Enable behaviour: Custom | none | none | **104 B** |
 | Enable behaviour: Chain | **128 B** | **4 B** | **1,398 B** |
-| Enable behaviour: Trail | **201 B** | — | **789 B** |
-| Max chains + trails *(slider 1–8, default 2)* | — | 66 B/step | — |
-| Points per chain / trail *(slider 2–32, default 16)* | — | 8 B/step | — |
+| Enable behaviour: Trail | **201 B** | none | **789 B** |
+| Max chains + trails *(slider 1–8, default 2)* | none | 66 B/step | none |
+| Points per chain / trail *(slider 2–32, default 16)* | none | 8 B/step | none |
 
-Turning off every on-by-default switch above frees **329 B** of bank 0, **37 B** of WRAM, **7,229 B** of banked ROM — the full
-span between this plugin at its fullest and stripped to nothing. Treat it as a
-ceiling rather than a recipe: you keep whatever your game actually uses.
+Turning off every on-by-default switch above frees **329 B** of bank 0, **37 B** of WRAM, **7,229 B** of banked ROM. That is the
+span between the plugin at its fullest and stripped to nothing, so treat it as a
+ceiling. You keep whatever your game actually uses.
 
 - **Max concurrent projectiles**: going from 1 to 20 moves WRAM by +304 B.
 - **Max projectile slots**: going from 5 to 20 moves WRAM by +480 B.
@@ -733,24 +773,22 @@ ceiling rather than a recipe: you keep whatever your game actually uses.
 
 <details><summary>How these were measured</summary>
 
-GB Studio 4.3.0-e1. This plugin's `engine/src/**/*.c` was compiled with the
-toolchain and flags GB Studio itself uses (`lcc -msm83:gb -Wf--max-allocs-per-node 3000
--DHUGE_TRACKER -DRUMBLE_ENABLE=0x08u`) against a merged include tree, and the SDCC object
-files' area records were read: `_HOME` is bank 0, `_DATA`/`_INITIALIZED`/`_BSS` are WRAM,
-and `_CODE*`/`_CONST`/`_LIT`/`_INITIALIZER` are banked ROM.
+GB Studio 4.3.0-e1. This plugin's engine code was compiled with the toolchain and
+flags GB Studio itself uses, and the size of each part of the result was read back and
+sorted into the three budgets: the fixed bank 0, work RAM, and switchable ROM banks.
 
 Two caveats. Only this plugin's own engine sources are measured, so a setting that also
-changes a struct shared with stock engine files can move a few more bytes in files the
-plugin does not ship. And each setting is toggled on its own: a handful measure slightly
-*negative* because enabling their code lets the compiler drop a fallback path elsewhere,
-and settings that gate other settings only show their own contribution.
+changes a shared data structure can move a few more bytes elsewhere. And each setting is
+toggled on its own, so a few measure slightly *negative* when enabling their code lets
+the compiler drop a fallback path, and a setting that gates other settings shows only
+its own contribution.
 
 </details>
 <!-- SETTINGCOST:END -->
 
 ## Memory Footprint
 
-Measured against the stock GB Studio **4.3.0-e1** engine by `measure_plugin_memory.js` (per-file SDCC compile with GB Studio's own build flags, at default engine settings; report of 2026-08-13). Figures are this plugin's *delta* versus stock — a file that replaces a stock engine file counts only the difference, which is why a plugin can come out negative. Using the plugin's events additionally compiles a few bytes of GBVM script per call into your project's script banks, on top of the fixed cost below.
+Measured against the stock GB Studio **4.3.0-e1** engine at default engine settings, report of 2026-08-13. Figures are the difference against a stock project: a file that replaces a stock engine file counts only the change, which is why a plugin can come out negative. Each event you use also compiles a few bytes of script into your project, on top of the fixed cost below.
 
 | Budget | Cost |
 |---|---|
@@ -759,10 +797,10 @@ Measured against the stock GB Studio **4.3.0-e1** engine by `measure_plugin_memo
 | Banked ROM | +9,050 bytes |
 
 - **Bank 0:** 85 bytes are resident in the non-switchable bank (`projectiles.c`); everything else lives in a switchable bank. See [Bank 0 (HOME) Usage](#bank-0-home-usage).
-- **WRAM:** 103 bytes at the default pool sizes, with every behaviour enabled. The plugin reshapes the stock pool rather than adding to it: stock GB Studio embeds a full 28-byte definition in every live projectile (41 bytes per entry), while this plugin's entry is 16 bytes holding an index into a shared table — which is what pays for its own globals and the strand pool.
-- **Banked ROM:** 9,050 bytes with every behaviour on, 7 of which land in stock files the plugin does not ship but which recompile differently because it overrides `gbs_types.h` and `projectiles.h`. Behaviours dominate the figure, so switching off the ones a game does not use is by far the biggest lever — Hookshot alone is 2,897 bytes. See [What each engine setting costs](#what-each-engine-setting-costs).
+- **WRAM:** 103 bytes at the default pool sizes with every behaviour on. The plugin reshapes the stock pool rather than adding to it. GB Studio puts a full 28-byte definition inside every live projectile, 41 bytes per entry, while this plugin's entry is 16 bytes pointing into a shared table. That saving is what pays for its own data and the strand pool.
+- **Banked ROM:** 9,050 bytes with every behaviour on. 7 of those land in stock files the plugin does not ship, which compile slightly differently once it is installed. Behaviours dominate the figure, so switching off the ones a game does not use is by far the biggest saving. Hookshot alone is 2,897 bytes. See [What each engine setting costs](#what-each-engine-setting-costs).
 - **Tuning:** the pool is 16 B × *Max concurrent projectiles*, the slot table 32 B × *Max projectile slots*, and the strand pool 4 B × *Max chains + trails* × *Points per chain / trail* (66 B and 8 B per step respectively). The strand pool disappears entirely when both Chain and Trail are off, which also returns 128 B and 201 B of bank 0.
-- **Engine WRAM headroom:** a stock GB Studio 4.3.0 project leaves about **854 bytes** of WRAM free (usable engine WRAM is 7,776 bytes at 0xC0A0–0xDF00; the stock engine uses 6,922). With this plugin installed roughly **751 bytes** remain. That does not change with the number of global variables your project defines: the script memory array is a fixed 3,584 bytes at stock engine settings (VM_HEAP_SIZE + VM_MAX_CONTEXTS × VM_CONTEXT_STACK_SIZE = 768 + 16 × 64 words).
+- **Engine WRAM headroom:** a stock GB Studio 4.3.0 project leaves about **854 bytes** of WRAM free (the engine has 7,776 bytes to work with and uses 6,922 of them). With this plugin installed roughly **751 bytes** remain. Adding more global variables to your project does not change that figure, because script memory is a fixed 3,584 byte block at stock engine settings.
 - **SRAM:** not used. Save slots and cartridge requirements are unaffected.
 
 ---
@@ -777,10 +815,9 @@ Measured against the stock GB Studio **4.3.0-e1** engine by `measure_plugin_memo
 <!-- BANK0:BEGIN -->
 ## Bank 0 (HOME) Usage
 
-Bank 0 is the 16 KB non-switchable ROM bank that the GB Studio engine core,
-the interrupt handlers and the GBDK runtime all share. Banked ROM is cheap
-(add another bank), bank 0 is not, so it is usually the first thing a project
-runs out of.
+Bank 0 is the 16 KB fixed ROM bank shared by the GB Studio engine core, the
+interrupt handlers and the GBDK runtime. Extra banked ROM is cheap to add,
+bank 0 is not, so bank 0 is usually the first thing a project runs out of.
 
 | | Bytes |
 |---|---|
@@ -793,19 +830,19 @@ Everything else this plugin adds lives in banked ROM.
 |---|---|---|---|
 | `core/projectiles.c` | 1,293 | 1,208 | +85 |
 
-Modules that replace or patch a stock engine file only cost the *difference*:
+A module that replaces a stock engine file costs only the *difference*, because
 the stock version's bank 0 bytes were being spent anyway.
 
 <details><summary>How this was measured</summary>
 
-GB Studio 4.3.0-e1, default engine settings. Each module is compiled with the
-toolchain and flags GB Studio itself uses, and the `A _HOME size` record SDCC
-writes into the resulting `.rel` object is read back; the stock column is the
-same compile of the engine file this module replaces.
+GB Studio 4.3.0-e1, default engine settings. Each module was compiled with the
+toolchain and flags GB Studio itself uses, and the bank 0 size the compiler
+recorded was read back. The stock column is the same compile of the engine file
+the module replaces.
 
-The "free" figure is a stock project with this plugin and nothing else. Your
-own number will differ: other plugins, and any engine settings that change what
-the core compiles, move it independently of this plugin.
+The "free" figure assumes a stock project with this plugin and nothing else.
+Your own number will differ, because other plugins and any engine settings that
+change what the core compiles move it too.
 
 </details>
 <!-- BANK0:END -->
@@ -830,11 +867,11 @@ bumps, patch regeneration, packaging fixes and documentation edits are omitted.
   Bounce (perfect reflect) / Stop on impact**. Bounce now negates the struck axis
   exactly instead of rebounding at a set strength, and the new Stop on impact mode
   halts the projectile where it struck. **Removes the old *Bounce (only floor)*
-  mode** — a slot that used it now bounces off every face, and any *Bounce* value it
+  mode**. A slot that used it now bounces off every face, and any **Bounce** value it
   had is ignored.
 
 - Added the spare collision tile bits to every scene type's paint palette as **Extra**
-  swatches — one per possible value of the bits each scene type leaves free. CollisionExPlugin
+  swatches, one per value each scene type leaves free. CollisionExPlugin
   declares the same palettes; the arrays are byte-identical, so this plugin's tile collision
   override has its tile values paintable whether or not that plugin is installed.
 
