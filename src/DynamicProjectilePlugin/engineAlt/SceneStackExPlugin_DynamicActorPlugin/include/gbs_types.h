@@ -259,5 +259,3 @@ typedef struct palette_t {
 } palette_t;
 
 #endif
-
-
