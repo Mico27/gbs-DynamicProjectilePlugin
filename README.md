@@ -855,6 +855,31 @@ Grouped by the date each change was merged into the official
 Only bug fixes, new features and feature changes are listed. Engine version
 bumps, patch regeneration, packaging fixes and documentation edits are omitted.
 
+### 2026-09-09
+
+- Fixed **Hit X** and **Hit Y** reporting where the projectile was rather than where it hit.
+  The tile tests probe the position the projectile is about to move into, and a chain or a
+  trail is struck on one of its links, so both now latch the point actually tested and the
+  on-hit and on-removal scripts report that. A removal with no collision behind it, such as
+  lifetime expiry, leaving the screen or a behaviour retiring itself, still reports the
+  projectile's own position.
+
+### 2026-08-30
+
+- Fixed launching a projectile retuning the shots already in flight. The parameters on the
+  *Parameters* tab are not all copied into the projectile at launch: a boomerang reads its
+  range and an orbit reads its actor index on every pass, so a launch that wrote all of them
+  changed the shots already crossing the screen. A launch now writes only the parameters its
+  *Slot Behaviour* actually uses. An event saved before that selector existed still writes
+  every one of them, as it did before.
+
+### 2026-08-11
+
+- Fixed tile collision testing the tile the projectile occupies rather than the one it is about
+  to move into, so a shot no longer buries itself a step inside a wall before reacting.
+- Each axis is now resolved on its own, so a shot entering a corner reacts to both faces
+  instead of only the one it was travelling along fastest.
+
 ### 2026-08-09
 
 - Replaced the definition's *Bounce* strength with a **Tile Collision Override**,
